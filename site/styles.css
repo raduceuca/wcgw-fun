@@ -106,6 +106,12 @@ header {
 :root[data-theme="dark"] .logo .eye-sun { display: none; }
 :root[data-theme="dark"] .logo .eye-moon { display: block; }
 
+.brand-name {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
 h1 {
   font-size: inherit;
   font-weight: 400;
