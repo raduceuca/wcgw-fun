@@ -26,6 +26,15 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="/styles.css">
+
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "v939g6gw99");
+  </script>
 </head>
 <body>
   <main>
@@ -131,6 +140,22 @@
       const newTheme = isDark ? 'light' : 'dark';
       root.dataset.theme = newTheme;
       localStorage.setItem('theme', newTheme);
+      // Track theme toggle in Clarity
+      if (window.clarity) {
+        clarity('event', 'theme_toggle');
+        clarity('set', 'theme', newTheme);
+      }
+    });
+
+    // Track link clicks
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.clarity) {
+          const linkText = link.textContent.trim() || link.href;
+          clarity('event', 'link_click');
+          clarity('set', 'clicked_link', linkText);
+        }
+      });
     });
 
     // Animated favicon - smooth color interpolation
