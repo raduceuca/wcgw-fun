@@ -60,18 +60,10 @@
           <rect x="120" y="53" width="32" height="6" rx="3" transform="rotate(-45 120 53)" fill="currentColor"/>
           <rect x="124" y="30" width="32" height="6" rx="3" transform="rotate(45 124 30)" fill="currentColor"/>
         </g>
-        <!-- Sun eye (hover in light mode) - stroke style, centered at (134, 40) -->
-        <g class="eye-mode eye-sun" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none">
-          <circle cx="134" cy="40" r="7"/>
-          <line x1="134" y1="27" x2="134" y2="27"/>
-          <line x1="134" y1="53" x2="134" y2="53"/>
-          <line x1="121" y1="40" x2="121" y2="40"/>
-          <line x1="147" y1="40" x2="147" y2="40"/>
-        </g>
-        <!-- Moon eye (hover in dark mode) - simple arc, centered at (134, 40) -->
-        <g class="eye-mode eye-moon" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none">
-          <path d="M138 28 A15 15 0 0 0 138 52"/>
-        </g>
+        <!-- Sun eye (hover in light mode) - filled circle centered at (134, 40) -->
+        <circle class="eye-mode eye-sun" cx="134" cy="40" r="10" fill="currentColor"/>
+        <!-- Moon eye (hover in dark mode) - half circle centered at (134, 40) -->
+        <path class="eye-mode eye-moon" d="M134 30 A10 10 0 0 1 134 50 Z" fill="currentColor"/>
       </svg>
       <h1>Tools for the aftermath <span class="tagline">(Someone has to.)</span></h1>
     </header>
