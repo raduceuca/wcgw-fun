@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun install)",
+      "Bash(bun install:*)",
+      "Bash(bun add:*)",
+      "Bash(bun remove:*)",
+      "Bash(bun run:*)",
+      "Bash(bun dev:*)",
+      "Bash(bun test:*)",
+      "Bash(bunx:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(curl:*)",
+      "WebSearch",
+      "Bash(gh auth status:*)",
+      "Bash(gh repo create:*)",
+      "Bash(npx vercel:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(git clone:*)"
+    ],
+    "deny": []
+  }
+}

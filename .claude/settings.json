@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/typecheck-after-edit.js \"$FILEPATH\"",
+            "timeout": 30000
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/design-check.js \"$FILEPATH\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
