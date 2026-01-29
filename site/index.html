@@ -133,9 +133,24 @@
       localStorage.setItem('theme', newTheme);
     });
 
-    // Animated favicon - cycle colors like the logo
-    const colors = ['#2dd4bf', '#a78bfa', '#f472b6', '#fb923c', '#4ade80', '#38bdf8'];
-    let colorIndex = 0;
+    // Animated favicon - smooth color interpolation
+    const colors = [
+      [45, 212, 191],   // teal #2dd4bf
+      [167, 139, 250],  // violet #a78bfa
+      [244, 114, 182],  // pink #f472b6
+      [251, 146, 60],   // orange #fb923c
+      [74, 222, 128],   // green #4ade80
+      [56, 189, 248]    // sky #38bdf8
+    ];
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+    const lerpColor = (c1, c2, t) => [
+      Math.round(lerp(c1[0], c2[0], t)),
+      Math.round(lerp(c1[1], c2[1], t)),
+      Math.round(lerp(c1[2], c2[2], t))
+    ];
+    const rgbToHex = ([r, g, b]) => '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+
     const faviconSvg = (color) => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
       <circle cx="16" cy="16" r="14" stroke="${color}" stroke-width="2" fill="none"/>
       <path d="M6 20 A10 3.5 0 0 1 8 17.5" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round"/>
@@ -147,10 +162,26 @@
     </svg>`;
 
     const favicon = document.querySelector('link[rel="icon"]');
-    setInterval(() => {
-      colorIndex = (colorIndex + 1) % colors.length;
-      favicon.href = 'data:image/svg+xml,' + encodeURIComponent(faviconSvg(colors[colorIndex]));
-    }, 2000);
+    const cycleDuration = 12000; // 12s total cycle (matches CSS)
+    let lastUpdate = 0;
+    const updateInterval = 50; // ~20fps (balance between smoothness and performance)
+
+    function animateFavicon(timestamp) {
+      if (timestamp - lastUpdate >= updateInterval) {
+        const progress = (timestamp % cycleDuration) / cycleDuration;
+        const totalSegments = colors.length;
+        const segmentProgress = progress * totalSegments;
+        const currentIndex = Math.floor(segmentProgress) % totalSegments;
+        const nextIndex = (currentIndex + 1) % totalSegments;
+        const t = segmentProgress - currentIndex;
+
+        const interpolatedColor = lerpColor(colors[currentIndex], colors[nextIndex], t);
+        favicon.href = 'data:image/svg+xml,' + encodeURIComponent(faviconSvg(rgbToHex(interpolatedColor)));
+        lastUpdate = timestamp;
+      }
+      requestAnimationFrame(animateFavicon);
+    }
+    requestAnimationFrame(animateFavicon);
   </script>
 </body>
 </html>
