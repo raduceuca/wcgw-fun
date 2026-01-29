@@ -39,31 +39,30 @@
 <body>
   <main>
     <header>
-      <svg class="logo" width="114" height="50" viewBox="0 0 228 100" fill="none" aria-label="WCGW logo" role="img">
-        <!-- Glow effect (blur only, no source graphic) -->
+      <svg class="logo" width="114" height="63" viewBox="0 0 228 125" fill="none" aria-label="WCGW logo" role="img">
         <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="14"/>
+          <filter id="glow" x="0" y="2" width="228" height="123" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+            <feGaussianBlur stdDeviation="14" result="effect1_foregroundBlur"/>
           </filter>
         </defs>
-        <!-- Back ring (behind dome, blurred glow only) -->
-        <path class="ring-back" opacity="0.46" filter="url(#glow)" d="M63.5 33C43.74 39.23 31 49 31 60C31 78.78 68.16 94 114 94C159.84 94 197 78.78 197 60C197 49 184.26 39.23 164.5 33" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-        <!-- Dome -->
-        <path d="M166 65V53C166 25.39 143.61 3 116 3H112C84.39 3 62 25.39 62 53V65" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-        <!-- Front ring -->
-        <path d="M55.59 24C32.73 31.13 18 42.35 18 54.97C18 76.53 60.98 94 114 94C167.02 94 210 76.53 210 54.97C210 42.35 195.27 31.13 172.41 24" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-        <!-- Plus eye -->
-        <rect x="93" y="56" width="26" height="6" rx="3" transform="rotate(-90 93 56)" fill="currentColor"/>
-        <rect x="83" y="40" width="26" height="6" rx="3" fill="currentColor"/>
-        <!-- X eye (default) - centered at (140, 40) -->
-        <g class="eye-x" stroke="currentColor" stroke-width="6" stroke-linecap="round">
-          <line x1="129" y1="29" x2="151" y2="51"/>
-          <line x1="129" y1="51" x2="151" y2="29"/>
+        <!-- Back ring (blurred glow) -->
+        <g opacity="0.46" filter="url(#glow)">
+          <path d="M63.5 33.0153C43.7388 39.2302 31 49.0057 31 60C31 78.7777 68.1604 94 114 94C159.84 94 197 78.7777 197 60C197 49.0057 184.261 39.2302 164.5 33.0153" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
         </g>
-        <!-- Sun eye (hover in light mode) - centered at (140, 40) -->
-        <circle class="eye-mode eye-sun" cx="140" cy="40" r="10" fill="currentColor"/>
-        <!-- Moon eye (hover in dark mode) - centered at (140, 40) -->
-        <path class="eye-mode eye-moon" d="M140 30 A10 10 0 0 1 140 50 Z" fill="currentColor"/>
+        <!-- Dome -->
+        <path d="M163 65V53C163 27.0426 141.957 6 116 6H112C86.0426 6 65 27.0426 65 53V65C65 66.6569 63.6569 68 62 68C60.3431 68 59 66.6569 59 65V53C59 23.7289 82.7289 2.06163e-06 112 0H116C145.271 4.1238e-06 169 23.7289 169 53V65C169 66.6569 167.657 68 166 68C164.343 68 163 66.6569 163 65Z" fill="currentColor"/>
+        <!-- Front ring -->
+        <path d="M15 54.9736C15.0001 47.4021 19.4263 40.6706 26.3408 35.0947C33.2753 29.5027 43.0562 24.7697 54.6963 21.1367C56.2779 20.6431 57.9605 21.5248 58.4541 23.1064C58.9475 24.6879 58.0657 26.3695 56.4844 26.8633C45.2685 30.3639 36.2539 34.8082 30.1074 39.7646C23.941 44.7372 21.0001 49.9258 21 54.9736C21 59.2896 23.1391 63.6923 27.623 68.0019C32.115 72.3193 38.7734 76.3452 47.2471 79.79C64.1799 86.6736 87.7794 91 114 91C140.221 91 163.82 86.6736 180.753 79.79C189.227 76.3452 195.885 72.3193 200.377 68.0019C204.861 63.6923 207 59.2896 207 54.9736C207 49.9258 204.059 44.7372 197.893 39.7646C191.746 34.8082 182.731 30.3639 171.516 26.8633C169.934 26.3695 169.052 24.6879 169.546 23.1064C170.04 21.5248 171.722 20.6431 173.304 21.1367C184.944 24.7697 194.725 29.5027 201.659 35.0947C208.574 40.6706 213 47.4021 213 54.9736C213 61.4343 209.767 67.2988 204.535 72.3271C199.312 77.3477 191.91 81.7311 183.012 85.3486C165.199 92.5897 140.799 97 114 97C87.2014 97 62.8006 92.5897 44.9883 85.3486C36.0897 81.7311 28.6885 77.3477 23.4648 72.3271C18.2333 67.2988 15 61.4343 15 54.9736Z" fill="currentColor"/>
+        <!-- Plus eye -->
+        <path d="M96 30C97.6569 30 99 31.3431 99 33V40H106C107.657 40 109 41.3431 109 43C109 44.6569 107.657 46 106 46H99V53C99 54.6569 97.6569 56 96 56C94.3431 56 93 54.6569 93 53V46H86C84.3431 46 83 44.6569 83 43C83 41.3431 84.3431 40 86 40H93V33C93 31.3431 94.3431 30 96 30Z" fill="currentColor"/>
+        <!-- X eye (default) - centered at (133, 43) -->
+        <path class="eye-x" d="M121.879 32.1215C123.05 30.9501 124.949 30.95 126.121 32.1215L133.499 39.4995L140.506 32.4936C141.677 31.3223 143.576 31.3225 144.748 32.4936C145.919 33.6652 145.919 35.5652 144.748 36.7368L137.742 43.7426L144.506 50.5063C145.677 51.6779 145.677 53.5769 144.506 54.7485C143.334 55.92 141.435 55.92 140.263 54.7485L133.5 47.9848L126.363 55.1215C125.191 56.2927 123.292 56.2929 122.121 55.1215C120.949 53.95 120.949 52.05 122.121 50.8784L129.257 43.7417L121.879 36.3637C120.707 35.1922 120.707 33.2931 121.879 32.1215Z" fill="currentColor"/>
+        <!-- Sun eye (hover in light mode) - centered at (133, 43) -->
+        <circle class="eye-mode eye-sun" cx="133" cy="43" r="12" fill="currentColor"/>
+        <!-- Moon eye (hover in dark mode) - centered at (133, 43) -->
+        <path class="eye-mode eye-moon" d="M133 31 A12 12 0 0 1 133 55 Z" fill="currentColor"/>
       </svg>
       <h1>Tools for the aftermath <span class="tagline">(Someone has to.)</span></h1>
     </header>
