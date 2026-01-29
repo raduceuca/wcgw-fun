@@ -60,17 +60,17 @@
           <rect x="120" y="53" width="32" height="6" rx="3" transform="rotate(-45 120 53)" fill="currentColor"/>
           <rect x="124" y="30" width="32" height="6" rx="3" transform="rotate(45 124 30)" fill="currentColor"/>
         </g>
-        <!-- Sun eye (hover in light mode) - centered at X intersection (134, 40) -->
-        <g class="eye-mode eye-sun" fill="currentColor">
-          <circle cx="134" cy="40" r="6"/>
-          <rect x="131" y="26" width="6" height="5" rx="2.5"/>
-          <rect x="131" y="49" width="6" height="5" rx="2.5"/>
-          <rect x="120" y="37" width="5" height="6" rx="2.5"/>
-          <rect x="143" y="37" width="5" height="6" rx="2.5"/>
+        <!-- Sun eye (hover in light mode) - stroke style, centered at (134, 40) -->
+        <g class="eye-mode eye-sun" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none">
+          <circle cx="134" cy="40" r="7"/>
+          <line x1="134" y1="27" x2="134" y2="27"/>
+          <line x1="134" y1="53" x2="134" y2="53"/>
+          <line x1="121" y1="40" x2="121" y2="40"/>
+          <line x1="147" y1="40" x2="147" y2="40"/>
         </g>
-        <!-- Moon eye (hover in dark mode) - centered at X intersection (134, 40) -->
-        <g class="eye-mode eye-moon" fill="currentColor">
-          <path d="M131 28 A14 14 0 1 0 131 52 A10 10 0 1 1 131 28"/>
+        <!-- Moon eye (hover in dark mode) - simple arc, centered at (134, 40) -->
+        <g class="eye-mode eye-moon" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none">
+          <path d="M138 28 A15 15 0 0 0 138 52"/>
         </g>
       </svg>
       <h1>Tools for the aftermath <span class="tagline">(Someone has to.)</span></h1>
