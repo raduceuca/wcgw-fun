@@ -131,13 +131,43 @@ h1 {
 .project {
   padding-bottom: 1.25rem;
   margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--text-muted);
+  position: relative;
 }
 
 .project:last-child {
-  border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+/* Morse code separators */
+.project:not(:last-child)::after {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  font-size: 0.5rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  letter-spacing: 0.05em;
+}
+
+/* "THE RESISTANCE IS ALIVE" */
+.project:nth-child(1)::after {
+  content: '- .... . / .-. . ... .. ... - .- -. -.-. . / .. ... / .- .-.. .. ...- .';
+}
+
+/* "ANTI-SLOP INSURGENCY RISING" */
+.project:nth-child(2)::after {
+  content: '.- -. - .. / ... .-.. --- .--. / .. -. ... ..- .-. --. . -. -.-. -.-- / .-. .. ... .. -. --.';
+}
+
+/* "THE SLOP STOPS WITH US" */
+.project:nth-child(3)::after {
+  content: '- .... . / ... .-.. --- .--. / ... - --- .--. ... / .-- .. - .... / ..- ...';
 }
 
 .project-link {
