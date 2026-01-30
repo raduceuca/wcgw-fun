@@ -128,8 +128,8 @@
     if (saved) root.dataset.theme = saved;
 
     logo.addEventListener('click', () => {
-      const isDark = getComputedStyle(root).getPropertyValue('--bg').trim() === '#0a0a0a';
-      const newTheme = isDark ? 'light' : 'dark';
+      const isLight = getComputedStyle(root).getPropertyValue('--bg').trim() === '#F8F8F7';
+      const newTheme = isLight ? 'dark' : 'light';
       root.dataset.theme = newTheme;
       localStorage.setItem('theme', newTheme);
       // Track theme toggle in Clarity

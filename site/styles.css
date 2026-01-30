@@ -4,7 +4,7 @@
 @property --accent {
   syntax: '<color>';
   inherits: true;
-  initial-value: #33ff00;
+  initial-value: #15803d;
 }
 
 * {
@@ -14,17 +14,17 @@
 }
 
 :root {
-  --bg: #0a0a0a;
-  --text: #e5e5e5;
-  --text-dim: #a3a3a3;
-  --text-muted: #525252;
-  --accent: #33ff00;
+  --bg: #F8F8F7;
+  --text: #171717;
+  --text-dim: #525252;
+  --text-muted: #a3a3a3;
+  --accent: #15803d;
   animation: accent-cycle 12s ease-in-out infinite;
 }
 
 /* Color cycle - high contrast colors for both modes */
 @keyframes accent-cycle {
-  0%, 100% { --accent: #33ff00; }   /* phosphor green */
+  0%, 100% { --accent: #15803d; }   /* phosphor green */
   16% { --accent: #a78bfa; }         /* violet */
   33% { --accent: #f472b6; }         /* pink */
   50% { --accent: #fb923c; }         /* orange */
@@ -32,24 +32,24 @@
   83% { --accent: #38bdf8; }         /* sky blue */
 }
 
-/* Light mode via system preference */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #fafafa;
-    --text: #171717;
-    --text-dim: #525252;
-    --text-muted: #a3a3a3;
-    --accent: #15803d;
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0a0a;
+    --text: #e5e5e5;
+    --text-dim: #a3a3a3;
+    --text-muted: #525252;
+    --accent: #33ff00;
   }
 }
 
-/* Light mode via manual toggle */
-:root[data-theme="light"] {
-  --bg: #fafafa;
-  --text: #171717;
-  --text-dim: #525252;
-  --text-muted: #a3a3a3;
-  --accent: #15803d;
+/* Dark mode via manual toggle */
+:root[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --text: #e5e5e5;
+  --text-dim: #a3a3a3;
+  --text-muted: #525252;
+  --accent: #33ff00;
 }
 
 body {
@@ -90,21 +90,21 @@ header {
 .logo:hover .eye-x { opacity: 0; }
 .logo:hover .eye-mode { opacity: 1; }
 
-/* Show moon in dark mode (suggests switching to light) */
-.logo .eye-sun { display: none; }
-.logo .eye-moon { display: block; }
-
 /* Show sun in light mode (suggests switching to dark) */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) .logo .eye-sun { display: block; }
-  :root:not([data-theme="dark"]) .logo .eye-moon { display: none; }
+.logo .eye-sun { display: block; }
+.logo .eye-moon { display: none; }
+
+/* Show moon in dark mode (suggests switching to light) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logo .eye-sun { display: none; }
+  :root:not([data-theme="light"]) .logo .eye-moon { display: block; }
 }
 
 /* Manual theme overrides */
-:root[data-theme="light"] .logo .eye-sun { display: block; }
-:root[data-theme="light"] .logo .eye-moon { display: none; }
 :root[data-theme="dark"] .logo .eye-sun { display: none; }
 :root[data-theme="dark"] .logo .eye-moon { display: block; }
+:root[data-theme="light"] .logo .eye-sun { display: block; }
+:root[data-theme="light"] .logo .eye-moon { display: none; }
 
 .brand-name {
   color: var(--accent);
