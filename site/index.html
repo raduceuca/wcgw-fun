@@ -41,9 +41,10 @@
   </script>
 </head>
 <body>
+  <a href="#projects" class="skip-link">Skip to projects</a>
   <main>
     <header>
-      <svg class="logo" width="114" height="63" viewBox="0 0 228 125" fill="none" aria-label="WCGW logo" role="img">
+      <svg class="logo" width="114" height="63" viewBox="0 0 228 125" fill="none" role="button" tabindex="0" aria-label="Switch theme">
         <defs>
           <filter id="glow" x="0" y="2" width="228" height="123" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
             <feFlood flood-opacity="0" result="BackgroundImageFix"/>
@@ -116,7 +117,7 @@
       <h1>Tools for the aftermath <span class="tagline">(Someone has to.)</span></h1>
     </header>
 
-    <section class="projects" aria-label="Projects">
+    <section class="projects" id="projects" aria-label="Projects">
       <article class="project">
         <div class="project-title">
           <a href="https://sloptable.com" class="project-link" target="_blank" rel="noopener">Periodic Table of Slop</a>
@@ -179,7 +180,7 @@
       root.dataset.theme = 'light';
     }
 
-    logo.addEventListener('click', () => {
+    function cycleTheme() {
       const current = root.dataset.theme || 'light';
       const idx = themes.indexOf(current);
       const next = themes[(idx + 1) % themes.length];
@@ -188,6 +189,14 @@
       if (window.clarity) {
         clarity('event', 'theme_toggle');
         clarity('set', 'theme', next);
+      }
+    }
+
+    logo.addEventListener('click', cycleTheme);
+    logo.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        cycleTheme();
       }
     });
 
@@ -204,12 +213,12 @@
 
     // Animated favicon - smooth color interpolation
     const colors = [
-      [51, 255, 0],     // phosphor green #33ff00
-      [167, 139, 250],  // violet #a78bfa
-      [244, 114, 182],  // pink #f472b6
-      [251, 146, 60],   // orange #fb923c
-      [74, 222, 128],   // green #4ade80
-      [56, 189, 248]    // sky #38bdf8
+      [21, 128, 61],    // green-700 #15803d
+      [124, 58, 237],   // violet-600 #7c3aed
+      [219, 39, 119],   // pink-600 #db2777
+      [194, 65, 12],    // orange-700 #c2410c
+      [15, 118, 110],   // teal-700 #0f766e
+      [3, 105, 161]     // sky-700 #0369a1
     ];
 
     const lerp = (a, b, t) => a + (b - a) * t;

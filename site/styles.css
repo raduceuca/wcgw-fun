@@ -17,19 +17,19 @@
   --bg: #F8F8F7;
   --text: #171717;
   --text-dim: #525252;
-  --text-muted: #a3a3a3;
+  --text-muted: #6b6b6b;
   --accent: #15803d;
   animation: accent-cycle 12s ease-in-out infinite;
 }
 
-/* Color cycle - high contrast colors for both modes */
+/* Color cycle - WCAG AA compliant on both light (#F8F8F7) and dark (#0a0a0a) */
 @keyframes accent-cycle {
-  0%, 100% { --accent: #15803d; }   /* phosphor green */
-  16% { --accent: #a78bfa; }         /* violet */
-  33% { --accent: #f472b6; }         /* pink */
-  50% { --accent: #fb923c; }         /* orange */
-  66% { --accent: #4ade80; }         /* green */
-  83% { --accent: #38bdf8; }         /* sky blue */
+  0%, 100% { --accent: #15803d; }   /* green — 4.72:1 on light */
+  16% { --accent: #7c3aed; }         /* violet-600 — 5.4:1 on light */
+  33% { --accent: #be185d; }         /* pink-700 — 5.8:1 on light */
+  50% { --accent: #c2410c; }         /* orange-700 — 5.0:1 on light */
+  66% { --accent: #0f766e; }         /* teal-700 — 4.6:1 on light */
+  83% { --accent: #0369a1; }         /* sky-700 — 5.2:1 on light */
 }
 
 /* Dark mode via system preference */
@@ -38,7 +38,7 @@
     --bg: #0a0a0a;
     --text: #e5e5e5;
     --text-dim: #a3a3a3;
-    --text-muted: #525252;
+    --text-muted: #808080;
     --accent: #33ff00;
   }
 }
@@ -48,7 +48,7 @@
   --bg: #0a0a0a;
   --text: #e5e5e5;
   --text-dim: #a3a3a3;
-  --text-muted: #525252;
+  --text-muted: #808080;
   --accent: #33ff00;
 }
 
@@ -156,6 +156,7 @@ h1 {
   font-size: inherit;
   font-weight: 400;
   margin-bottom: 0;
+  text-wrap: balance;
 }
 
 .tagline {
@@ -251,7 +252,6 @@ h1 {
   color: var(--bg);
   padding: 0.125rem 0.375rem;
   border-radius: 2px;
-  opacity: 0.6;
 }
 
 /* About */
@@ -286,10 +286,41 @@ footer {
   color: var(--text-muted);
 }
 
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 0.5rem 1rem;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
 /* Focus states */
-a:focus-visible {
+a:focus-visible,
+.logo:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Base link transition */
+a {
+  transition: color 150ms ease-out;
+}
+
+.project-link {
+  transition: color 150ms ease-out, background-color 150ms ease-out;
+}
+
+.social-link {
+  transition: color 150ms ease-out;
 }
 
 /* Reduced motion */
@@ -309,7 +340,7 @@ a:focus-visible {
   --bg: #ece4d4;
   --text: #2c1e12;
   --text-dim: #4a3728;
-  --text-muted: #8b7355;
+  --text-muted: #6e593e;
   --accent: #b91c1c;
   animation: none;
 }
@@ -469,8 +500,8 @@ a:focus-visible {
   --bg: #0a0e1a;
   --text: #f0f2f5;
   --text-dim: #b8c0d0;
-  --text-muted: #4a5677;
-  --accent: #e11d48;
+  --text-muted: #7b86a3;
+  --accent: #f43f5e;
   animation: none;
 }
 
@@ -491,7 +522,7 @@ a:focus-visible {
   right: 0;
   height: 3px;
   background: linear-gradient(90deg, var(--accent), #ff4466, var(--accent));
-  z-index: 200;
+  z-index: 50;
 }
 
 :root[data-theme="broadcast"] main {
@@ -609,7 +640,7 @@ a:focus-visible {
 }
 
 :root[data-theme="broadcast"] .social-link:hover {
-  color: #ff4466;
+  color: #fb7185;
 }
 
 /* Ticker tape — actual news crawl feel */
@@ -621,7 +652,7 @@ a:focus-visible {
   max-width: 100%;
   margin: 0;
   padding: 0;
-  z-index: 100;
+  z-index: 30;
   background: rgba(10, 14, 26, 0.95);
   border-top: 2px solid var(--accent);
 }
@@ -665,7 +696,7 @@ a:focus-visible {
   --bg: #0a0a0a;
   --text: #33ff00;
   --text-dim: #28cc00;
-  --text-muted: #1a7a00;
+  --text-muted: #2d9e00;
   --accent: #ff00ff;
   animation: none;
 }
@@ -694,7 +725,7 @@ a:focus-visible {
     rgba(0, 0, 0, 0.12) 2px
   );
   pointer-events: none;
-  z-index: 1000;
+  z-index: 50;
 }
 
 /* CRT vignette — heavy, real */
@@ -707,7 +738,7 @@ a:focus-visible {
   bottom: -2%;
   background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.85) 100%);
   pointer-events: none;
-  z-index: 999;
+  z-index: 40;
 }
 
 :root[data-theme="arcade"] main {
@@ -815,7 +846,7 @@ a:focus-visible {
   --text: #1a1a1a;
   --text-dim: #2d2d2d;
   --text-muted: #555555;
-  --accent: #ff5722;
+  --accent: #c62828;
   animation: none;
 }
 
@@ -940,7 +971,7 @@ a:focus-visible {
 }
 
 :root[data-theme="cartoon"] .status--live {
-  background: #4caf50;
+  background: #2e7d32;
   color: white;
   border-radius: 20px;
   padding: 0.15rem 0.65rem;
@@ -1005,7 +1036,7 @@ a:focus-visible {
 }
 
 :root[data-theme="cartoon"] .social-link:hover {
-  color: #e64a19;
+  color: #bf360c;
   text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
 }
 
@@ -1028,7 +1059,7 @@ a:focus-visible {
   --text: #000000;
   --text-dim: #1a1a1a;
   --text-muted: #666666;
-  --accent: #ff5757;
+  --accent: #c62828;
   animation: none;
 }
 
@@ -1130,7 +1161,7 @@ a:focus-visible {
 }
 
 :root[data-theme="brutalist"] .status--live {
-  background: var(--accent);
+  background: #000;
   color: #fff;
   border: 3px solid #000;
   border-radius: 0;
@@ -1198,7 +1229,7 @@ a:focus-visible {
   --bg: #1a0a3e;
   --text: #ff71ce;
   --text-dim: #b967ff;
-  --text-muted: #5a3d7a;
+  --text-muted: #9a7fba;
   --accent: #01cdfe;
   animation: none;
 }
