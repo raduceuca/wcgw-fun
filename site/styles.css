@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&family=Special+Elite&family=Anton&family=Press+Start+2P&family=Bangers&family=Comic+Neue:wght@400;700&family=DotGothic16&display=swap');
 
 /* Enable CSS custom property animation */
 @property --accent {
@@ -105,6 +105,46 @@ header {
 :root[data-theme="dark"] .logo .eye-moon { display: block; }
 :root[data-theme="light"] .logo .eye-sun { display: block; }
 :root[data-theme="light"] .logo .eye-moon { display: none; }
+
+/* Themed eyes — hidden by default */
+.logo .eye-theme { opacity: 0; display: none; }
+
+/* Per-theme: hide default eyes, show themed eye */
+:root[data-theme="classified"] .logo .eye-x,
+:root[data-theme="broadcast"] .logo .eye-x,
+:root[data-theme="arcade"] .logo .eye-x,
+:root[data-theme="cartoon"] .logo .eye-x,
+:root[data-theme="brutalist"] .logo .eye-x,
+:root[data-theme="vaporwave"] .logo .eye-x { opacity: 0; }
+
+:root[data-theme="classified"] .logo .eye-mode,
+:root[data-theme="broadcast"] .logo .eye-mode,
+:root[data-theme="arcade"] .logo .eye-mode,
+:root[data-theme="cartoon"] .logo .eye-mode,
+:root[data-theme="brutalist"] .logo .eye-mode,
+:root[data-theme="vaporwave"] .logo .eye-mode { display: none; }
+
+:root[data-theme="classified"] .logo .eye-classified,
+:root[data-theme="broadcast"] .logo .eye-broadcast,
+:root[data-theme="arcade"] .logo .eye-arcade,
+:root[data-theme="cartoon"] .logo .eye-cartoon,
+:root[data-theme="brutalist"] .logo .eye-brutalist,
+:root[data-theme="vaporwave"] .logo .eye-vaporwave { display: block; opacity: 1; }
+
+/* Disable hover eye swap for non-light/dark themes */
+:root[data-theme="classified"] .logo:hover .eye-x,
+:root[data-theme="broadcast"] .logo:hover .eye-x,
+:root[data-theme="arcade"] .logo:hover .eye-x,
+:root[data-theme="cartoon"] .logo:hover .eye-x,
+:root[data-theme="brutalist"] .logo:hover .eye-x,
+:root[data-theme="vaporwave"] .logo:hover .eye-x { opacity: 0; }
+
+:root[data-theme="classified"] .logo:hover .eye-mode,
+:root[data-theme="broadcast"] .logo:hover .eye-mode,
+:root[data-theme="arcade"] .logo:hover .eye-mode,
+:root[data-theme="cartoon"] .logo:hover .eye-mode,
+:root[data-theme="brutalist"] .logo:hover .eye-mode,
+:root[data-theme="vaporwave"] .logo:hover .eye-mode { display: none; }
 
 .brand-name {
   color: var(--accent);
@@ -256,5 +296,766 @@ a:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
   }
+}
+
+/* ============================================
+   THEME: CLASSIFIED
+   Government redacted document aesthetic
+   ============================================ */
+
+:root[data-theme="classified"] {
+  --bg: #f5e6c8;
+  --text: #3d2b1f;
+  --text-dim: #5c4033;
+  --text-muted: #8b7355;
+  --accent: #cc0000;
+  animation: none;
+}
+
+:root[data-theme="classified"] body {
+  font-family: 'Special Elite', serif;
+  font-size: 1rem;
+  background-image: url('/img/classified-stain.jpg');
+  background-size: 600px;
+  background-repeat: repeat;
+  position: relative;
+}
+
+:root[data-theme="classified"] body::before {
+  content: 'CLASSIFIED';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg);
+  font-family: 'Special Elite', serif;
+  font-size: 8rem;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  letter-spacing: 0.1em;
+}
+
+:root[data-theme="classified"] main {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="classified"] .brand-name {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+:root[data-theme="classified"] .status--live {
+  background: transparent;
+  color: var(--accent);
+  border: 2px dashed var(--accent);
+  border-radius: 0;
+  padding: 0.125rem 0.5rem;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+}
+
+:root[data-theme="classified"] .status--soon {
+  background: transparent;
+  color: var(--text-muted);
+  border: 2px dashed var(--text-muted);
+  border-radius: 0;
+  padding: 0.125rem 0.5rem;
+  transform: rotate(1deg);
+}
+
+:root[data-theme="classified"] .project:not(:last-child)::after {
+  content: '████████████████████████████████████████';
+  font-size: 0.5rem;
+  color: #3d2b1f;
+  opacity: 0.3;
+  letter-spacing: -0.05em;
+}
+
+:root[data-theme="classified"] .project-link:hover {
+  text-decoration: none;
+  background: rgba(204, 0, 0, 0.1);
+}
+
+:root[data-theme="classified"] footer::before {
+  content: 'DOCUMENT REF: WCGW-' attr(data-year) ' // EYES ONLY';
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+}
+
+/* ============================================
+   THEME: BROADCAST
+   Breaking news / cable TV aesthetic
+   ============================================ */
+
+:root[data-theme="broadcast"] {
+  --bg: #0f1b3d;
+  --text: #ffffff;
+  --text-dim: #c4cede;
+  --text-muted: #6b7fa3;
+  --accent: #dc2626;
+  animation: none;
+}
+
+:root[data-theme="broadcast"] body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  border-top: 4px solid var(--accent);
+}
+
+:root[data-theme="broadcast"] main {
+  max-width: 600px;
+}
+
+:root[data-theme="broadcast"] .brand-name {
+  background: var(--accent);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  display: inline-block;
+  font-family: 'Anton', sans-serif;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+:root[data-theme="broadcast"] h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+}
+
+:root[data-theme="broadcast"] .tagline {
+  color: var(--accent);
+}
+
+:root[data-theme="broadcast"] .project {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+:root[data-theme="broadcast"] .project:last-child {
+  padding: 0.75rem 1rem;
+}
+
+:root[data-theme="broadcast"] .project:not(:last-child)::after {
+  display: none;
+}
+
+:root[data-theme="broadcast"] .project-link {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+:root[data-theme="broadcast"] .status--live {
+  background: var(--accent);
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+:root[data-theme="broadcast"] .status--soon {
+  background: var(--text-muted);
+}
+
+:root[data-theme="broadcast"] .about {
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+}
+
+:root[data-theme="broadcast"] body::after {
+  content: 'WCGW NEWS ★ TOOLS FOR THE AFTERMATH ★ SOMEONE HAS TO ★ BREAKING: SLOP DETECTED ★ WCGW NEWS ★ TOOLS FOR THE AFTERMATH ★ SOMEONE HAS TO ★ BREAKING: SLOP DETECTED ★';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--accent);
+  color: white;
+  padding: 0.4rem 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: ticker 20s linear infinite;
+  z-index: 100;
+}
+
+@keyframes ticker {
+  0% { text-indent: 100%; }
+  100% { text-indent: -200%; }
+}
+
+:root[data-theme="broadcast"] footer {
+  padding-bottom: 3rem;
+}
+
+/* ============================================
+   THEME: ARCADE
+   Retro gaming / pixel art CRT aesthetic
+   ============================================ */
+
+:root[data-theme="arcade"] {
+  --bg: #000000;
+  --text: #33ff00;
+  --text-dim: #22aa00;
+  --text-muted: #116600;
+  --accent: #ff00ff;
+  animation: none;
+}
+
+:root[data-theme="arcade"] body {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.6rem;
+  line-height: 2.2;
+  position: relative;
+  image-rendering: pixelated;
+}
+
+:root[data-theme="arcade"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+:root[data-theme="arcade"] body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  z-index: 999;
+}
+
+:root[data-theme="arcade"] main {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="arcade"] .brand-name {
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+:root[data-theme="arcade"] h1 {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+
+:root[data-theme="arcade"] .project {
+  padding: 0.5rem 0;
+  padding-bottom: 1rem;
+}
+
+:root[data-theme="arcade"] .project-link::before {
+  content: '> ';
+  color: var(--accent);
+}
+
+:root[data-theme="arcade"] .project-link:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+:root[data-theme="arcade"] .project:not(:last-child)::after {
+  content: '- - - - - - - - - - - - - - - - - - - -';
+  color: var(--text-muted);
+  font-size: 0.5rem;
+}
+
+:root[data-theme="arcade"] .status--live {
+  background: var(--accent);
+  color: #000;
+  animation: blink-arcade 1s step-end infinite;
+  border-radius: 0;
+}
+
+@keyframes blink-arcade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+:root[data-theme="arcade"] .status--soon {
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 0;
+}
+
+:root[data-theme="arcade"] .social-link:hover {
+  color: var(--accent);
+}
+
+:root[data-theme="arcade"] footer {
+  font-size: 0.5rem;
+}
+
+:root[data-theme="arcade"] footer::before {
+  content: 'INSERT COIN TO CONTINUE';
+  display: block;
+  color: var(--accent);
+  animation: blink-arcade 1.5s step-end infinite;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   THEME: CARTOON
+   Family Guy / American Dad animation style
+   ============================================ */
+
+:root[data-theme="cartoon"] {
+  --bg: #87CEEB;
+  --text: #1a1a1a;
+  --text-dim: #333333;
+  --text-muted: #666666;
+  --accent: #ff6b35;
+  animation: none;
+}
+
+:root[data-theme="cartoon"] body {
+  font-family: 'Comic Neue', cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  background-image: url('/img/cartoon-clouds.jpg');
+  background-size: cover;
+  background-position: top center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+:root[data-theme="cartoon"] main {
+  background: #ffffff;
+  border: 4px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  margin-top: 2rem;
+  box-shadow: 8px 8px 0px #1a1a1a;
+  position: relative;
+}
+
+:root[data-theme="cartoon"] .brand-name {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem;
+  letter-spacing: 0.05em;
+  transform: rotate(-1deg);
+  display: inline-block;
+}
+
+:root[data-theme="cartoon"] h1 {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  transform: rotate(0.5deg);
+}
+
+:root[data-theme="cartoon"] .tagline {
+  color: var(--accent);
+}
+
+:root[data-theme="cartoon"] .project {
+  background: #fffde7;
+  border: 3px solid #1a1a1a;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 4px 4px 0px #1a1a1a;
+  transform: rotate(-0.5deg);
+}
+
+:root[data-theme="cartoon"] .project:nth-child(even) {
+  transform: rotate(0.5deg);
+}
+
+:root[data-theme="cartoon"] .project:last-child {
+  padding: 1rem;
+  margin-bottom: 0;
+}
+
+:root[data-theme="cartoon"] .project:not(:last-child)::after {
+  display: none;
+}
+
+:root[data-theme="cartoon"] .project-link {
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+:root[data-theme="cartoon"] .project-link:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+:root[data-theme="cartoon"] .status--live {
+  background: #4caf50;
+  color: white;
+  border-radius: 20px;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid #1a1a1a;
+  font-family: 'Bangers', cursive;
+  font-size: 0.75rem;
+}
+
+:root[data-theme="cartoon"] .status--soon {
+  background: #ffeb3b;
+  color: #1a1a1a;
+  border-radius: 20px;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid #1a1a1a;
+  opacity: 1;
+  font-family: 'Bangers', cursive;
+  font-size: 0.75rem;
+}
+
+:root[data-theme="cartoon"] .about {
+  background: white;
+  border: 3px solid #1a1a1a;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  box-shadow: 4px 4px 0px #1a1a1a;
+}
+
+:root[data-theme="cartoon"] .about::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: 30px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 16px solid #1a1a1a;
+}
+
+:root[data-theme="cartoon"] .about::after {
+  content: '';
+  position: absolute;
+  top: -11px;
+  left: 33px;
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 12px solid white;
+}
+
+:root[data-theme="cartoon"] .social-link {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+:root[data-theme="cartoon"] .social-link:hover {
+  color: #e65100;
+}
+
+:root[data-theme="cartoon"] footer {
+  color: #1a1a1a;
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  text-align: center;
+  max-width: 100%;
+}
+
+/* ============================================
+   THEME: BRUTALIST
+   Raw concrete web / anti-design
+   ============================================ */
+
+:root[data-theme="brutalist"] {
+  --bg: #ffffff;
+  --text: #000000;
+  --text-dim: #000000;
+  --text-muted: #555555;
+  --accent: #000000;
+  animation: none;
+}
+
+:root[data-theme="brutalist"] body {
+  font-family: system-ui, 'Courier New', monospace;
+  font-size: 1rem;
+  line-height: 1.4;
+  border: 8px solid #000;
+}
+
+:root[data-theme="brutalist"] main {
+  max-width: 700px;
+  padding: 2rem 2rem 2rem 3rem;
+}
+
+:root[data-theme="brutalist"] header {
+  margin-bottom: 2rem;
+  border-bottom: 4px solid #000;
+  padding-bottom: 2rem;
+}
+
+:root[data-theme="brutalist"] .brand-name {
+  font-size: 3.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+:root[data-theme="brutalist"] h1 {
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+:root[data-theme="brutalist"] .tagline {
+  color: #555;
+}
+
+:root[data-theme="brutalist"] .logo {
+  color: #000;
+}
+
+:root[data-theme="brutalist"] .project {
+  border: 4px solid #000;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+:root[data-theme="brutalist"] .project:nth-child(odd) {
+  transform: rotate(-1deg);
+}
+
+:root[data-theme="brutalist"] .project:nth-child(even) {
+  transform: rotate(0.7deg);
+  margin-left: 1rem;
+}
+
+:root[data-theme="brutalist"] .project:last-child {
+  padding: 1rem;
+  margin-bottom: 0;
+}
+
+:root[data-theme="brutalist"] .project:not(:last-child)::after {
+  display: none;
+}
+
+:root[data-theme="brutalist"] .project-link {
+  font-weight: 900;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+:root[data-theme="brutalist"] .project-link:hover {
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 0.25rem;
+}
+
+:root[data-theme="brutalist"] .project-desc {
+  font-size: 0.85rem;
+}
+
+:root[data-theme="brutalist"] .status--live {
+  background: #000;
+  color: #fff;
+  border-radius: 0;
+  padding: 0.1rem 0.4rem;
+  font-weight: 900;
+}
+
+:root[data-theme="brutalist"] .status--soon {
+  background: transparent;
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 0;
+  opacity: 1;
+  font-weight: 900;
+}
+
+:root[data-theme="brutalist"] .about {
+  border-top: 4px solid #000;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+}
+
+:root[data-theme="brutalist"] .social-link {
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+:root[data-theme="brutalist"] .social-link:hover {
+  background: #000;
+  color: #fff;
+  padding: 0 0.25rem;
+}
+
+:root[data-theme="brutalist"] footer {
+  border-top: 4px solid #000;
+  max-width: 700px;
+  font-size: 2rem;
+  font-weight: 900;
+  padding-top: 1rem;
+}
+
+/* ============================================
+   THEME: VAPORWAVE
+   90s retrowave / internet aesthetic
+   ============================================ */
+
+:root[data-theme="vaporwave"] {
+  --bg: #2d1b69;
+  --text: #ff71ce;
+  --text-dim: #b967ff;
+  --text-muted: #6b4d8a;
+  --accent: #01cdfe;
+  animation: none;
+}
+
+:root[data-theme="vaporwave"] body {
+  font-family: 'DotGothic16', monospace;
+  font-size: 0.95rem;
+  background-image: url('/img/vaporwave-grid.jpg');
+  background-size: cover;
+  background-position: bottom center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+:root[data-theme="vaporwave"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 27, 105, 0.95) 0%,
+    rgba(45, 27, 105, 0.7) 50%,
+    rgba(45, 27, 105, 0.3) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+:root[data-theme="vaporwave"] main {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="vaporwave"] header::before {
+  content: 'ア エ ス テ テ ィ ッ ク';
+  display: block;
+  font-size: 0.7rem;
+  color: var(--accent);
+  opacity: 0.6;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.3em;
+}
+
+:root[data-theme="vaporwave"] .brand-name {
+  text-shadow: 3px 3px 0px #01cdfe, -1px -1px 0px #b967ff;
+  font-size: 1.1rem;
+}
+
+:root[data-theme="vaporwave"] h1 {
+  text-shadow: 2px 2px 0px rgba(1, 205, 254, 0.3);
+}
+
+:root[data-theme="vaporwave"] .project {
+  background: rgba(45, 27, 105, 0.6);
+  border: 1px solid rgba(1, 205, 254, 0.3);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+  backdrop-filter: blur(4px);
+}
+
+:root[data-theme="vaporwave"] .project:last-child {
+  padding: 0.75rem 1rem;
+}
+
+:root[data-theme="vaporwave"] .project:not(:last-child)::after {
+  content: '· · · · · · · · · · · · · · · · · · · ·';
+  color: var(--accent);
+  opacity: 0.3;
+}
+
+:root[data-theme="vaporwave"] .project-link {
+  color: var(--text);
+}
+
+:root[data-theme="vaporwave"] .project-link:hover {
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(1, 205, 254, 0.5), 2px 2px 0px rgba(255, 113, 206, 0.3);
+  text-decoration: none;
+}
+
+:root[data-theme="vaporwave"] .status--live {
+  background: var(--accent);
+  color: #2d1b69;
+  border-radius: 0;
+}
+
+:root[data-theme="vaporwave"] .status--soon {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  opacity: 0.7;
+}
+
+:root[data-theme="vaporwave"] .social-link {
+  color: var(--accent);
+}
+
+:root[data-theme="vaporwave"] .social-link:hover {
+  text-shadow: 0 0 8px rgba(1, 205, 254, 0.5);
+}
+
+:root[data-theme="vaporwave"] .about {
+  border-top: 1px solid rgba(1, 205, 254, 0.2);
+  padding-top: 2rem;
+}
+
+:root[data-theme="vaporwave"] footer {
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="vaporwave"] footer::after {
+  content: '永遠に';
+  display: block;
+  font-size: 0.7rem;
+  color: var(--accent);
+  opacity: 0.4;
+  margin-top: 0.25rem;
 }

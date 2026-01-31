@@ -25,6 +25,8 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 
   <!-- Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="/styles.css">
 
   <!-- Microsoft Clarity (disabled on localhost) -->
@@ -63,8 +65,52 @@
         <path class="eye-x" d="M121.879 32.1215C123.05 30.9501 124.949 30.95 126.121 32.1215L133.499 39.4995L140.506 32.4936C141.677 31.3223 143.576 31.3225 144.748 32.4936C145.919 33.6652 145.919 35.5652 144.748 36.7368L137.742 43.7426L144.506 50.5063C145.677 51.6779 145.677 53.5769 144.506 54.7485C143.334 55.92 141.435 55.92 140.263 54.7485L133.5 47.9848L126.363 55.1215C125.191 56.2927 123.292 56.2929 122.121 55.1215C120.949 53.95 120.949 52.05 122.121 50.8784L129.257 43.7417L121.879 36.3637C120.707 35.1922 120.707 33.2931 121.879 32.1215Z" fill="currentColor"/>
         <!-- Sun eye (hover in light mode) - centered at (133, 43) -->
         <circle class="eye-mode eye-sun" cx="133" cy="43" r="12" fill="currentColor"/>
-        <!-- Moon eye (hover in dark mode) - closed eyelid centered at (133, 43) -->
+        <!-- Moon eye (hover in dark mode) - centered at (133, 43) -->
         <path class="eye-mode eye-moon" d="M121 43 A12 12 0 0 1 145 43 Z" fill="currentColor"/>
+        <!-- Classified eye: surveillance camera - centered at (133, 43) -->
+        <g class="eye-theme eye-classified">
+          <circle cx="133" cy="40" r="6" fill="currentColor"/>
+          <path d="M127 40L120 34V46L127 40Z" fill="currentColor"/>
+          <rect x="130" y="48" width="6" height="3" rx="1" fill="currentColor"/>
+        </g>
+        <!-- Broadcast eye: signal bars - centered at (133, 43) -->
+        <g class="eye-theme eye-broadcast">
+          <rect x="124" y="46" width="4" height="8" rx="1" fill="currentColor"/>
+          <rect x="131" y="40" width="4" height="14" rx="1" fill="currentColor"/>
+          <rect x="138" y="34" width="4" height="20" rx="1" fill="currentColor"/>
+        </g>
+        <!-- Arcade eye: pixel coin - centered at (133, 43) -->
+        <g class="eye-theme eye-arcade">
+          <rect x="127" y="33" width="4" height="4" fill="currentColor"/>
+          <rect x="131" y="33" width="4" height="4" fill="currentColor"/>
+          <rect x="135" y="33" width="4" height="4" fill="currentColor"/>
+          <rect x="123" y="37" width="4" height="4" fill="currentColor"/>
+          <rect x="139" y="37" width="4" height="4" fill="currentColor"/>
+          <rect x="123" y="41" width="4" height="4" fill="currentColor"/>
+          <rect x="131" y="41" width="4" height="4" fill="currentColor"/>
+          <rect x="139" y="41" width="4" height="4" fill="currentColor"/>
+          <rect x="123" y="45" width="4" height="4" fill="currentColor"/>
+          <rect x="139" y="45" width="4" height="4" fill="currentColor"/>
+          <rect x="127" y="49" width="4" height="4" fill="currentColor"/>
+          <rect x="131" y="49" width="4" height="4" fill="currentColor"/>
+          <rect x="135" y="49" width="4" height="4" fill="currentColor"/>
+        </g>
+        <!-- Cartoon eye: spiral - centered at (133, 43) -->
+        <g class="eye-theme eye-cartoon">
+          <path d="M133 43 C133 39 137 37 139 41 C141 45 137 49 133 47 C129 45 129 39 133 39 C136 39 137 42 135 43" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </g>
+        <!-- Brutalist eye: hazard triangle - centered at (133, 43) -->
+        <g class="eye-theme eye-brutalist">
+          <path d="M133 30L146 54H120Z" stroke="currentColor" stroke-width="3" fill="none" stroke-linejoin="miter"/>
+          <line x1="133" y1="40" x2="133" y2="47" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="133" cy="51" r="1.5" fill="currentColor"/>
+        </g>
+        <!-- Vaporwave eye: glitch lines - centered at (133, 43) -->
+        <g class="eye-theme eye-vaporwave">
+          <line x1="121" y1="36" x2="145" y2="36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="124" y1="43" x2="142" y2="43" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="119" y1="50" x2="147" y2="50" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
       </svg>
       <p class="brand-name">What could go wrong?</p>
       <h1>Tools for the aftermath <span class="tagline">(Someone has to.)</span></h1>
@@ -121,23 +167,27 @@
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Theme toggle
+    // Theme cycle
+    const themes = ['light', 'dark', 'classified', 'broadcast', 'arcade', 'cartoon', 'brutalist', 'vaporwave'];
     const logo = document.querySelector('.logo');
     const root = document.documentElement;
 
-    // Check saved preference
     const saved = localStorage.getItem('theme');
-    if (saved) root.dataset.theme = saved;
+    if (saved && themes.includes(saved)) {
+      root.dataset.theme = saved;
+    } else {
+      root.dataset.theme = 'light';
+    }
 
     logo.addEventListener('click', () => {
-      const isLight = getComputedStyle(root).getPropertyValue('--bg').trim() === '#F8F8F7';
-      const newTheme = isLight ? 'dark' : 'light';
-      root.dataset.theme = newTheme;
-      localStorage.setItem('theme', newTheme);
-      // Track theme toggle in Clarity
+      const current = root.dataset.theme || 'light';
+      const idx = themes.indexOf(current);
+      const next = themes[(idx + 1) % themes.length];
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
       if (window.clarity) {
         clarity('event', 'theme_toggle');
-        clarity('set', 'theme', newTheme);
+        clarity('set', 'theme', next);
       }
     });
 
