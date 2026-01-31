@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&family=Special+Elite&family=Anton&family=Press+Start+2P&family=Bangers&family=Comic+Neue:wght@400;700&family=DotGothic16&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400;700&family=Special+Elite&family=Bebas+Neue&family=Source+Sans+3:wght@400;600;700&family=Press+Start+2P&family=Bangers&family=Comic+Neue:wght@400;700&family=Lexend+Mega:wght@400;700;900&family=Public+Sans:wght@400;500;700&family=DotGothic16&display=swap');
 
 /* Enable CSS custom property animation */
 @property --accent {
@@ -302,42 +302,71 @@ a:focus-visible {
 
 /* ============================================
    THEME: CLASSIFIED
-   Government redacted document aesthetic
+   Aged government document — weathered, real
    ============================================ */
 
 :root[data-theme="classified"] {
-  --bg: #f5e6c8;
-  --text: #3d2b1f;
-  --text-dim: #5c4033;
+  --bg: #ece4d4;
+  --text: #2c1e12;
+  --text-dim: #4a3728;
   --text-muted: #8b7355;
-  --accent: #cc0000;
+  --accent: #b91c1c;
   animation: none;
 }
 
 :root[data-theme="classified"] body {
   font-family: 'Special Elite', serif;
-  font-size: 1rem;
-  background-image: url('/img/classified-stain.jpg');
-  background-size: 600px;
-  background-repeat: repeat;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  background-color: var(--bg);
+  background-image:
+    url('/img/classified-stain.jpg'),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(44, 30, 18, 0.03) 28px,
+      rgba(44, 30, 18, 0.03) 29px
+    );
+  background-size: 800px, auto;
+  background-blend-mode: multiply;
   position: relative;
 }
 
+/* Fold crease lines */
 :root[data-theme="classified"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(90deg, transparent 49.5%, rgba(0,0,0,0.04) 49.5%, rgba(0,0,0,0.04) 50.5%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, rgba(0,0,0,0.03) 49.5%, rgba(0,0,0,0.03) 50.5%, transparent 50.5%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* CLASSIFIED stamp — angled, rough, faded red */
+:root[data-theme="classified"] body::after {
   content: 'CLASSIFIED';
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-35deg);
+  top: 15%;
+  right: 5%;
+  transform: rotate(-18deg);
   font-family: 'Special Elite', serif;
-  font-size: 8rem;
-  font-weight: 700;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 400;
   color: var(--accent);
-  opacity: 0.08;
+  opacity: 0.07;
   pointer-events: none;
   z-index: 0;
   white-space: nowrap;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 4px solid var(--accent);
+  padding: 0.1em 0.3em;
 }
 
 :root[data-theme="classified"] main {
@@ -345,19 +374,38 @@ a:focus-visible {
   z-index: 1;
 }
 
+:root[data-theme="classified"] .logo {
+  filter: sepia(0.4) contrast(1.2);
+}
+
 :root[data-theme="classified"] .brand-name {
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--text-muted);
+  padding-bottom: 0.25rem;
+  display: inline-block;
+}
+
+:root[data-theme="classified"] h1 {
+  margin-top: 0.5rem;
+}
+
+:root[data-theme="classified"] .project {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(44, 30, 18, 0.15);
 }
 
 :root[data-theme="classified"] .status--live {
   background: transparent;
   color: var(--accent);
-  border: 2px dashed var(--accent);
+  border: 2px solid var(--accent);
   border-radius: 0;
-  padding: 0.125rem 0.5rem;
+  padding: 0.1rem 0.5rem;
   text-transform: uppercase;
-  transform: rotate(-2deg);
+  transform: rotate(-3deg);
+  font-family: 'Special Elite', serif;
+  letter-spacing: 0.1em;
 }
 
 :root[data-theme="classified"] .status--soon {
@@ -365,87 +413,155 @@ a:focus-visible {
   color: var(--text-muted);
   border: 2px dashed var(--text-muted);
   border-radius: 0;
-  padding: 0.125rem 0.5rem;
-  transform: rotate(1deg);
+  padding: 0.1rem 0.5rem;
+  transform: rotate(1.5deg);
+  font-family: 'Special Elite', serif;
+  opacity: 0.8;
 }
 
+/* Redaction bars — varying widths */
 :root[data-theme="classified"] .project:not(:last-child)::after {
   content: '████████████████████████████████████████';
-  font-size: 0.5rem;
-  color: #3d2b1f;
-  opacity: 0.3;
-  letter-spacing: -0.05em;
+  font-size: 0.4rem;
+  color: var(--text);
+  opacity: 0.15;
+  letter-spacing: -0.08em;
+}
+
+:root[data-theme="classified"] .project:nth-child(2):not(:last-child)::after {
+  content: '██████████████████████████';
+  opacity: 0.2;
 }
 
 :root[data-theme="classified"] .project-link:hover {
   text-decoration: none;
-  background: rgba(204, 0, 0, 0.1);
+  background: rgba(185, 28, 28, 0.08);
+  padding: 0 0.15rem;
+}
+
+:root[data-theme="classified"] .about {
+  border-top: 1px dashed var(--text-muted);
+  padding-top: 2rem;
+  font-size: 0.9rem;
+}
+
+:root[data-theme="classified"] footer {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
 }
 
 :root[data-theme="classified"] footer::before {
-  content: 'DOCUMENT REF: WCGW-' attr(data-year) ' // EYES ONLY';
+  content: 'DOC REF: WCGW-2026-001 // EYES ONLY // DO NOT DISTRIBUTE';
   display: block;
-  font-size: 0.7rem;
-  color: var(--text-muted);
+  color: var(--accent);
+  opacity: 0.5;
   margin-bottom: 0.5rem;
-  letter-spacing: 0.1em;
+  font-size: 0.6rem;
 }
 
 /* ============================================
    THEME: BROADCAST
-   Breaking news / cable TV aesthetic
+   CNN / Sky News — layered, urgent, produced
    ============================================ */
 
 :root[data-theme="broadcast"] {
-  --bg: #0f1b3d;
-  --text: #ffffff;
-  --text-dim: #c4cede;
-  --text-muted: #6b7fa3;
-  --accent: #dc2626;
+  --bg: #0a0e1a;
+  --text: #f0f2f5;
+  --text-dim: #b8c0d0;
+  --text-muted: #4a5677;
+  --accent: #e11d48;
   animation: none;
 }
 
 :root[data-theme="broadcast"] body {
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Source Sans 3', system-ui, sans-serif;
   font-size: 0.9rem;
-  border-top: 4px solid var(--accent);
+  background: linear-gradient(165deg, #0a0e1a 0%, #111832 50%, #0d1228 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Top red line + network badge area */
+:root[data-theme="broadcast"] body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), #ff4466, var(--accent));
+  z-index: 200;
 }
 
 :root[data-theme="broadcast"] main {
-  max-width: 600px;
+  max-width: 620px;
+  padding-top: 3rem;
+}
+
+:root[data-theme="broadcast"] header {
+  margin-bottom: 3rem;
 }
 
 :root[data-theme="broadcast"] .brand-name {
   background: var(--accent);
   color: white;
-  padding: 0.25rem 0.75rem;
+  padding: 0.3rem 0.85rem;
   display: inline-block;
-  font-family: 'Anton', sans-serif;
-  font-size: 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.15rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  position: relative;
+}
+
+/* Live dot indicator */
+:root[data-theme="broadcast"] .brand-name::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+  animation: broadcast-dot 2s ease-in-out infinite;
+}
+
+@keyframes broadcast-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
 }
 
 :root[data-theme="broadcast"] h1 {
-  font-family: 'Anton', sans-serif;
-  font-size: 1.5rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   text-transform: uppercase;
-  margin-top: 0.75rem;
+  margin-top: 1rem;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
 }
 
 :root[data-theme="broadcast"] .tagline {
   color: var(--accent);
+  font-weight: 600;
+}
+
+:root[data-theme="broadcast"] .projects {
+  margin-bottom: 3rem;
 }
 
 :root[data-theme="broadcast"] .project {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+  padding: 0.85rem 1rem 0.85rem 1.25rem;
   border-left: 3px solid var(--accent);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0 4px 4px 0;
+  position: relative;
 }
 
 :root[data-theme="broadcast"] .project:last-child {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem 0.85rem 1.25rem;
 }
 
 :root[data-theme="broadcast"] .project:not(:last-child)::after {
@@ -453,79 +569,116 @@ a:focus-visible {
 }
 
 :root[data-theme="broadcast"] .project-link {
-  font-family: 'Anton', sans-serif;
-  font-size: 1.1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+:root[data-theme="broadcast"] .project-link:hover {
+  color: var(--accent);
+  text-decoration: none;
 }
 
 :root[data-theme="broadcast"] .status--live {
   background: var(--accent);
-  animation: pulse-live 2s ease-in-out infinite;
-}
-
-@keyframes pulse-live {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  color: white;
+  border-radius: 2px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  animation: broadcast-dot 2s ease-in-out infinite;
 }
 
 :root[data-theme="broadcast"] .status--soon {
-  background: var(--text-muted);
+  background: rgba(255,255,255,0.1);
+  color: var(--text-dim);
+  border-radius: 2px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 
 :root[data-theme="broadcast"] .about {
-  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
   padding-top: 2rem;
 }
 
-:root[data-theme="broadcast"] body::after {
-  content: 'WCGW NEWS ★ TOOLS FOR THE AFTERMATH ★ SOMEONE HAS TO ★ BREAKING: SLOP DETECTED ★ WCGW NEWS ★ TOOLS FOR THE AFTERMATH ★ SOMEONE HAS TO ★ BREAKING: SLOP DETECTED ★';
+:root[data-theme="broadcast"] .social-link {
+  color: var(--accent);
+}
+
+:root[data-theme="broadcast"] .social-link:hover {
+  color: #ff4466;
+}
+
+/* Ticker tape — actual news crawl feel */
+:root[data-theme="broadcast"] footer {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: 100;
+  background: rgba(10, 14, 26, 0.95);
+  border-top: 2px solid var(--accent);
+}
+
+:root[data-theme="broadcast"] footer p {
   background: var(--accent);
   color: white;
-  padding: 0.4rem 0;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  padding: 0.35rem 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
   white-space: nowrap;
   overflow: hidden;
-  animation: ticker 20s linear infinite;
-  z-index: 100;
+  animation: ticker 25s linear infinite;
+}
+
+:root[data-theme="broadcast"] footer p::before {
+  content: 'WCGW NEWS \00a0\00a0★\00a0\00a0 TOOLS FOR THE AFTERMATH \00a0\00a0★\00a0\00a0 SOMEONE HAS TO \00a0\00a0★\00a0\00a0 BREAKING: SLOP LEVELS RISING \00a0\00a0★\00a0\00a0 PERIODIC TABLE OF SLOP NOW LIVE \00a0\00a0★\00a0\00a0 ';
+}
+
+:root[data-theme="broadcast"] footer p::after {
+  content: '\00a0\00a0★\00a0\00a0 WCGW NEWS \00a0\00a0★\00a0\00a0 TOOLS FOR THE AFTERMATH \00a0\00a0★\00a0\00a0 SOMEONE HAS TO \00a0\00a0★\00a0\00a0 BREAKING: SLOP LEVELS RISING \00a0\00a0★\00a0\00a0 PERIODIC TABLE OF SLOP NOW LIVE';
 }
 
 @keyframes ticker {
-  0% { text-indent: 100%; }
-  100% { text-indent: -200%; }
+  0% { text-indent: 100vw; }
+  100% { text-indent: -200vw; }
 }
 
-:root[data-theme="broadcast"] footer {
-  padding-bottom: 3rem;
+/* Push main content up so ticker doesn't cover it */
+:root[data-theme="broadcast"] body {
+  padding-bottom: 2.5rem;
 }
 
 /* ============================================
    THEME: ARCADE
-   Retro gaming / pixel art CRT aesthetic
+   CRT terminal — phosphor glow, real scanlines
    ============================================ */
 
 :root[data-theme="arcade"] {
-  --bg: #000000;
+  --bg: #0a0a0a;
   --text: #33ff00;
-  --text-dim: #22aa00;
-  --text-muted: #116600;
+  --text-dim: #28cc00;
+  --text-muted: #1a7a00;
   --accent: #ff00ff;
   animation: none;
 }
 
 :root[data-theme="arcade"] body {
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.6rem;
-  line-height: 2.2;
+  font-size: 0.55rem;
+  line-height: 2.4;
   position: relative;
-  image-rendering: pixelated;
+  background: radial-gradient(ellipse at center, #0d1a0d 0%, #050505 70%);
 }
 
+/* Scanlines — tight, subtle */
 :root[data-theme="arcade"] body::before {
   content: '';
   position: fixed;
@@ -535,23 +688,24 @@ a:focus-visible {
   bottom: 0;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.15) 0px,
-    rgba(0, 0, 0, 0.15) 1px,
+    transparent 0px,
     transparent 1px,
-    transparent 3px
+    rgba(0, 0, 0, 0.12) 1px,
+    rgba(0, 0, 0, 0.12) 2px
   );
   pointer-events: none;
   z-index: 1000;
 }
 
+/* CRT vignette — heavy, real */
 :root[data-theme="arcade"] body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7);
+  top: -2%;
+  left: -2%;
+  right: -2%;
+  bottom: -2%;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.85) 100%);
   pointer-events: none;
   z-index: 999;
 }
@@ -559,49 +713,64 @@ a:focus-visible {
 :root[data-theme="arcade"] main {
   position: relative;
   z-index: 1;
+  max-width: 500px;
+}
+
+:root[data-theme="arcade"] .logo {
+  color: var(--text);
+  filter: drop-shadow(0 0 6px rgba(51, 255, 0, 0.4));
 }
 
 :root[data-theme="arcade"] .brand-name {
   color: var(--accent);
   text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
 }
 
 :root[data-theme="arcade"] h1 {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   text-transform: uppercase;
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.3);
 }
 
 :root[data-theme="arcade"] .project {
-  padding: 0.5rem 0;
-  padding-bottom: 1rem;
+  padding: 0.75rem 0;
+  padding-bottom: 1.25rem;
+}
+
+:root[data-theme="arcade"] .project-link {
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.3);
 }
 
 :root[data-theme="arcade"] .project-link::before {
-  content: '> ';
+  content: '▸ ';
   color: var(--accent);
 }
 
 :root[data-theme="arcade"] .project-link:hover {
   color: var(--accent);
   text-decoration: none;
+  text-shadow: 0 0 12px rgba(255, 0, 255, 0.6);
 }
 
 :root[data-theme="arcade"] .project:not(:last-child)::after {
-  content: '- - - - - - - - - - - - - - - - - - - -';
+  content: '· · · · · · · · · · · · · · · · · · · · · ·';
   color: var(--text-muted);
-  font-size: 0.5rem;
+  font-size: 0.4rem;
+  opacity: 0.5;
 }
 
 :root[data-theme="arcade"] .status--live {
   background: var(--accent);
   color: #000;
-  animation: blink-arcade 1s step-end infinite;
   border-radius: 0;
+  box-shadow: 0 0 6px rgba(255, 0, 255, 0.4);
+  animation: blink-arcade 1.2s step-end infinite;
 }
 
 @keyframes blink-arcade {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%, 70% { opacity: 1; }
+  71%, 100% { opacity: 0; }
 }
 
 :root[data-theme="arcade"] .status--soon {
@@ -611,33 +780,42 @@ a:focus-visible {
   border-radius: 0;
 }
 
-:root[data-theme="arcade"] .social-link:hover {
+:root[data-theme="arcade"] .about {
+  border-top: 1px solid var(--text-muted);
+  padding-top: 2rem;
+}
+
+:root[data-theme="arcade"] .social-link {
   color: var(--accent);
+  text-shadow: 0 0 4px rgba(255, 0, 255, 0.3);
+}
+
+:root[data-theme="arcade"] .social-link:hover {
+  text-shadow: 0 0 12px rgba(255, 0, 255, 0.6);
 }
 
 :root[data-theme="arcade"] footer {
-  font-size: 0.5rem;
+  font-size: 0.45rem;
+  text-shadow: 0 0 3px rgba(51, 255, 0, 0.3);
 }
 
-:root[data-theme="arcade"] footer::before {
-  content: 'INSERT COIN TO CONTINUE';
-  display: block;
+:root[data-theme="arcade"] footer p::before {
+  content: 'INSERT COIN ';
   color: var(--accent);
   animation: blink-arcade 1.5s step-end infinite;
-  margin-bottom: 0.5rem;
 }
 
 /* ============================================
    THEME: CARTOON
-   Family Guy / American Dad animation style
+   Family Guy / American Dad — bold, bouncy, alive
    ============================================ */
 
 :root[data-theme="cartoon"] {
-  --bg: #87CEEB;
+  --bg: #5bb8f5;
   --text: #1a1a1a;
-  --text-dim: #333333;
-  --text-muted: #666666;
-  --accent: #ff6b35;
+  --text-dim: #2d2d2d;
+  --text-muted: #555555;
+  --accent: #ff5722;
   animation: none;
 }
 
@@ -645,57 +823,104 @@ a:focus-visible {
   font-family: 'Comic Neue', cursive;
   font-size: 1rem;
   font-weight: 700;
+  line-height: 1.6;
+  background-color: var(--bg);
   background-image: url('/img/cartoon-clouds.jpg');
   background-size: cover;
   background-position: top center;
   background-attachment: fixed;
-  background-repeat: no-repeat;
 }
 
 :root[data-theme="cartoon"] main {
   background: #ffffff;
-  border: 4px solid #1a1a1a;
-  border-radius: 16px;
+  border: 5px solid #1a1a1a;
+  border-radius: 24px;
   padding: 2.5rem 2rem;
   margin-top: 2rem;
-  box-shadow: 8px 8px 0px #1a1a1a;
+  box-shadow: 10px 10px 0px #1a1a1a;
   position: relative;
+  overflow: hidden;
+}
+
+/* Halftone dot overlay on panel */
+:root[data-theme="cartoon"] main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 6px 6px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+:root[data-theme="cartoon"] main > * {
+  position: relative;
+  z-index: 1;
+}
+
+:root[data-theme="cartoon"] .logo {
+  color: var(--accent);
+  filter: drop-shadow(3px 3px 0px #1a1a1a);
 }
 
 :root[data-theme="cartoon"] .brand-name {
   font-family: 'Bangers', cursive;
-  font-size: 1.4rem;
-  letter-spacing: 0.05em;
-  transform: rotate(-1deg);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  transform: rotate(-2deg);
   display: inline-block;
+  color: var(--accent);
+  text-shadow: 2px 2px 0px #1a1a1a;
 }
 
 :root[data-theme="cartoon"] h1 {
   font-family: 'Bangers', cursive;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   transform: rotate(0.5deg);
+  letter-spacing: 0.02em;
 }
 
 :root[data-theme="cartoon"] .tagline {
   color: var(--accent);
+  font-family: 'Bangers', cursive;
 }
 
 :root[data-theme="cartoon"] .project {
   background: #fffde7;
-  border: 3px solid #1a1a1a;
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 4px 4px 0px #1a1a1a;
-  transform: rotate(-0.5deg);
+  border: 4px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 6px 6px 0px #1a1a1a;
+  transform: rotate(-0.8deg);
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
 }
 
-:root[data-theme="cartoon"] .project:nth-child(even) {
-  transform: rotate(0.5deg);
+:root[data-theme="cartoon"] .project:hover {
+  transform: rotate(0deg) translateY(-2px);
+  box-shadow: 8px 10px 0px #1a1a1a;
+}
+
+:root[data-theme="cartoon"] .project:nth-child(2) {
+  transform: rotate(0.6deg);
+  background: #e8f5e9;
+}
+
+:root[data-theme="cartoon"] .project:nth-child(3) {
+  transform: rotate(-0.3deg);
+  background: #fce4ec;
+}
+
+:root[data-theme="cartoon"] .project:nth-child(4) {
+  transform: rotate(1deg);
+  background: #e3f2fd;
 }
 
 :root[data-theme="cartoon"] .project:last-child {
-  padding: 1rem;
+  padding: 1rem 1.25rem;
   margin-bottom: 0;
 }
 
@@ -705,7 +930,7 @@ a:focus-visible {
 
 :root[data-theme="cartoon"] .project-link {
   font-family: 'Bangers', cursive;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   letter-spacing: 0.02em;
 }
 
@@ -718,146 +943,164 @@ a:focus-visible {
   background: #4caf50;
   color: white;
   border-radius: 20px;
-  padding: 0.15rem 0.6rem;
-  border: 2px solid #1a1a1a;
+  padding: 0.15rem 0.65rem;
+  border: 3px solid #1a1a1a;
   font-family: 'Bangers', cursive;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  box-shadow: 2px 2px 0px #1a1a1a;
 }
 
 :root[data-theme="cartoon"] .status--soon {
-  background: #ffeb3b;
+  background: #ffc107;
   color: #1a1a1a;
   border-radius: 20px;
-  padding: 0.15rem 0.6rem;
-  border: 2px solid #1a1a1a;
+  padding: 0.15rem 0.65rem;
+  border: 3px solid #1a1a1a;
   opacity: 1;
   font-family: 'Bangers', cursive;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
+  box-shadow: 2px 2px 0px #1a1a1a;
 }
 
+/* Speech bubble about section */
 :root[data-theme="cartoon"] .about {
   background: white;
-  border: 3px solid #1a1a1a;
-  border-radius: 20px;
-  padding: 1.25rem 1.5rem;
+  border: 4px solid #1a1a1a;
+  border-radius: 24px;
+  padding: 1.5rem 1.75rem;
   position: relative;
-  box-shadow: 4px 4px 0px #1a1a1a;
+  box-shadow: 6px 6px 0px #1a1a1a;
+  margin-top: 1.5rem;
 }
 
 :root[data-theme="cartoon"] .about::before {
   content: '';
   position: absolute;
-  top: -16px;
-  left: 30px;
+  top: -20px;
+  left: 32px;
   width: 0;
   height: 0;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 16px solid #1a1a1a;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 20px solid #1a1a1a;
 }
 
 :root[data-theme="cartoon"] .about::after {
   content: '';
   position: absolute;
-  top: -11px;
-  left: 33px;
+  top: -13px;
+  left: 36px;
   width: 0;
   height: 0;
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-  border-bottom: 12px solid white;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 14px solid white;
 }
 
 :root[data-theme="cartoon"] .social-link {
   color: var(--accent);
   font-weight: 700;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
 }
 
 :root[data-theme="cartoon"] .social-link:hover {
-  color: #e65100;
+  color: #e64a19;
+  text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
 }
 
 :root[data-theme="cartoon"] footer {
   color: #1a1a1a;
   font-family: 'Bangers', cursive;
-  font-size: 1rem;
+  font-size: 1.1rem;
   text-align: center;
   max-width: 100%;
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
 }
 
 /* ============================================
    THEME: BRUTALIST
-   Raw concrete web / anti-design
+   Neubrutalist — HARD shadows, red accent, loud
    ============================================ */
 
 :root[data-theme="brutalist"] {
   --bg: #ffffff;
   --text: #000000;
-  --text-dim: #000000;
-  --text-muted: #555555;
-  --accent: #000000;
+  --text-dim: #1a1a1a;
+  --text-muted: #666666;
+  --accent: #ff5757;
   animation: none;
 }
 
 :root[data-theme="brutalist"] body {
-  font-family: system-ui, 'Courier New', monospace;
+  font-family: 'Public Sans', system-ui, sans-serif;
   font-size: 1rem;
-  line-height: 1.4;
-  border: 8px solid #000;
+  line-height: 1.5;
+  background: #ffffff;
 }
 
 :root[data-theme="brutalist"] main {
-  max-width: 700px;
-  padding: 2rem 2rem 2rem 3rem;
+  max-width: 680px;
+  padding: 3rem 2rem;
 }
 
 :root[data-theme="brutalist"] header {
-  margin-bottom: 2rem;
-  border-bottom: 4px solid #000;
+  margin-bottom: 3rem;
   padding-bottom: 2rem;
+  border-bottom: 6px solid #000;
+}
+
+:root[data-theme="brutalist"] .logo {
+  color: #000;
+  filter: drop-shadow(4px 4px 0px var(--accent));
 }
 
 :root[data-theme="brutalist"] .brand-name {
-  font-size: 3.5rem;
+  font-family: 'Lexend Mega', sans-serif;
+  font-size: clamp(2.5rem, 7vw, 4rem);
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
   color: #000;
   margin-bottom: 0.5rem;
 }
 
 :root[data-theme="brutalist"] h1 {
-  font-size: 1.2rem;
-  font-weight: 900;
+  font-family: 'Lexend Mega', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
 :root[data-theme="brutalist"] .tagline {
-  color: #555;
-}
-
-:root[data-theme="brutalist"] .logo {
-  color: #000;
+  color: var(--accent);
+  font-weight: 700;
 }
 
 :root[data-theme="brutalist"] .project {
   border: 4px solid #000;
-  padding: 1rem;
-  margin-bottom: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: -4px;
+  background: #fff;
+  box-shadow: 6px 6px 0px #000;
+  position: relative;
+  transition: transform 150ms ease-out, box-shadow 150ms ease-out;
 }
 
-:root[data-theme="brutalist"] .project:nth-child(odd) {
-  transform: rotate(-1deg);
+:root[data-theme="brutalist"] .project:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #000;
+  z-index: 2;
 }
 
 :root[data-theme="brutalist"] .project:nth-child(even) {
-  transform: rotate(0.7deg);
-  margin-left: 1rem;
+  background: #FFDE59;
 }
 
 :root[data-theme="brutalist"] .project:last-child {
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   margin-bottom: 0;
 }
 
@@ -866,28 +1109,35 @@ a:focus-visible {
 }
 
 :root[data-theme="brutalist"] .project-link {
-  font-weight: 900;
+  font-family: 'Lexend Mega', sans-serif;
+  font-weight: 700;
   font-size: 1.1rem;
   text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
 :root[data-theme="brutalist"] .project-link:hover {
   background: #000;
   color: #fff;
   text-decoration: none;
-  padding: 0 0.25rem;
+  padding: 0.1rem 0.35rem;
+  margin: -0.1rem -0.35rem;
 }
 
 :root[data-theme="brutalist"] .project-desc {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
 }
 
 :root[data-theme="brutalist"] .status--live {
-  background: #000;
+  background: var(--accent);
   color: #fff;
+  border: 3px solid #000;
   border-radius: 0;
-  padding: 0.1rem 0.4rem;
-  font-weight: 900;
+  padding: 0.1rem 0.5rem;
+  font-weight: 700;
+  font-family: 'Lexend Mega', sans-serif;
+  box-shadow: 3px 3px 0px #000;
 }
 
 :root[data-theme="brutalist"] .status--soon {
@@ -896,44 +1146,59 @@ a:focus-visible {
   border: 3px solid #000;
   border-radius: 0;
   opacity: 1;
-  font-weight: 900;
+  font-weight: 700;
+  font-family: 'Lexend Mega', sans-serif;
+  padding: 0.1rem 0.5rem;
 }
 
 :root[data-theme="brutalist"] .about {
-  border-top: 4px solid #000;
-  padding-top: 1.5rem;
-  margin-top: 2rem;
+  border: 4px solid #000;
+  padding: 1.5rem;
+  margin-top: 2.5rem;
+  background: var(--accent);
+  color: #000;
+  box-shadow: 6px 6px 0px #000;
+}
+
+:root[data-theme="brutalist"] .about p {
+  color: #000;
 }
 
 :root[data-theme="brutalist"] .social-link {
-  font-weight: 900;
-  text-transform: uppercase;
+  color: #000;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 3px;
 }
 
 :root[data-theme="brutalist"] .social-link:hover {
   background: #000;
-  color: #fff;
-  padding: 0 0.25rem;
+  color: var(--accent);
+  padding: 0.1rem 0.25rem;
+  margin: -0.1rem -0.25rem;
+  text-decoration: none;
 }
 
 :root[data-theme="brutalist"] footer {
-  border-top: 4px solid #000;
-  max-width: 700px;
-  font-size: 2rem;
+  max-width: 680px;
+  font-family: 'Lexend Mega', sans-serif;
+  font-size: 1.5rem;
   font-weight: 900;
-  padding-top: 1rem;
+  padding-top: 2rem;
+  color: #000;
 }
 
 /* ============================================
    THEME: VAPORWAVE
-   90s retrowave / internet aesthetic
+   真の美学 — chrome, neon, the grid calls
    ============================================ */
 
 :root[data-theme="vaporwave"] {
-  --bg: #2d1b69;
+  --bg: #1a0a3e;
   --text: #ff71ce;
   --text-dim: #b967ff;
-  --text-muted: #6b4d8a;
+  --text-muted: #5a3d7a;
   --accent: #01cdfe;
   animation: none;
 }
@@ -941,14 +1206,15 @@ a:focus-visible {
 :root[data-theme="vaporwave"] body {
   font-family: 'DotGothic16', monospace;
   font-size: 0.95rem;
+  background-color: #1a0a3e;
   background-image: url('/img/vaporwave-grid.jpg');
   background-size: cover;
   background-position: bottom center;
   background-attachment: fixed;
-  background-repeat: no-repeat;
   position: relative;
 }
 
+/* Top gradient fade — let grid show through */
 :root[data-theme="vaporwave"] body::before {
   content: '';
   position: fixed;
@@ -958,54 +1224,96 @@ a:focus-visible {
   bottom: 0;
   background: linear-gradient(
     180deg,
-    rgba(45, 27, 105, 0.95) 0%,
-    rgba(45, 27, 105, 0.7) 50%,
-    rgba(45, 27, 105, 0.3) 100%
+    rgba(26, 10, 62, 0.92) 0%,
+    rgba(26, 10, 62, 0.6) 60%,
+    rgba(26, 10, 62, 0.15) 100%
   );
   pointer-events: none;
   z-index: 0;
 }
 
-:root[data-theme="vaporwave"] main {
-  position: relative;
+/* Subtle scanlines */
+:root[data-theme="vaporwave"] body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.06) 2px,
+    rgba(0, 0, 0, 0.06) 4px
+  );
+  pointer-events: none;
   z-index: 1;
 }
 
+:root[data-theme="vaporwave"] main {
+  position: relative;
+  z-index: 2;
+}
+
+:root[data-theme="vaporwave"] header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
 :root[data-theme="vaporwave"] header::before {
-  content: 'ア エ ス テ テ ィ ッ ク';
+  content: '真 の 美 学';
   display: block;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--accent);
-  opacity: 0.6;
-  margin-bottom: 0.5rem;
-  letter-spacing: 0.3em;
+  opacity: 0.5;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5em;
+}
+
+:root[data-theme="vaporwave"] .logo {
+  color: var(--accent);
+  filter: drop-shadow(0 0 8px rgba(1, 205, 254, 0.4)) drop-shadow(0 0 20px rgba(185, 103, 255, 0.2));
 }
 
 :root[data-theme="vaporwave"] .brand-name {
-  text-shadow: 3px 3px 0px #01cdfe, -1px -1px 0px #b967ff;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, #ff71ce, #01cdfe, #b967ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(255, 113, 206, 0.3));
 }
 
 :root[data-theme="vaporwave"] h1 {
-  text-shadow: 2px 2px 0px rgba(1, 205, 254, 0.3);
+  text-shadow: 0 0 20px rgba(1, 205, 254, 0.3);
+}
+
+:root[data-theme="vaporwave"] .tagline {
+  color: var(--accent);
+  opacity: 0.7;
 }
 
 :root[data-theme="vaporwave"] .project {
-  background: rgba(45, 27, 105, 0.6);
-  border: 1px solid rgba(1, 205, 254, 0.3);
-  padding: 0.75rem 1rem;
-  margin-bottom: 0.75rem;
-  backdrop-filter: blur(4px);
+  background: rgba(26, 10, 62, 0.7);
+  border: 1px solid rgba(1, 205, 254, 0.2);
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 0.5rem;
+  backdrop-filter: blur(8px);
+  transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+:root[data-theme="vaporwave"] .project:hover {
+  border-color: rgba(1, 205, 254, 0.5);
+  box-shadow: 0 0 20px rgba(1, 205, 254, 0.1);
 }
 
 :root[data-theme="vaporwave"] .project:last-child {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.25rem;
 }
 
 :root[data-theme="vaporwave"] .project:not(:last-child)::after {
-  content: '· · · · · · · · · · · · · · · · · · · ·';
-  color: var(--accent);
-  opacity: 0.3;
+  display: none;
 }
 
 :root[data-theme="vaporwave"] .project-link {
@@ -1014,22 +1322,23 @@ a:focus-visible {
 
 :root[data-theme="vaporwave"] .project-link:hover {
   color: var(--accent);
-  text-shadow: 0 0 8px rgba(1, 205, 254, 0.5), 2px 2px 0px rgba(255, 113, 206, 0.3);
+  text-shadow: 0 0 10px rgba(1, 205, 254, 0.5), 3px 3px 0px rgba(185, 103, 255, 0.3);
   text-decoration: none;
 }
 
 :root[data-theme="vaporwave"] .status--live {
-  background: var(--accent);
-  color: #2d1b69;
+  background: linear-gradient(90deg, #01cdfe, #05ffa1);
+  color: #1a0a3e;
   border-radius: 0;
+  font-weight: 700;
 }
 
 :root[data-theme="vaporwave"] .status--soon {
   background: transparent;
   color: var(--accent);
-  border: 1px solid var(--accent);
+  border: 1px solid rgba(1, 205, 254, 0.4);
   border-radius: 0;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 :root[data-theme="vaporwave"] .social-link {
@@ -1037,25 +1346,25 @@ a:focus-visible {
 }
 
 :root[data-theme="vaporwave"] .social-link:hover {
-  text-shadow: 0 0 8px rgba(1, 205, 254, 0.5);
+  text-shadow: 0 0 10px rgba(1, 205, 254, 0.6);
+  color: #05ffa1;
 }
 
 :root[data-theme="vaporwave"] .about {
-  border-top: 1px solid rgba(1, 205, 254, 0.2);
+  border-top: 1px solid rgba(1, 205, 254, 0.15);
   padding-top: 2rem;
+  text-align: center;
 }
 
 :root[data-theme="vaporwave"] footer {
   color: var(--text-muted);
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  text-align: center;
 }
 
-:root[data-theme="vaporwave"] footer::after {
-  content: '永遠に';
-  display: block;
-  font-size: 0.7rem;
+:root[data-theme="vaporwave"] footer p::after {
+  content: ' \00a0\00a0 永遠に';
   color: var(--accent);
   opacity: 0.4;
-  margin-top: 0.25rem;
 }
