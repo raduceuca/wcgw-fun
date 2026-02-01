@@ -2,11 +2,13 @@ import { useState, useCallback, useRef } from 'react'
 import { ApiKeyInput } from './components/ApiKeyInput'
 import { ImageUpload } from './components/ImageUpload'
 import { PromptBuilder } from './components/PromptBuilder'
+import { History } from './components/History'
 import { ResultGrid } from './components/ResultGrid'
 import { Lightbox } from './components/Lightbox'
 import { extractTags, resolvePrompts } from './lib/merge-tags'
 import { generateImage } from './lib/gemini'
 import { downloadAllAsZip } from './lib/download'
+import { getHistory, pushHistory } from './lib/storage'
 import type { TagDefinition, GenerationResult } from './types'
 
 export function App() {
@@ -18,7 +20,17 @@ export function App() {
   const [running, setRunning] = useState(false)
   const [concurrency, setConcurrency] = useState(3)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [history, setHistory] = useState(() => getHistory())
   const abortRef = useRef(false)
+
+  function refreshHistory() {
+    setHistory(getHistory())
+  }
+
+  function handleLoadHistory(tmpl: string, tags: Record<string, string>) {
+    setTemplate(tmpl)
+    setTagValues(tags)
+  }
 
   const canGenerate = apiKey.trim().length > 0
     && image !== null
@@ -91,6 +103,8 @@ export function App() {
   }
 
   function handleGenerate() {
+    pushHistory(template, tagValues)
+    refreshHistory()
     const items = buildPrompts()
     setResults(items)
     runGeneration(items)
@@ -128,6 +142,12 @@ export function App() {
           onTemplateChange={setTemplate}
           tagValues={tagValues}
           onTagValuesChange={setTagValues}
+        />
+
+        <History
+          entries={history}
+          onLoad={handleLoadHistory}
+          onEntriesChange={refreshHistory}
         />
 
         <div className="flex items-center gap-3">
