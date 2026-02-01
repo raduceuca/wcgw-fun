@@ -16,13 +16,31 @@ function extensionForMime(mime: string): string {
   return 'png'
 }
 
-export function buildFilename(result: GenerationResult): string {
+export function buildFilename(result: GenerationResult, index: number): string {
   const tagValues = Object.values(result.prompt.tags)
-  const stem = tagValues.length > 0
+  const label = tagValues.length > 0
     ? slugify(tagValues.join('-'))
     : slugify(result.prompt.text.slice(0, 60))
+  const num = String(index + 1).padStart(3, '0')
   const ext = extensionForMime(result.mimeType ?? 'image/png')
-  return `${stem}.${ext}`
+  return `batch-${num}-${label}.${ext}`
+}
+
+export function downloadSingle(result: GenerationResult, index: number): void {
+  if (!result.imageData) return
+  const name = buildFilename(result, index)
+  const binary = atob(result.imageData)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i)
+  }
+  const blob = new Blob([bytes], { type: result.mimeType ?? 'image/png' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = name
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 export async function downloadAllAsZip(
@@ -34,8 +52,8 @@ export async function downloadAllAsZip(
   const zip = new JSZip()
   const usedNames = new Set<string>()
 
-  for (const result of successful) {
-    let name = buildFilename(result)
+  for (const [idx, result] of successful.entries()) {
+    let name = buildFilename(result, idx)
     if (usedNames.has(name)) {
       const [stem, ext] = name.split(/\.(?=[^.]+$)/)
       let i = 2

@@ -3,6 +3,7 @@ import { ApiKeyInput } from './components/ApiKeyInput'
 import { ImageUpload } from './components/ImageUpload'
 import { PromptBuilder } from './components/PromptBuilder'
 import { ResultGrid } from './components/ResultGrid'
+import { Lightbox } from './components/Lightbox'
 import { extractTags, resolvePrompts } from './lib/merge-tags'
 import { generateImage } from './lib/gemini'
 import { downloadAllAsZip } from './lib/download'
@@ -16,6 +17,7 @@ export function App() {
   const [results, setResults] = useState<GenerationResult[]>([])
   const [running, setRunning] = useState(false)
   const [concurrency, setConcurrency] = useState(3)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const abortRef = useRef(false)
 
   const canGenerate = apiKey.trim().length > 0
@@ -171,7 +173,16 @@ export function App() {
           </div>
         </div>
 
-        <ResultGrid results={results} onRetry={handleRetry} />
+        <ResultGrid results={results} onRetry={handleRetry} onView={setLightboxIndex} />
+
+        {lightboxIndex !== null && (
+          <Lightbox
+            results={results}
+            currentIndex={lightboxIndex}
+            onClose={() => setLightboxIndex(null)}
+            onNavigate={setLightboxIndex}
+          />
+        )}
       </div>
     </div>
   )

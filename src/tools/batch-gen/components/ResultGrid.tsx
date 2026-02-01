@@ -4,9 +4,10 @@ import { ResultCard } from './ResultCard'
 interface Props {
   readonly results: readonly GenerationResult[]
   readonly onRetry: (id: string) => void
+  readonly onView: (index: number) => void
 }
 
-export function ResultGrid({ results, onRetry }: Props) {
+export function ResultGrid({ results, onRetry, onView }: Props) {
   if (results.length === 0) return null
 
   const done = results.filter(r => r.status === 'success' || r.status === 'error').length
@@ -29,8 +30,8 @@ export function ResultGrid({ results, onRetry }: Props) {
       )}
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {results.map(r => (
-          <ResultCard key={r.id} result={r} onRetry={onRetry} />
+        {results.map((r, i) => (
+          <ResultCard key={r.id} result={r} index={i} onRetry={onRetry} onView={onView} />
         ))}
       </div>
     </section>
