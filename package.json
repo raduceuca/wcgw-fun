@@ -1,6 +1,7 @@
 {
   "name": "wcgw-fun",
   "private": true,
+  "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "vite",
