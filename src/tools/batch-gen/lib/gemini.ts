@@ -1,7 +1,7 @@
 import type { GeminiResponse, GeminiPart } from '../types'
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models'
-const MODEL = 'gemini-2.0-flash-exp'
+const MODEL = 'gemini-2.5-flash-image'
 
 export interface GenerateImageParams {
   readonly apiKey: string
