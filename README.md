@@ -14,6 +14,10 @@ WCGW is Radu Ceucă's studio: fractional design leadership and product design fo
 
 Kode Mono. Phosphor green on near-black, or dark ink on off-white. A dome with rings and a plus and an x for eyes. A morse line at the bottom for people who read those.
 
-## Not a template
+## Astro starter
 
-The copy, the mark and the name are WCGW's. Fork the mechanics if you like; leave the brand.
+Reusable Astro boilerplate lives in the sibling repo **`~/development/wcgw-starter`** (`npx create-wcgw-starter my-site`). `templates/astro-starter/` here is only a pointer.
+
+## Not a template of the brand
+
+The copy, the mark and the name on wcgw.fun are WCGW’s. Fork the mechanics if you like; leave the brand.
