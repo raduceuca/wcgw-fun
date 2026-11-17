@@ -21,14 +21,13 @@ The page is a manuscript. WCGW is the editor holding a blue pencil
 *does* to it (cuts, underlines, ticks) is drawn by hand in the one
 accent color, `--pencil`.
 
-## The logo is Radu
+## The logo is the mark; the face is down page
 
-The masthead is Radu's engraved portrait, not a mark: this is his primary site.
-It is two alpha masks (`public/img/portrait*.webp`, made from the v8 avatar's
-`offwhite-black` and `black-offwhite` renders) painted with `--ink`, so it takes
-every palette's color: by day the lines are ink, by night the lit face is ink.
-It is the theme button. Hover puts on shades (going dark, or bracing for the
-light); the classified theme redacts the eyes.
+The masthead is the WCGW brand mark (`public/logo.svg`, inlined as `.mark`).
+It is the theme button. Radu's engraved portrait lives in Act four with the
+bio — two alpha masks (`public/img/portrait*.webp`, from the v8 avatar's
+`offwhite-black` and `black-offwhite` renders) painted with `--ink`, so by day
+the lines are ink and by night the lit face is ink.
 
 ## Things go wrong
 

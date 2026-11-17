@@ -166,53 +166,17 @@ ul { list-style: none; }
   transition: scale 0.15s ease;
 }
 .logo:active { scale: 0.96; }
+.logo:focus-visible {
+  outline: 2px solid var(--pencil);
+  outline-offset: 0.2em;
+}
 
-/* The logo is Radu: one engraving, two masks, painted with the page's ink.
-   By day the lines are ink; by night the lit face is ink and the lines are the page. */
-.portrait {
-  position: relative;
+/* Brand mark in the masthead — theme toggle. */
+.mark {
   display: block;
-  width: 4.5em;
-  aspect-ratio: 320 / 352;
-}
-.portrait::before,
-.portrait::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: currentColor;
-  -webkit-mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
-  mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
-  opacity: calc(1 - var(--night));
-  transition: opacity 0.3s ease;
-}
-.portrait::after {
-  -webkit-mask-image: url("/img/portrait-night.webp");
-  mask-image: url("/img/portrait-night.webp");
-  opacity: var(--night);
-}
-
-/* Hover puts on shades: going dark, or bracing for the light. */
-.shades {
-  --lens: color-mix(in srgb, var(--bg) calc(var(--night) * 100%), var(--ink));
-  --glare: color-mix(in srgb, var(--ink) calc(var(--night) * 100%), var(--bg));
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  fill: var(--lens);
-  stroke: var(--lens);
-  stroke-width: 3;
-  stroke-linejoin: round;
-  opacity: 0;
-  transition: opacity 0.12s ease;
-}
-.shades .glint { fill: none; stroke: var(--glare); stroke-width: 4; stroke-linecap: round; }
-.shades .redacted { display: none; }
-.logo:focus-visible .shades { opacity: 1; }
-@media (hover: hover) {
-  .logo:hover .shades { opacity: 1; }
+  width: 3.25em;
+  height: auto;
+  aspect-ratio: 100 / 68;
 }
 
 .hero { padding-bottom: var(--act-space); }
@@ -530,6 +494,42 @@ h1 {
   font-variant-numeric: lining-nums tabular-nums;
   font-size-adjust: 0.4;
   letter-spacing: 0.01em;
+}
+
+/* Engraved portrait lives with the bio, not the masthead. */
+.bio {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1em;
+}
+.bio-copy > * + * { margin-top: 0; }
+.bio-copy > .cont { text-indent: 1.4em; }
+.portrait {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 4.25em;
+  aspect-ratio: 320 / 352;
+  margin-top: 0.15em;
+}
+.portrait::before,
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  -webkit-mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
+  opacity: calc(1 - var(--night));
+  transition: opacity 0.3s ease;
+}
+.portrait::after {
+  -webkit-mask-image: url("/img/portrait-night.webp");
+  mask-image: url("/img/portrait-night.webp");
+  opacity: var(--night);
+}
+@media (max-width: 30rem) {
+  .bio { flex-direction: column; gap: 0.75em; }
 }
 
 /* ==========================================================================
