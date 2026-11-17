@@ -7,7 +7,7 @@ The creative studio landing page for [wcgw.fun](https://wcgw.fun).
 | Aspect | Value |
 |--------|-------|
 | **Type** | Static HTML/CSS site |
-| **Deploy** | Cloudflare Pages (auto-deploy on push to main) |
+| **Deploy** | Cloudflare Pages project `wcgw-fun` (upload `site/`; Git not connected — deploy with `wrangler pages deploy site --project-name=wcgw-fun`) |
 | **Domain** | wcgw.fun |
 | **Analytics** | Microsoft Clarity (disabled on localhost) |
 
@@ -17,33 +17,31 @@ The creative studio landing page for [wcgw.fun](https://wcgw.fun).
 
 ```
 site/
-├── index.html       # Main landing page (all content + inline JS)
-├── styles.css       # Stylesheet with CSS animations
-├── favicon.svg      # Animated favicon
+├── index.html       # Editorial manifesto landing page
+├── styles.css       # Paper / Night stylesheet
+├── favicon.svg      # Brand favicon
 ├── logo.svg         # Brand logo
 ├── og-image.png     # Open Graph social card
 └── og-template.html # OG image template reference
 ```
 
-No build step. The `site/` directory is deployed directly to Cloudflare Pages.
+The `site/` directory is what ships to Cloudflare Pages. Root Vite tooling under `tools/` is separate.
 
 ---
 
 ## Design Direction
 
-- **Font**: JetBrains Mono (monospace)
-- **Aesthetic**: Warning-label / incident-report energy. Clinical, not playful.
-- **Layout**: Centered, max-width ~540px, generous whitespace
-- **Accent color**: Phosphor green, used sparingly
-- **Modes**: Light (default) and dark, toggled by clicking the logo
+Source of truth: Paper file “WCGW design directions” + Project preferences (editorial manifesto).
 
-See `wcgw-fun-brief.md` for the full design brief.
+- Type: EB Garamond + Instrument Sans (nums)
+- Themes: Paper (`#FAFAFA`) and Night only — no classified / mono
+- Hero three-beat + lede “Infinite output. An abdication of agency.” + cake CTA
 
 ---
 
 ## Notes
 
-- No JavaScript framework, no bundler, no dependencies needed for the site
-- The site has inline JS for: theme toggle, animated favicon, Microsoft Clarity events
+- No JavaScript framework for the landing page
+- Inline JS for: theme toggle, reveal, Bucharest clock, Clarity
 - Clarity is conditionally loaded (skipped on localhost/127.0.0.1)
 - Scaffolded with [claudecraft](https://claudecraft.dev) by [@raduceuca](https://x.com/raduceuca)
