@@ -6,44 +6,45 @@ The creative studio landing page for [wcgw.fun](https://wcgw.fun).
 
 | Aspect | Value |
 |--------|-------|
-| **Type** | Static HTML/CSS site |
-| **Deploy** | Cloudflare Pages (auto-deploy on push to main) |
+| **Type** | Astro static site (Vite under the hood) |
+| **Deploy** | Cloudflare Pages project `wcgw-fun` — `npm run deploy` (builds then `wrangler pages deploy dist`) |
 | **Domain** | wcgw.fun |
 | **Analytics** | Microsoft Clarity (disabled on localhost) |
 
 ---
 
-## Project Structure
+## Commands
 
-```
-site/
-├── index.html       # Main landing page (all content + inline JS)
-├── styles.css       # Stylesheet with CSS animations
-├── favicon.svg      # Animated favicon
-├── logo.svg         # Brand logo
-├── og-image.png     # Open Graph social card
-└── og-template.html # OG image template reference
+```sh
+npm run dev      # http://localhost:3369
+npm run build    # Astro → dist/
+npm run test     # vitest (home modules)
+npm run deploy   # build + Pages direct upload
 ```
 
-No build step. The `site/` directory is deployed directly to Cloudflare Pages.
+---
+
+## Landing structure
+
+```
+src/
+├── pages/index.astro      # Landing route
+├── layouts/BaseLayout.astro
+├── styles/home.css        # Paper / Night manuscript styles
+├── scripts/home.ts        # Client boot
+└── home/                  # Theme, stream, mishaps, mole, physics…
+public/                    # favicon, portraits, og-image
+```
+
+Legacy Vite multi-page tools under `tools/` are separate from the Astro landing deploy.
 
 ---
 
 ## Design Direction
 
-- **Font**: JetBrains Mono (monospace)
-- **Aesthetic**: Warning-label / incident-report energy. Clinical, not playful.
-- **Layout**: Centered, max-width ~540px, generous whitespace
-- **Accent color**: Phosphor green, used sparingly
-- **Modes**: Light (default) and dark, toggled by clicking the logo
+- Prefs + Paper copy locks: three-beat hero, agency lede, cake CTA, Paper/Night
+- Delight: token stream + mishaps (`src/home/mishaps.ts`) + Act Two mole (`src/home/mole.ts`)
+- Type: EB Garamond + Instrument Sans (nums)
+- Drop classified / mono theme zoo
 
-See `wcgw-fun-brief.md` for the full design brief.
-
----
-
-## Notes
-
-- No JavaScript framework, no bundler, no dependencies needed for the site
-- The site has inline JS for: theme toggle, animated favicon, Microsoft Clarity events
-- Clarity is conditionally loaded (skipped on localhost/127.0.0.1)
-- Scaffolded with [claudecraft](https://claudecraft.dev) by [@raduceuca](https://x.com/raduceuca)
+Scaffolded with [claudecraft](https://claudecraft.dev) / [wcgw-starter](https://github.com/raduceuca/wcgw-starter) direction by [@raduceuca](https://x.com/raduceuca).

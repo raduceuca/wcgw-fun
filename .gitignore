@@ -34,3 +34,4 @@ pnpm-debug.log*
 
 # Claude Code (per-machine; records approved commands verbatim)
 .claude/settings.local.json
+.astro

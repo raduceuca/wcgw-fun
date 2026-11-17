@@ -1,0 +1,80 @@
+---
+interface Props {
+  title?: string
+  description?: string
+  themeColorLight?: string
+  themeColorDark?: string
+}
+
+const {
+  title = 'WCGW. What could go wrong?',
+  description = 'Infinite output. An abdication of agency.',
+  themeColorLight = '#fafafa',
+  themeColorDark = '#161513',
+} = Astro.props
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Your team can ship anything now. Congratulations. What could go wrong?" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://wcgw.fun" />
+    <meta property="og:image" content="https://wcgw.fun/og-image.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@wcgwfun" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content="Your team can ship anything now. Congratulations. What could go wrong?" />
+    <meta name="twitter:image" content="https://wcgw.fun/og-image.png" />
+
+    <meta name="theme-color" content={themeColorLight} media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <script is:inline>
+      try {
+        var t = localStorage.getItem('wcgw-theme')
+        if (t === 'paper' || t === 'night') document.documentElement.dataset.theme = t
+      } catch (e) {}
+      if (matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        document.documentElement.classList.add('streaming')
+      }
+      document.documentElement.classList.add('js')
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script is:inline type="text/javascript">
+      if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+        ;(function (c, l, a, r, i, t, y) {
+          c[a] =
+            c[a] ||
+            function () {
+              ;(c[a].q = c[a].q || []).push(arguments)
+            }
+          t = l.createElement(r)
+          t.async = 1
+          t.src = 'https://www.clarity.ms/tag/' + i
+          y = l.getElementsByTagName(r)[0]
+          y.parentNode.insertBefore(t, y)
+        })(window, document, 'clarity', 'script', 'v939g6gw99')
+      }
+    </script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

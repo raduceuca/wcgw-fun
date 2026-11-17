@@ -1,0 +1,4 @@
+# Cloudflare Pages — Direct Upload of dist/. Static only (no Workers SSR adapter).
+name = "wcgw-fun"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-11-01"
