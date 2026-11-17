@@ -1,0 +1,283 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import '../styles/home.css'
+---
+
+<BaseLayout>
+  <a href="#tools" class="skip">Skip to tools</a>
+
+  <div class="page">
+    <header class="masthead">
+      <button class="logo" type="button" aria-label="Switch to night mode">
+        <span class="portrait" aria-hidden="true">
+          <svg class="shades" viewBox="0 0 320 352">
+            <path d="M79.9 124.5 93.1 121.2 114.1 118.8 134.9 116.8 142 118.3 143.1 125.5 142.2 140 139.1 150.5 132.9 157.8 122.5 161.1 107.8 162.2 93.2 159.9 82.9 153.5 79.2 144.2 78.4 131.7Z"></path>
+            <path d="M162.9 112.4 175.2 108.1 193.9 105.8 216.7 105 228 107.3 232.1 117.6 231.2 136.2 227 148.6 218.8 156.9 200.1 159.2 181.4 158 167 151.7 161.8 140.3 161.2 123.8Z"></path>
+            <path class="glint" d="M88 132 98 125M172 120 182 114"></path>
+            <path class="redacted" d="M70 118 240 98 243 132 73 152Z"></path>
+          </svg>
+        </span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>
+          <span class="beat"><span data-draft="Great question! "></span>Your team can ship anything now.</span>
+          <span class="beat">Congratulations.</span>
+          <span class="beat beat-punch"
+            >What could go <span class="wrong" data-wrong aria-hidden="true"
+              ><span class="ch ch-w">w</span><span class="ch ch-r">r</span><span class="ch ch-o">o</span
+              ><span class="ch ch-n">n</span><span class="ch ch-g">g</span><span class="ch ch-q">?</span></span
+            ><span class="sr-only">wrong?</span></span
+          >
+        </h1>
+        <div class="row">
+          <div class="body">
+            <p class="lede">Infinite output. An abdication of agency.</p>
+            <div class="cake" role="group" aria-label="Offer">
+              <div class="cake-row">
+                <a class="cake-btn" href="#studio">Have your cake</a>
+                <label class="cake-check"><input type="checkbox" checked="" /> and eat it too</label>
+              </div>
+              <p class="cake-aside">Keep shipping with agency.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="act row" aria-labelledby="act-1">
+        <p class="gutter">Act one</p>
+        <div class="body">
+          <h2 id="act-1">We are entering the <span data-draft="golden age.">aftermath.</span></h2>
+          <p>The wave already hit. Everyone shipped everything. Now there’s a lot of rubble that looks like landing pages.</p>
+          <p>
+            AI made everything easy to make.<br />It didn’t make anything easier to choose.<span data-loop aria-hidden="true"
+              > It didn’t make anything easier to choose. It didn’t make anything easier to choose. It didn’t make any</span
+            >
+          </p>
+          <p>
+            Not a critic of the machines. An expert with opinions. Occasional author of slop. Unapologetic killer of ideas and
+            features.
+          </p>
+        </div>
+      </section>
+
+      <div class="row eyes blink" aria-hidden="true">
+        <div class="body">
+          <svg class="eye" viewBox="83 30 26 26"
+            ><path
+              d="M96 30C97.657 30 99 31.343 99 33V40H106C107.657 40 109 41.343 109 43C109 44.657 107.657 46 106 46H99V53C99 54.657 97.657 56 96 56C94.343 56 93 54.657 93 53V46H86C84.343 46 83 44.657 83 43C83 41.343 84.343 40 86 40H93V33C93 31.343 94.343 30 96 30Z"
+            ></path></svg
+          >
+          <svg class="eye" viewBox="120.3 30.3 25.5 25.5"
+            ><path
+              d="M121.879 32.121C123.05 30.95 124.949 30.95 126.121 32.121L133.499 39.499L140.506 32.494C141.677 31.322 143.576 31.323 144.748 32.494C145.919 33.665 145.919 35.565 144.748 36.737L137.742 43.743L144.506 50.506C145.677 51.678 145.677 53.577 144.506 54.748C143.334 55.92 141.435 55.92 140.263 54.748L133.5 47.985L126.363 55.121C125.191 56.293 123.292 56.293 122.121 55.121C120.949 53.95 120.949 52.05 122.121 50.878L129.257 43.742L121.879 36.364C120.707 35.192 120.707 33.293 121.879 32.121Z"
+            ></path></svg
+          >
+        </div>
+      </div>
+
+      <section class="act row" id="studio" aria-labelledby="act-2">
+        <p class="gutter">Act two</p>
+        <div class="body">
+          <h2 id="act-2">How much would you pay for a <span data-draft="YES?">NO?</span></h2>
+          <p>WCGW sells the no. Credible, reasoned, monthly. Unlimited amounts of the two-letter word.</p>
+          <p class="cont">Here is a normal week. The ideas come in, every one of them a yes, and</p>
+
+          <figure class="nope" id="nope" aria-labelledby="nope-cap">
+            <div class="field" tabindex="-1">
+              <ol class="holes" aria-label="Incoming ideas">
+                <li class="hole"></li>
+                <li class="hole"></li>
+                <li class="hole"></li>
+                <li class="hole"></li>
+                <li class="hole"></li>
+              </ol>
+              <div class="radu" aria-hidden="true" data-mood="deadpan">
+                <span class="radu-face" data-mood="deadpan"></span>
+                <span class="radu-face night" data-mood="deadpan"></span>
+              </div>
+              <span class="mallet" aria-hidden="true"></span>
+              <div class="finale">
+                <span class="finale-mark" role="img" aria-label="Radu, ready with the mallet"></span>
+                <span class="finale-mark night" aria-hidden="true"></span>
+              </div>
+            </div>
+            <figcaption class="mole-tally" id="nope-cap">
+              <span id="tally">Every yes gets a hearing.</span>
+              <span class="ctl">
+                <button type="button" id="sound" aria-pressed="false">Sound off</button>
+                <button type="button" id="again" hidden>Again</button>
+              </span>
+            </figcaption>
+          </figure>
+
+          <p class="lead">most of them meet the mallet. Whatever survives is the work.</p>
+          <p class="pile binned" id="binned">
+            Binned: <s>add AI to the settings page</s>, <s>make the logo pop</s>, <s>a chatbot for the chatbot</s>,
+            <s>pivot to agents</s>, <s>confetti on every click</s>, <s>add a sparkle icon</s>, <s>just one more modal</s>.
+          </p>
+          <p class="pile kept" id="kept" aria-live="polite">
+            Kept: delete the onboarding, ship the boring fix first, ask a user, and make it faster.
+          </p>
+          <div class="aside">
+            <p>Design leadership by the month. Nicely. With reasons.</p>
+            <p>Agency, reviewed monthly®</p>
+          </div>
+          <p>
+            Ship bold. Wear a parachute. WCGW asks what could go wrong before your users do — then help you land, not just ship.
+          </p>
+        </div>
+      </section>
+
+      <div class="row eyes blink" aria-hidden="true">
+        <div class="body">
+          <svg class="eye" viewBox="83 30 26 26"
+            ><path
+              d="M96 30C97.657 30 99 31.343 99 33V40H106C107.657 40 109 41.343 109 43C109 44.657 107.657 46 106 46H99V53C99 54.657 97.657 56 96 56C94.343 56 93 54.657 93 53V46H86C84.343 46 83 44.657 83 43C83 41.343 84.343 40 86 40H93V33C93 31.343 94.343 30 96 30Z"
+            ></path></svg
+          >
+          <svg class="eye" viewBox="120.3 30.3 25.5 25.5"
+            ><path
+              d="M121.879 32.121C123.05 30.95 124.949 30.95 126.121 32.121L133.499 39.499L140.506 32.494C141.677 31.322 143.576 31.323 144.748 32.494C145.919 33.665 145.919 35.565 144.748 36.737L137.742 43.743L144.506 50.506C145.677 51.678 145.677 53.577 144.506 54.748C143.334 55.92 141.435 55.92 140.263 54.748L133.5 47.985L126.363 55.121C125.191 56.293 123.292 56.293 122.121 55.121C120.949 53.95 120.949 52.05 122.121 50.878L129.257 43.742L121.879 36.364C120.707 35.192 120.707 33.293 121.879 32.121Z"
+            ></path></svg
+          >
+        </div>
+      </div>
+
+      <section class="act row" id="tools" aria-labelledby="act-3">
+        <p class="gutter">Act three</p>
+        <div class="body">
+          <h2 id="act-3">Tools for the aftermath</h2>
+          <p>Someone has to. The judgment comes from using the tools, not from yelling at them.</p>
+          <ul class="tools">
+            <li>
+              <p class="tool">
+                <a class="link" href="https://sloptable.com" target="_blank" rel="noopener">Periodic Table of Slop</a>
+                <span class="status">Live</span>
+              </p>
+              <p class="tool-desc">The elements of AI-generated content</p>
+            </li>
+            <li>
+              <p class="tool">
+                <a class="link" href="https://claudecraft.dev" target="_blank" rel="noopener">claudecraft.dev</a>
+                <span class="status">Live</span>
+              </p>
+              <p class="tool-desc">Designer-first boilerplate for Claude Code</p>
+            </li>
+            <li>
+              <p class="tool">
+                <a class="link" href="https://slopmeter.wtf" target="_blank" rel="noopener">slopmeter.wtf</a>
+                <span class="status">Live</span>
+              </p>
+              <p class="tool-desc">AI slop detection, measured in Altmans</p>
+            </li>
+            <li data-loose-row>
+              <p class="tool"><span>Taste Files</span><span class="status">Coming soon</span></p>
+              <p class="tool-desc">Design systems for AI</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="row eyes blink" aria-hidden="true">
+        <div class="body">
+          <svg class="eye" viewBox="83 30 26 26"
+            ><path
+              d="M96 30C97.657 30 99 31.343 99 33V40H106C107.657 40 109 41.343 109 43C109 44.657 107.657 46 106 46H99V53C99 54.657 97.657 56 96 56C94.343 56 93 54.657 93 53V46H86C84.343 46 83 44.657 83 43C83 41.343 84.343 40 86 40H93V33C93 31.343 94.343 30 96 30Z"
+            ></path></svg
+          >
+          <svg class="eye" viewBox="120.3 30.3 25.5 25.5"
+            ><path
+              d="M121.879 32.121C123.05 30.95 124.949 30.95 126.121 32.121L133.499 39.499L140.506 32.494C141.677 31.322 143.576 31.323 144.748 32.494C145.919 33.665 145.919 35.565 144.748 36.737L137.742 43.743L144.506 50.506C145.677 51.678 145.677 53.577 144.506 54.748C143.334 55.92 141.435 55.92 140.263 54.748L133.5 47.985L126.363 55.121C125.191 56.293 123.292 56.293 122.121 55.121C120.949 53.95 120.949 52.05 122.121 50.878L129.257 43.742L121.879 36.364C120.707 35.192 120.707 33.293 121.879 32.121Z"
+            ></path></svg
+          >
+        </div>
+      </div>
+
+      <section class="act row" aria-labelledby="act-4">
+        <p class="gutter">Act four</p>
+        <div class="body">
+          <h2 id="act-4">Vital signs</h2>
+          <dl class="signs">
+            <dt>Status</dt>
+            <dd>Taking monthly engagements.</dd>
+            <dt>Building</dt>
+            <dd>Taste Files.</dd>
+            <dt>Teaching</dt>
+            <dd><cite>Should designers ship?</cite></dd>
+            <dt>Based in</dt>
+            <dd>Bucharest, <span data-clock>where it’s late.</span></dd>
+            <dt>Outlook</dt>
+            <dd><span class="line" data-falls>Optimist with backups.</span></dd>
+          </dl>
+          <p>
+            Radu <span data-moji="Ceucă" aria-hidden="true">CeucÄƒ</span><span class="sr-only">Ceucă</span>: designer, builder,
+            former Head of Design at MultiversX. Now a fractional whatever.
+          </p>
+          <p class="cont">
+            Hire WCGW by the month to stop the wrong things before they reach your users. Say hello:
+            <a class="link" href="https://x.com/raduceuca" target="_blank" rel="noopener">@raduceuca</a> or
+            <a class="link" href="https://x.com/wcgwfun" target="_blank" rel="noopener">@wcgwfun</a>.
+          </p>
+        </div>
+      </section>
+
+      <div class="row eyes" aria-hidden="true">
+        <div class="body">
+          <svg class="eye" viewBox="83 30 26 26"
+            ><path
+              d="M96 30C97.657 30 99 31.343 99 33V40H106C107.657 40 109 41.343 109 43C109 44.657 107.657 46 106 46H99V53C99 54.657 97.657 56 96 56C94.343 56 93 54.657 93 53V46H86C84.343 46 83 44.657 83 43C83 41.343 84.343 40 86 40H93V33C93 31.343 94.343 30 96 30Z"
+            ></path></svg
+          >
+          <svg class="eye" viewBox="120.3 30.3 25.5 25.5" data-loose
+            ><path
+              d="M121.879 32.121C123.05 30.95 124.949 30.95 126.121 32.121L133.499 39.499L140.506 32.494C141.677 31.322 143.576 31.323 144.748 32.494C145.919 33.665 145.919 35.565 144.748 36.737L137.742 43.743L144.506 50.506C145.677 51.678 145.677 53.577 144.506 54.748C143.334 55.92 141.435 55.92 140.263 54.748L133.5 47.985L126.363 55.121C125.191 56.293 123.292 56.293 122.121 55.121C120.949 53.95 120.949 52.05 122.121 50.878L129.257 43.742L121.879 36.364C120.707 35.192 120.707 33.293 121.879 32.121Z"
+            ></path></svg
+          >
+        </div>
+      </div>
+
+      <section class="row">
+        <div class="body closing">
+          <p>
+            Before you ship it, ask yourself what could go wrong.<br />Then ask someone who’ll know the answer.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="row">
+      <div class="body foot">
+        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        <p>The logo is a button. Obviously.</p>
+      </div>
+    </footer>
+  </div>
+
+  <p class="theme-note" role="status" aria-live="polite"></p>
+
+  <template id="mascot">
+    <svg class="mascot" viewBox="0 0 100 68" fill="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="5" stroke-linecap="round">
+        <path d="M4 50 A46 14 0 0 1 25 37"></path>
+        <path d="M75 37 A46 14 0 0 1 96 50"></path>
+        <path d="M4 50 A46 14 0 0 0 96 50"></path>
+        <path class="dome" d="M25 50 C25 50 25 20 50 20 C75 20 75 50 75 50"></path>
+        <g class="ok">
+          <path d="M38 32v12M32 38h12"></path>
+          <path d="M56 32l12 12M68 32l-12 12"></path>
+        </g>
+        <g class="hit">
+          <path d="M32 32l12 12M44 32l-12 12"></path>
+          <path d="M56 32l12 12M68 32l-12 12"></path>
+        </g>
+      </g>
+    </svg>
+  </template>
+
+  <script>
+    import '../scripts/home.ts'
+  </script>
+</BaseLayout>

@@ -6,42 +6,45 @@ The creative studio landing page for [wcgw.fun](https://wcgw.fun).
 
 | Aspect | Value |
 |--------|-------|
-| **Type** | Static HTML/CSS site |
-| **Deploy** | Cloudflare Pages project `wcgw-fun` (upload `site/`; Git not connected — deploy with `wrangler pages deploy site --project-name=wcgw-fun`) |
+| **Type** | Astro static site (Vite under the hood) |
+| **Deploy** | Cloudflare Pages project `wcgw-fun` — `npm run deploy` (builds then `wrangler pages deploy dist`) |
 | **Domain** | wcgw.fun |
 | **Analytics** | Microsoft Clarity (disabled on localhost) |
 
 ---
 
-## Project Structure
+## Commands
 
-```
-site/
-├── index.html       # Editorial manifesto landing page
-├── styles.css       # Paper / Night stylesheet
-├── favicon.svg      # Brand favicon
-├── logo.svg         # Brand logo
-├── og-image.png     # Open Graph social card
-└── og-template.html # OG image template reference
+```sh
+npm run dev      # http://localhost:3369
+npm run build    # Astro → dist/
+npm run test     # vitest (home modules)
+npm run deploy   # build + Pages direct upload
 ```
 
-The `site/` directory is what ships to Cloudflare Pages. Root Vite tooling under `tools/` is separate.
+---
+
+## Landing structure
+
+```
+src/
+├── pages/index.astro      # Landing route
+├── layouts/BaseLayout.astro
+├── styles/home.css        # Paper / Night manuscript styles
+├── scripts/home.ts        # Client boot
+└── home/                  # Theme, stream, mishaps, mole, physics…
+public/                    # favicon, portraits, og-image
+```
+
+Legacy Vite multi-page tools under `tools/` are separate from the Astro landing deploy.
 
 ---
 
 ## Design Direction
 
-Source of truth: Paper file “WCGW design directions” + Project preferences (editorial manifesto).
-
+- Prefs + Paper copy locks: three-beat hero, agency lede, cake CTA, Paper/Night
+- Delight: token stream + mishaps (`src/home/mishaps.ts`) + Act Two mole (`src/home/mole.ts`)
 - Type: EB Garamond + Instrument Sans (nums)
-- Themes: Paper (`#FAFAFA`) and Night only — no classified / mono
-- Hero three-beat + lede “Infinite output. An abdication of agency.” + cake CTA
+- Drop classified / mono theme zoo
 
----
-
-## Notes
-
-- No JavaScript framework for the landing page
-- Inline JS for: theme toggle, reveal, Bucharest clock, Clarity
-- Clarity is conditionally loaded (skipped on localhost/127.0.0.1)
-- Scaffolded with [claudecraft](https://claudecraft.dev) by [@raduceuca](https://x.com/raduceuca)
+Scaffolded with [claudecraft](https://claudecraft.dev) / [wcgw-starter](https://github.com/raduceuca/wcgw-starter) direction by [@raduceuca](https://x.com/raduceuca).
