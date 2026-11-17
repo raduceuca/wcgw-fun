@@ -1,7 +1,6 @@
 import { track } from '../home/analytics'
 import { initClock } from '../home/clock'
 import { initFavicon } from '../home/favicon'
-import { initMole } from '../home/mole'
 import { initMishaps } from '../home/mishaps'
 import { initReveal } from '../home/reveal'
 import { initStream } from '../home/stream'
@@ -13,7 +12,6 @@ if (year) year.textContent = String(new Date().getFullYear())
 initTheme()
 initStream()
 initMishaps()
-initMole()
 initClock()
 initReveal()
 initFavicon()

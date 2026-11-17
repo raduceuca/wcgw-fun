@@ -3,7 +3,7 @@
 ## Framing
 
 "Your team can ship anything now. Congratulations. What could go wrong?"
-Lede: “Infinite output. An abdication of agency.” Cake CTA + mishaps + Act Two mole.
+Lede: “Infinite output. An abdication of agency.” Cake CTA + mishaps. Act Two is quiet copy + binned/kept piles — no mole/squash game.
 WCGW sells the informed no: design and product judgment, by the month.
 
 ## References
@@ -39,8 +39,8 @@ and starts early so readers begin hunting for it. Each is a different failure:
   "wrong?" then collapses letter by letter (structural).
 - Act one: "golden age." is written, then corrected to "aftermath." (hype);
   the writer loops on a line, runs out of tokens mid-word, and stalls (generation).
-- Act two: "a YES?" is corrected to "a NO?" (agents default to yes); after the
-  pencil cuts, "pivot to agents" un-cuts itself, twice (the zombie idea).
+- Act two: "a YES?" is corrected to "a NO?" (agents default to yes). No
+  squash/mole stage — static binned and kept lists only.
 - Act three: the "Taste Files" row (not built yet) comes loose and hangs crooked.
 - Act four: "Optimist with backups." tips off its row and lands on the paragraph
   below, where it stays (the backups never come);
@@ -61,9 +61,9 @@ from the ones above.
   space. Never a second family. (The hidden easter-egg themes are exempt.)
 - One accent: `--pencil`. Only hand-drawn marks and focus rings use it.
 - Interactions have to land a joke or help reading: the page streaming in like an
-  agent's reply as you reach it (token streaming, `src/home/stream.ts`), the roadmap
-  you can cut, the live Bucharest clock, the + × dividers that blink.
-  Respect `prefers-reduced-motion`.
+  agent's reply as you reach it (token streaming, `src/home/stream.ts`), mishaps,
+  the live Bucharest clock, the + × dividers that blink.
+  Respect `prefers-reduced-motion`. Do not bring back the Act Two mole/squash game.
 - Light and dark come from the Paper and Night palettes. Tokens live at the
   top of `styles.css`.
 
