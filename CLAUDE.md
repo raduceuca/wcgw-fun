@@ -42,7 +42,7 @@ Legacy Vite multi-page tools under `tools/` are separate from the Astro landing 
 
 ## Design Direction
 
-- Prefs + Paper copy locks: three-beat hero, agency lede, cake CTA, Paper/Night
+- Prefs + Paper copy locks: three-beat hero, agency lede, Paper/Night (cake CTA rejected — do not bring back)
 - Delight: token stream + mishaps (`src/home/mishaps.ts`); Act Two is quiet copy + binned/kept piles (mole game rejected)
 - Type: EB Garamond + Instrument Sans (nums)
 - Drop classified / mono theme zoo
