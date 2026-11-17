@@ -262,67 +262,6 @@ h1 {
   color: var(--soft);
 }
 
-/* Cake CTA — editorial, not SaaS */
-.cake {
-  margin-top: 1.8em;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-  align-items: flex-start;
-}
-.cake-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem 1.4rem;
-}
-.cake-btn {
-  font: inherit;
-  color: var(--ink);
-  text-decoration: underline 0.06em color-mix(in srgb, var(--ink) 35%, transparent);
-  text-underline-offset: 0.22em;
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-.cake-btn:hover { text-decoration-color: var(--ink); }
-.cake-check {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--soft);
-  cursor: pointer;
-  user-select: none;
-}
-.cake-check input {
-  appearance: none;
-  width: 0.9rem;
-  height: 0.9rem;
-  margin: 0;
-  border: 1.5px solid var(--ink);
-  flex-shrink: 0;
-  display: grid;
-  place-content: center;
-  background: transparent;
-}
-.cake-check input::after {
-  content: "";
-  width: 0.45rem;
-  height: 0.28rem;
-  border-left: 1.5px solid var(--ink);
-  border-bottom: 1.5px solid var(--ink);
-  transform: rotate(-45deg) translateY(-1px);
-  opacity: 0;
-}
-.cake-check input:checked::after { opacity: 1; }
-.cake-aside {
-  margin: 0;
-  color: var(--soft);
-  font-style: italic;
-  font-size: 0.95em;
-}
-
 /* ==========================================================================
    Links: a quiet underline at rest, the pencil on hover
    ========================================================================== */
