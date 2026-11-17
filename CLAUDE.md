@@ -32,7 +32,7 @@ src/
 ├── layouts/BaseLayout.astro
 ├── styles/home.css        # Paper / Night manuscript styles
 ├── scripts/home.ts        # Client boot
-└── home/                  # Theme, stream, mishaps, mole, physics…
+└── home/                  # Theme, stream, mishaps, physics…
 public/                    # favicon, portraits, og-image
 ```
 
@@ -43,7 +43,7 @@ Legacy Vite multi-page tools under `tools/` are separate from the Astro landing 
 ## Design Direction
 
 - Prefs + Paper copy locks: three-beat hero, agency lede, cake CTA, Paper/Night
-- Delight: token stream + mishaps (`src/home/mishaps.ts`) + Act Two mole (`src/home/mole.ts`)
+- Delight: token stream + mishaps (`src/home/mishaps.ts`); Act Two is quiet copy + binned/kept piles (mole game rejected)
 - Type: EB Garamond + Instrument Sans (nums)
 - Drop classified / mono theme zoo
 
