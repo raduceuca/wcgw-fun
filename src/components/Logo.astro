@@ -1,0 +1,10 @@
+---
+import { LOGO_BODY, LOGO_EYE_X, LOGO_VIEWBOX } from '../home/logo'
+---
+
+<svg class="mark" viewBox={LOGO_VIEWBOX} fill="none" aria-hidden="true">
+  <Fragment set:html={LOGO_BODY} />
+  <path class="eye-x" d={LOGO_EYE_X} fill="currentColor"></path>
+  <circle class="eye-sun" cx="133" cy="43" r="12" fill="currentColor"></circle>
+  <path class="eye-moon" d="M121 43 A12 12 0 0 1 145 43 Z" fill="currentColor"></path>
+</svg>

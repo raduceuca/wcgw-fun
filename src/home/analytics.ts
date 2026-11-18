@@ -4,7 +4,7 @@ declare global {
   }
 }
 
-/** Microsoft Clarity custom event. Clarity is not loaded on localhost. */
+/** Microsoft Clarity custom event. Clarity loads in production builds only. */
 export function track(event: string, key: string, value: string): void {
   if (!window.clarity) return
   window.clarity('event', event)

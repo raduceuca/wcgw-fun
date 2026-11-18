@@ -3,7 +3,7 @@
 ## Framing
 
 "Your team can ship anything now. Congratulations. What could go wrong?"
-Lede: “Infinite output. An abdication of agency.” Cake CTA + mishaps. Act Two is quiet copy + binned/kept piles — no mole/squash game.
+Lede: “Infinite output. An abdication of agency.” Mishaps, no cake CTA. Act Two is quiet copy + binned/kept piles — no mole/squash game.
 WCGW sells the informed no: design and product judgment, by the month.
 
 ## References
@@ -23,8 +23,9 @@ accent color, `--pencil`.
 
 ## The logo is the mark; the face is down page
 
-The masthead is the WCGW brand mark (`public/logo.svg`, inlined as `.mark`).
-It is the theme button. Radu's engraved portrait lives in Act four with the
+The masthead is the real WCGW logo from the design system (`src/home/logo.ts`,
+rendered by `src/components/Logo.astro`), 114px wide, in ink. It is the theme
+button: pointing at it turns the × eye into a sun by day, a half moon by night. Radu's engraved portrait lives in Act four with the
 bio — two alpha masks (`public/img/portrait*.webp`, from the v8 avatar's
 `offwhite-black` and `black-offwhite` renders) painted with `--ink`, so by day
 the lines are ink and by night the lit face is ink.
@@ -40,7 +41,7 @@ and starts early so readers begin hunting for it. Each is a different failure:
   the writer loops on a line, runs out of tokens mid-word, and stalls (generation).
 - Act two: "a YES?" is corrected to "a NO?" (agents default to yes). No
   squash/mole stage — static binned and kept lists only.
-- Act three: the "Taste Files" row (not built yet) comes loose and hangs crooked.
+- Act three: the "Coming soon" row (Unhoured, not built yet) comes loose and hangs crooked.
 - Act four: "Optimist with backups." tips off its row and lands on the paragraph
   below, where it stays (the backups never come);
   the name renders mis-encoded as "CeucÄƒ" (encoding).

@@ -1,0 +1,98 @@
+---
+import Logo from '../components/Logo.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { consent } from '../copy'
+import { site } from '../site'
+import '../styles/home.css'
+
+/* The privacy notice Microsoft Clarity's terms require: who runs the site, what is
+   recorded, who else gets it, the cookies, and how to change your answer. */
+const updated = '18 November 2026'
+---
+
+<BaseLayout title="Privacy. WCGW" description="What wcgw.fun records, and what it doesn't.">
+  <div class="page">
+    <header class="masthead">
+      <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
+    </header>
+
+    <main>
+      <section class="act row privacy" aria-labelledby="privacy">
+        <p class="gutter">Privacy</p>
+        <div class="body">
+          <h1 id="privacy">What this site records</h1>
+          <p>
+            wcgw.fun is run by WCGW, the studio of Radu Ceucă in Bucharest. It sells no ads and keeps no
+            accounts. It does watch how the page is used, to see what goes wrong.
+          </p>
+
+          <h2>What gets recorded</h2>
+          <p>
+            The site uses <a class="link" href="https://clarity.microsoft.com" rel="noopener">Microsoft Clarity</a>.
+            It records where you click, how far you scroll and how the mouse moves, which pages you open, and
+            your browser, device and country. Visits can be replayed as a recording. This starts on your first
+            visit, without cookies.
+          </p>
+
+          <h2>Cookies</h2>
+          <p>
+            None until you say yes. After a yes, Clarity sets two on this site, <code>_clck</code> and
+            <code>_clsk</code>, to tie your pages and visits together. Microsoft may also set its own, such as
+            <code>MUID</code> and <code>CLID</code>, on its domains
+            (<a class="link" href="https://learn.microsoft.com/clarity/setup-and-installation/clarity-cookies" rel="noopener">the full list</a>).
+            A no sets none. Advertising use is refused either way.
+          </p>
+
+          <h2>Who sees it</h2>
+          <p>
+            Radu, in the Clarity dashboard. Microsoft collects and processes the data too, as its
+            <a class="link" href="https://www.microsoft.com/privacy/privacystatement" rel="noopener">privacy statement</a>
+            describes. WCGW doesn’t sell it or use it for ads.
+          </p>
+
+          <h2>Why</h2>
+          <p>
+            The cookieless recording rests on WCGW’s interest in a site that works. The cookies rest on your
+            yes.
+          </p>
+
+          <h2>On your device</h2>
+          <p>Your theme and your cookie answer stay in your browser’s storage. They are never sent anywhere.</p>
+
+          <h2>Changing your mind</h2>
+          <p>
+            Use <em>Cookies</em> at the bottom of any page. Clarity also honours Global Privacy Control. To see
+            or delete what was recorded about you, write to
+            <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.
+          </p>
+
+          <p class="updated">Updated {updated}.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="row">
+      <div class="body foot">
+        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        {site.clarityId && <p><button class="link" type="button" data-consent-open>{consent.reopen}</button></p>}
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    display: block;
+    color: inherit;
+  }
+  .home:focus-visible {
+    outline: 2px solid var(--pencil);
+    outline-offset: 0.2em;
+  }
+  .privacy { margin-top: clamp(4.5rem, 3rem + 7vw, 8.75rem); }
+  h1 { margin-top: 0; font-size: inherit; letter-spacing: 0; line-height: inherit; }
+  h2 { font-size: inherit; color: var(--soft); }
+  h2 + p { margin-top: 0.2em; }
+  code { font: inherit; font-family: var(--sans); font-size: 0.85em; }
+  .updated { color: var(--soft); }
+</style>

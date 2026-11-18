@@ -1,0 +1,138 @@
+---
+import { consent } from '../copy'
+---
+
+<aside class="consent" data-consent hidden tabindex="-1" aria-label={consent.label}>
+  <p class="ask">{consent.ask}</p>
+  <p class="reply" data-consent-reply aria-live="polite"></p>
+  <div class="answers">
+    <button class="answer" type="button" data-consent-answer="yes" data-reply={consent.saidYes}><span>{consent.yes}</span></button>
+    <button class="answer" type="button" data-consent-answer="no" data-reply={consent.saidNo}><span>{consent.no}</span></button>
+    <a class="details" href="/privacy">{consent.details}</a>
+  </div>
+</aside>
+
+<script>
+  import { initConsent } from '../home/consent'
+  initConsent()
+</script>
+
+<style>
+  /* A slip tucked into the manuscript. The editor answers with the blue pencil:
+     the option you turn down gets struck out, like everything else WCGW says no to. */
+  .consent {
+    position: fixed;
+    z-index: 20;
+    left: 1.375rem;
+    bottom: calc(1.375rem + env(safe-area-inset-bottom, 0px));
+    max-width: min(22rem, 100% - 2.75rem);
+    /* The sentence, then the two answers below it. */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 1.5em;
+    padding: 0.35em 1.25em;
+    border: 1px solid var(--hair);
+    background: var(--bg);
+    font-size: 0.86em;
+    line-height: 1.5;
+    animation: slip-in 0.5s var(--ease-pencil);
+    transition: opacity 0.3s ease, translate 0.3s ease;
+  }
+  .consent[hidden] { display: none; }
+  .ask, .reply { flex: 1 1 auto; padding-block: 0.55em; }
+  .consent.is-leaving { opacity: 0; translate: 0 0.5rem; }
+
+  @keyframes slip-in {
+    from { opacity: 0; translate: 0 0.75rem; }
+  }
+
+  .reply:empty,
+  .is-answered .ask { display: none; }
+
+  .answers {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75em;
+  }
+
+  /* Who runs it and what it keeps: the privacy page. Quieter than the answers. */
+  .details {
+    margin-left: auto;
+    padding-block: 0.55em;
+    color: var(--soft);
+    text-decoration: underline 0.06em color-mix(in srgb, var(--soft) 40%, transparent);
+    text-underline-offset: 0.22em;
+  }
+  .details:focus-visible {
+    outline: 2px solid var(--pencil);
+    outline-offset: 2px;
+  }
+  .is-answered .details { visibility: hidden; }
+
+  /* Both answers look the same: refusing is as easy as accepting. */
+  .answer {
+    min-width: 2.75rem; /* 44px target around an ink-sized word */
+    padding: 0.55em 0;
+    border: 0;
+    text-align: left;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
+  .answer:focus-visible {
+    outline: 2px solid var(--pencil);
+    outline-offset: 2px;
+  }
+  .answer span {
+    position: relative;
+    text-decoration: underline 0.06em color-mix(in srgb, var(--ink) 32%, transparent);
+    text-underline-offset: 0.22em;
+    transition: color 0.25s ease, text-decoration-color 0.2s ease;
+  }
+
+  /* Hand-drawn marks, painted with the pencil */
+  .answer span::before,
+  .answer span::after {
+    content: "";
+    position: absolute;
+    background: var(--pencil);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.32s var(--ease-pencil);
+    pointer-events: none;
+  }
+  .answer span::after {
+    left: -0.04em;
+    right: -0.04em;
+    bottom: -0.3em;
+    height: 0.42em;
+    -webkit-mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+  }
+  .answer span::before {
+    left: -0.2em;
+    right: -0.2em;
+    top: 50%;
+    height: 0.55em;
+    translate: 0 -38%;
+    -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+  }
+
+  .answer:focus-visible span { text-decoration-color: transparent; }
+  .answer:focus-visible span::after { clip-path: inset(0); }
+  @media (hover: hover) {
+    .answer:hover span { text-decoration-color: transparent; }
+    .answer:hover span::after { clip-path: inset(0); }
+  }
+
+  /* After an answer: the chosen word keeps its line, the other is cut. */
+  .is-answered .answer { pointer-events: none; }
+  .answer.is-chosen span { text-decoration-color: transparent; }
+  .answer.is-chosen span::after { clip-path: inset(0); }
+  .answer.is-cut span { color: var(--soft); text-decoration-color: transparent; }
+  .answer.is-cut span::before { clip-path: inset(0); }
+  .answer.is-cut span::after { clip-path: inset(0 100% 0 0); }
+  .consent:focus { outline: none; }
+</style>

@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "instrument sans",
+        "createdAt": "2026-11-17T22:46:25.648Z",
+        "reason": "project CLAUDE.md design direction locks 'Type: EB Garamond + Instrument Sans (nums)'; font predates this session"
+      }
+    ]
+  }
+}

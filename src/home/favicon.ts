@@ -1,3 +1,5 @@
+import { LOGO_BODY, LOGO_EYE_X } from './logo'
+
 type RGB = [number, number, number]
 
 const COLORS: RGB[] = [
@@ -14,15 +16,9 @@ const FRAME_MS = 50
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 const toHex = ([r, g, b]: RGB) => '#' + [r, g, b].map(x => Math.round(x).toString(16).padStart(2, '0')).join('')
 
-const faviconSvg = (color: string) => `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="14" stroke="${color}" stroke-width="2" fill="none"/>
-  <path d="M6 20 A10 3.5 0 0 1 8 17.5" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M24 17.5 A10 3.5 0 0 1 26 20" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M6 20 A10 3.5 0 0 0 26 20" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M8 18 C8 18 8 9 16 9 C24 9 24 18 24 18" stroke="${color}" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <g stroke="${color}" stroke-width="2" stroke-linecap="round"><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></g>
-  <g stroke="${color}" stroke-width="2" stroke-linecap="round"><line x1="18" y1="12" x2="22" y2="16"/><line x1="22" y1="12" x2="18" y2="16"/></g>
-</svg>`
+/** The logo on a square canvas, as in the design system's `favicon.svg`. */
+const faviconSvg = (color: string) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 -51.5 228 228" fill="none" color="${color}">${LOGO_BODY}<path d="${LOGO_EYE_X}" fill="currentColor"/></svg>`
 
 /** The favicon slowly cycles through colors. */
 export function initFavicon(): void {

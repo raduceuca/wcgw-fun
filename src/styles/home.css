@@ -27,6 +27,7 @@
   --measure: 34rem;
   --beat: 1.45em;
   --act-space: clamp(3.5rem, 2.25rem + 4.5vw, 6rem);
+  --logo-width: 114px;
 
   /* Hand-drawn marks (alpha masks, painted with --pencil) */
   --mark-strike: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6.8C24 5.4 52 6 78 4.6S108 4 118 3.2' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
@@ -171,12 +172,22 @@ ul { list-style: none; }
   outline-offset: 0.2em;
 }
 
-/* Brand mark in the masthead — theme toggle. */
+/* The logo (src/components/Logo.astro) is the theme toggle: pointing at it turns
+   the × eye into a sun by day and a half moon by night. */
 .mark {
   display: block;
-  width: 3.25em;
+  width: var(--logo-width);
   height: auto;
-  aspect-ratio: 100 / 68;
+}
+.mark :is(.eye-x, .eye-sun, .eye-moon) { transition: opacity 0.15s ease; }
+.mark :is(.eye-sun, .eye-moon) { opacity: 0; }
+.logo:focus-visible .eye-x { opacity: 0; }
+.logo:focus-visible .eye-sun { opacity: calc(1 - var(--night)); }
+.logo:focus-visible .eye-moon { opacity: var(--night); }
+@media (hover: hover) {
+  .logo:hover .eye-x { opacity: 0; }
+  .logo:hover .eye-sun { opacity: calc(1 - var(--night)); }
+  .logo:hover .eye-moon { opacity: var(--night); }
 }
 
 .hero { padding-bottom: var(--act-space); }
@@ -286,6 +297,13 @@ h1 {
   clip-path: inset(0 100% 0 0);
   transition: clip-path 0.3s var(--ease-pencil);
   pointer-events: none;
+}
+button.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
 }
 .link:focus-visible { text-decoration-color: transparent; }
 .link:focus-visible::after { clip-path: inset(0); }

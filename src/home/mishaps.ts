@@ -161,7 +161,7 @@ function loop(paragraph: HTMLElement): Mishap {
   }
 }
 
-/** Act three: the "Taste Files" row (not built yet, not load-bearing) comes loose at one end, then slips again. */
+/** Act three: the "Unhoured" row (not built yet, not load-bearing) comes loose at one end, then slips again. */
 function looseRow(row: HTMLElement): Mishap {
   const first = topple({ to: 2.5, height: 2.5, lean: 40 })
   const slipStarts = first.end + 700
