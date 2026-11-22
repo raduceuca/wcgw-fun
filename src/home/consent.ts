@@ -5,6 +5,12 @@
 export const CONSENT_KEY = 'wcgw-consent'
 export type Answer = 'yes' | 'no'
 
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void
+  }
+}
+
 const REPLY_MS = 2000
 /** Matches the banner's fade-out. */
 const LEAVE_MS = 300
@@ -25,9 +31,16 @@ export function decide(answer: Answer): void {
   } catch {
     /* private mode: ask again next visit */
   }
+  const analytics = answer === 'yes' ? 'granted' : 'denied'
   window.clarity?.('consentv2', {
     ad_Storage: 'denied',
-    analytics_Storage: answer === 'yes' ? 'granted' : 'denied',
+    analytics_Storage: analytics,
+  })
+  window.gtag?.('consent', 'update', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: analytics,
   })
 }
 

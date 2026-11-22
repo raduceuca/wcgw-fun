@@ -1,13 +1,17 @@
 ---
 import ConsentBanner from '../components/ConsentBanner.astro'
 import { CONSENT_KEY } from '../home/consent'
-import { site } from '../site'
+import { canonical, jsonLd, markdownPath } from '../seo'
+import { type Page, site } from '../site'
+import '../styles/fonts.css'
 
 interface Props {
   title?: string
   description?: string
   themeColorLight?: string
   themeColorDark?: string
+  /** A public page from `pages` (src/site.ts). Without one (the 404) the page is noindex. */
+  page?: Page
   /** Write the page in like an agent's reply (src/home/stream.ts). Home only. */
   stream?: boolean
 }
@@ -17,11 +21,16 @@ const {
   description = 'Infinite output. An abdication of agency.',
   themeColorLight = '#fafafa',
   themeColorDark = '#161513',
+  page,
   stream = false,
 } = Astro.props
 
-/** Clarity runs in production builds only, so local dev clicks stay out of the data. */
+const url = page ? canonical(page.path) : undefined
+const graph = page && JSON.stringify(jsonLd({ page, title, description }))
+
+/** Clarity and GTM run in production builds only, so local dev clicks stay out of the data. */
 const clarityId = import.meta.env.PROD ? site.clarityId : ''
+const gtmId = import.meta.env.PROD ? site.gtmId : ''
 ---
 <!DOCTYPE html>
 <html lang="en" data-stream={stream ? '' : undefined}>
@@ -30,11 +39,16 @@ const clarityId = import.meta.env.PROD ? site.clarityId : ''
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.founder} />
+    {url ? <link rel="canonical" href={url} /> : <meta name="robots" content="noindex" />}
+    {page && <link rel="alternate" type="text/markdown" href={markdownPath(page.path)} />}
+    {[...site.profiles.studio, ...site.profiles.founder].map(href => <link rel="me" href={href} />)}
+    {graph && <script is:inline type="application/ld+json" set:html={graph} />}
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content="Your team can ship anything now. Congratulations. What could go wrong?" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={site.url} />
+    <meta property="og:url" content={url ?? site.url} />
     <meta property="og:image" content={`${site.url}/og-image.png`} />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -59,12 +73,8 @@ const clarityId = import.meta.env.PROD ? site.clarityId : ''
       root.classList.add('js')
     </script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Instrument+Sans:wght@400&display=swap"
-      rel="stylesheet"
-    />
+    <!-- The hero's face. The rest of src/styles/fonts.css loads as the text needs it. -->
+    <link rel="preload" href="/fonts/eb-garamond-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     {
       clarityId && (
@@ -86,10 +96,40 @@ const clarityId = import.meta.env.PROD ? site.clarityId : ''
       )
     }
 
+    {
+      gtmId && (
+        <script is:inline define:vars={{ gtmId, consentKey: CONSENT_KEY }}>
+          if (!window.__wcgwGtmLoaded) {
+            window.__wcgwGtmLoaded = true
+            window.dataLayer = window.dataLayer || []
+            window.gtag = window.gtag || function () { window.dataLayer.push(arguments) }
+            var granted = false
+            try { granted = localStorage.getItem(consentKey) === 'yes' } catch (e) {}
+            window.gtag('consent', 'default', {
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              analytics_storage: granted ? 'granted' : 'denied',
+            })
+            ;(function (w, d, s, l, i) {
+              w[l] = w[l] || []
+              w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+              var f = d.getElementsByTagName(s)[0]
+              var j = d.createElement(s)
+              var dl = l !== 'dataLayer' ? '&l=' + l : ''
+              j.async = true
+              j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+              f.parentNode.insertBefore(j, f)
+            })(window, document, 'script', 'dataLayer', gtmId)
+          }
+        </script>
+      )
+    }
+
     <slot name="head" />
   </head>
   <body>
     <slot />
-    {site.clarityId && <ConsentBanner />}
+    {(site.clarityId || site.gtmId) && <ConsentBanner />}
   </body>
 </html>
