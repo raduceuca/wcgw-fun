@@ -28,8 +28,7 @@ const {
 const url = page ? canonical(page.path) : undefined
 const graph = page && JSON.stringify(jsonLd({ page, title, description }))
 
-/** Clarity and GTM run in production builds only, so local dev clicks stay out of the data. */
-const clarityId = import.meta.env.PROD ? site.clarityId : ''
+/** GTM runs in production builds only, so local dev clicks stay out of the data (Clarity loads via GTM). */
 const gtmId = import.meta.env.PROD ? site.gtmId : ''
 ---
 <!DOCTYPE html>
@@ -77,26 +76,6 @@ const gtmId = import.meta.env.PROD ? site.gtmId : ''
     <link rel="preload" href="/fonts/eb-garamond-normal-latin.woff2" as="font" type="font/woff2" crossorigin />
 
     {
-      clarityId && (
-        <script is:inline define:vars={{ clarityId, consentKey: CONSENT_KEY }}>
-          if (!window.clarity) {
-            ;(function (c, l, a, r, i, t, y) {
-              c[a] = c[a] || function () { ;(c[a].q = c[a].q || []).push(arguments) }
-              t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i
-              y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y)
-            })(window, document, 'clarity', 'script', clarityId)
-            // Cookieless until a yes; a stored yes is honored at once. Ads never.
-            try {
-              if (localStorage.getItem(consentKey) === 'yes') {
-                window.clarity('consentv2', { ad_Storage: 'denied', analytics_Storage: 'granted' })
-              }
-            } catch (e) {}
-          }
-        </script>
-      )
-    }
-
-    {
       gtmId && (
         <script is:inline define:vars={{ gtmId, consentKey: CONSENT_KEY }}>
           if (!window.__wcgwGtmLoaded) {
@@ -130,6 +109,6 @@ const gtmId = import.meta.env.PROD ? site.gtmId : ''
   </head>
   <body>
     <slot />
-    {(site.clarityId || site.gtmId) && <ConsentBanner />}
+    {site.gtmId && <ConsentBanner />}
   </body>
 </html>
