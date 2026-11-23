@@ -22,15 +22,15 @@ import '../../styles/home.css'
    no feelings Radu did not type. "The point" is built from his own sentences. */
 
 const base = '/stories/this-is-not-it'
-const film = { versions: 22, seconds: 109, fps: 30, bpm: 120, pictures: 45, turns: 91 }
+const film = { versions: 25, seconds: 119.5, fps: 30, bpm: 120, pictures: 49 }
 
 /** The LinkedIn post that started it. Source: LinkedIn post analytics export, 20 November 2026. */
 const post = { at: '9:08', impressions: 13866, reached: 8432, reactions: 49, comments: 32, saves: 30, profileViews: 135 }
 
-/* Times in the gutter are Bucharest time on 20 November 2026. They come from the timestamps of
+/* Times in the gutter are Bucharest time on 20 November 2026, then on Monday 23 November. They come from the timestamps of
    the files themselves (pictures and cuts), the LinkedIn export (the post) and the chat (my notes). */
-const frames = film.seconds * film.fps
-const length = `${Math.floor(film.seconds / 60)}:${String(film.seconds % 60).padStart(2, '0')}`
+const frames = Math.round(film.seconds * film.fps)
+const length = `${Math.floor(film.seconds / 60)}:${String(Math.floor(film.seconds % 60)).padStart(2, '0')}`
 
 /** Interim cuts that can be played. Lengths come from the files; verdicts are mine. */
 const cut = {
@@ -43,7 +43,19 @@ const cut = {
   11: { v: 11, at: '15:05', len: '1:51', verdict: 'On the beat.', note: `The whole picture retimed to ${film.bpm} beats a minute.` },
   13: { v: 13, at: '15:19', len: '1:51', verdict: 'Half right.', note: 'All nature: wood, stone, water, leaves.' },
   16: { v: 16, at: '16:18', len: '1:51', verdict: 'Amazing. Still not it.', note: 'The page became a card with a hole in it, and the card fell away.' },
+  22: { v: 22, at: 'Fri 17:29', len: '1:49', verdict: 'Friday’s last cut.', note: 'Soft piano, a beach behind the page.' },
+  23: { v: 23, at: 'Mon 11:34', len: '1:59', verdict: 'After my notes.', note: 'Rocket clouds, a tombstone for rectangle tools, a pencil sketch, rolling credits.' },
+  25: { v: 25, at: 'Mon 11:49', len: '1:59', verdict: 'After the rhythm pass.', note: 'This one plays piano and nylon guitar. There are soft and electric piano versions too.' },
 }
+
+/** Monday 23 November: the notes I sent on the film, by scene, in my words (spelling fixed). */
+const monday = [
+  [2, 'transitions must preserve at least one element so it feels natural.'],
+  [3, 'ship it still feels weak, can we get some actual booster rocket clouds forming at bottom as it launches?'],
+  [7, 'Last year, the rectangle pulling tools drew their last breath. Didn’t suffer, they just went away.'],
+  [12, 'think we need to hold a few extra seconds on this screen.'],
+  [15, 'Not long. Keep it fun.'],
+]
 
 /** The afternoon the ending was made, by the clock (Bucharest, 20 November 2026):
     what I typed and when, then the version that came back and when its file was written. */
@@ -107,8 +119,9 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <span class="beat">This is <span class="cut">not</span> <em>it.</em></span>
           </h1>
           <p class="lede">
-            At 00:52 I had a picture for a LinkedIn post. At 17:29 the same day I had this film. Here is
-            that day in order, with what I typed. <a class="link" href="/stories">A WCGW story</a>.
+            At 00:52 on a Friday I had a picture for a LinkedIn post. At 17:29 the same day I had a film.
+            On Monday I gave it one more round of notes. Here are both days in order, with what I typed.
+            <a class="link" href="/stories">A WCGW story</a>.
           </p>
         </div>
       </section>
@@ -451,6 +464,109 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
         <figcaption class="cap"><div class="row"><p class="body">The photo behind the page. I asked for a deeper meaning and then for a Caribbean beach. No real reason. It is aspirational, and sometimes it’s gut.</p></div></figcaption>
       </figure>
 
+      <section class="act row day" aria-labelledby="mon">
+        <p class="gutter">Monday</p>
+        <div class="body">
+          <h2 id="mon">Three days later I wanted to post it.</h2>
+          <blockquote class="shout">
+            <p>“I really want to post it today.”</p>
+            <footer>Me, at 10:38.</footer>
+          </blockquote>
+        </div>
+      </section>
+
+      <section class="act row step" aria-labelledby="m1">
+        <p class="gutter"><span class="num">10:38</span> Notes</p>
+        <div class="body">
+          <h2 id="m1">One note per scene.</h2>
+          <blockquote class="prompt">
+            <p>“Create me a little artifact where I can play each scene in the video individually and provide feedback, individual feedback on each scene, which will then take and compile into a bigger prompt”</p>
+          </blockquote>
+          <p>
+            It came back at 10:50. The film cut into its scenes, each one on a loop, with Keep, Tweak,
+            Rework or Cut and a box for a note. My notes turned into one prompt I pasted back.
+          </p>
+        </div>
+      </section>
+
+      <figure class="wide shot">
+        <img src={`${base}/review.webp`} alt="The review page: the film on the left, the scenes listed on the right, each with a note box. Scene 3 is marked Rework with a note about rocket clouds." width="1200" height="737" loading="lazy" />
+      </figure>
+
+      <section class="act row step" aria-labelledby="m2">
+        <p class="gutter"><span class="num">11:12</span> The notes</p>
+        <div class="body">
+          <h2 id="m2">Nine scenes got a note.</h2>
+          <ul class="notes">
+            {monday.map(([n, line]) => <li><span class="num">{n}</span>“{line}”</li>)}
+          </ul>
+          <p>The biggest change was the tombstone. Figma is no longer named. The rectangle tools are.</p>
+          <figure class="pair">
+            <div><img src={`${base}/tomb-v22.webp`} alt="Friday: Late last year I left Figma. Not repositioned. Left." width="720" height="900" loading="lazy" /><p class="meta">Friday</p></div>
+            <div><img src={`${base}/tomb-v25.webp`} alt="Monday: Late last year, my rectangle tools drew their last breath. They didn’t suffer." width="720" height="900" loading="lazy" /><p class="meta">Monday</p></div>
+          </figure>
+          <figure class="loop">
+            <video data-loop autoplay muted loop playsinline preload="metadata" poster={`${base}/launch.webp`} width="600" height="750">
+              <source src={`${base}/launch.mp4`} type="video/mp4" />
+            </video>
+            <figcaption>Ship it. The clouds are cotton wool from Amplifiers, moved at twelve frames a second like stop motion.</figcaption>
+          </figure>
+          <p>
+            Version 23 came back at 11:34, with a pencil sketch on the Dreamweaver screen and the credits
+            rolling over the beach.
+          </p>
+          <StoryDeck base={base} cuts={[cut[22], cut[23]]} />
+        </div>
+      </section>
+
+      <section class="act row step" aria-labelledby="m3">
+        <p class="gutter"><span class="num">11:38</span> One word</p>
+        <div class="body">
+          <h2 id="m3">Just.</h2>
+          <blockquote class="prompt">
+            <p>“we drew pictures of it, ‘we just drew pictures of it’ maybe so it’s clear this is what we actually did?”</p>
+          </blockquote>
+          <p>Version 24, a minute later.</p>
+        </div>
+      </section>
+
+      <section class="act row step" aria-labelledby="m4">
+        <p class="gutter"><span class="num">11:40</span> Rhythm</p>
+        <div class="body">
+          <h2 id="m4">One last pass on the rhythm.</h2>
+          <blockquote class="prompt">
+            <p>“can you do another look at the overall rhythm and how well everything syncs together? want to try out maybe another different instrument, or combine piano and acoustic guitar”</p>
+          </blockquote>
+          <p>
+            One line was too fast to read. “It had a key for exactly this.” was on screen for
+            <abbr class="fact" title="Seven words in 1.3 seconds, measured from the caption timings">1.3 seconds</abbr>.
+            The pause before the key became two pauses, one per line.
+          </p>
+          <p>
+            The picture was retimed by a few hundredths of a second so that what you see lands with what you hear.
+            Of the <abbr class="fact" title="The sharpest changes between frames in the rendered film">52 sharpest hits</abbr>,
+            <abbr class="fact" title="Version 24: 27 of 52. Version 25: 32 of 52. Measured on the rendered films against the sound's own list of events.">27 landed within a frame of their sound before, and 32 after</abbr>.
+          </p>
+          <StoryDeck base={base} cuts={[cut[25]]} />
+          <blockquote class="prompt">
+            <p>“perhaps amplifiers gets a different role relative to classic movie roles?”</p>
+          </blockquote>
+          <p>Amplifiers made the pictures. The type, the boxes and the cursor are code. So the credit says Sets and props.</p>
+        </div>
+      </section>
+
+      <section class="act row step" aria-labelledby="m5">
+        <p class="gutter"><span class="num">15:47</span> A cover</p>
+        <div class="body">
+          <h2 id="m5">Then a thumbnail.</h2>
+          <blockquote class="prompt"><p>“generate a linkedin video thumbnail for this”</p></blockquote>
+          <figure class="thumbfig">
+            <img src={`${base}/thumb.webp`} alt="The thumbnail: the F12 key on paper with a pencil sketch of a monitor and the words see it, above the title This is not it, with not struck through in blue." width="720" height="900" loading="lazy" />
+            <figcaption>Made from a frame of the film, with the title on top.</figcaption>
+          </figure>
+        </div>
+      </section>
+
       <section class="act row" aria-labelledby="its">
         <p class="gutter">It</p>
         <div class="body">
@@ -480,8 +596,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             drawing software can work at the speed of my thoughts. AI is by far the closest.
           </p>
           <p>
-            The first cut of the film came back at 12:17 and the last at 17:29. In between I typed
-            short messages. Claude wrote the code, the piano and the edit.
+            The first cut of the film came back at 12:17 on Friday and the last at 11:49 on Monday. In
+            between I typed short messages. Claude wrote the code, the piano and the edit.
             Amplifiers made the pictures. I picked, and I said what looked wrong.
           </p>
           <p>Took only a quarter of a century?</p>
@@ -508,11 +624,12 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <dd>Radu Ceucă, by complaining.</dd>
             <dt>Code, piano, edit</dt>
             <dd>Claude. It wrote this page too, and argued back.</dd>
-            <dt>The day</dt>
+            <dt>The days</dt>
             <dd>
-              20 November 2026, Bucharest time. First picture <span class="num">00:52</span>, post <span class="num">09:08</span>,
-              first cut <span class="num">12:17</span>, last cut <span class="num">17:29</span>. Times come from the files’ own
-              timestamps, the LinkedIn export and the chat.
+              Friday 20 November 2026, Bucharest time. First picture <span class="num">00:52</span>, post <span class="num">09:08</span>,
+              first cut <span class="num">12:17</span>, Friday’s last cut <span class="num">17:29</span>. Monday 23 November: review
+              page <span class="num">10:50</span>, notes <span class="num">11:12</span>, version 25 <span class="num">11:49</span>.
+              Times come from the files’ own timestamps, the LinkedIn export and the chat.
             </dd>
             <dt>The post</dt>
             <dd>
@@ -521,18 +638,18 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
               <span class="num">{post.reactions}</span> reactions, <span class="num">{post.comments}</span> comments,
               <span class="num">{post.saves}</span> saves. LinkedIn post analytics export, the same evening.
             </dd>
-            <dt>Pictures</dt>
+            <dt>Sets and props</dt>
             <dd>
               <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>. Tony planned the first three.
               <span class="num">{film.pictures}</span> pictures in two image sessions
               (<span class="num">35</span> and <span class="num">10</span>, per its own log on 20 November 2026), usually three or
-              four per idea. The finger on the key is four edits of one photo. Its hook writer helped with
+              four per idea, and <span class="num">4</span> cotton-wool clouds on Monday. The finger on the key is four edits of one photo. Its hook writer helped with
               the X post.
             </dd>
             <dt>Prompts</dt>
             <dd>Mine. Spelling fixed, and a few of them tidied where I rambled. The lowercase and the tone are original.</dd>
             <dt>Thread</dt>
-            <dd>One. <span class="num">{film.turns}</span> turns, mine and Claude’s, when this page was written.</dd>
+            <dd>One, over two days.</dd>
             <dt>Versions</dt>
             <dd><span class="num">{film.versions}</span>. Counted in the thread, v1 to v{film.versions}.</dd>
             <dt>Film</dt>
@@ -545,7 +662,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <dd><span class="num">7</span>. Versions 14, 16, 17, 18, 19, 20 and 21, over <span class="num">72</span> minutes of notes, 15:59 to 17:11.</dd>
             <dt>Sound</dt>
             <dd>
-              Piano from the FluidR3 soundfont, sequenced in code. Twigs and hammers are public-domain
+              Piano, and nylon guitar in one of the three soundtracks, from the FluidR3 soundfont, sequenced in code. Twigs and hammers are public-domain
               recordings from <a class="link" href="https://opengameart.org" rel="noopener">OpenGameArt</a>. Volvo snapped about
               <span class="num">300</span> sticks for its turn signal
               (<a class="link" href="https://news.yahoo.com/volvo-snapped-stick-turn-signal-175500792.html" rel="noopener">Car and Driver</a>).
@@ -1133,6 +1250,20 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     }
     :global(.js) .is-in .it::after { clip-path: inset(0); }
   }
+
+  /* Monday */
+  .day h2 { margin-bottom: 0; }
+  .notes { list-style: none; padding: 0; margin-top: 1.2em; }
+  .notes li { position: relative; padding-left: 2.2em; text-wrap: pretty; }
+  .notes li + li { margin-top: 0.6em; }
+  .notes .num { position: absolute; left: 0; top: 0.2em; color: var(--soft); }
+  .notes .num::before { content: 'Scene '; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
+  .thumbfig { max-width: 18rem; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 30rem; }
+  .pair img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
+  .pair .meta { margin-top: 0.4em; color: var(--soft); }
+  .thumbfig img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
 
   /* One ask */
   .cta { margin-top: var(--act-space); }
