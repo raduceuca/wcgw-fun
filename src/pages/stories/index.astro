@@ -1,0 +1,83 @@
+---
+import Logo from '../../components/Logo.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { consent } from '../../copy'
+import { pages, site } from '../../site'
+import '../../styles/home.css'
+
+/* Stories: how things here got made, told in the order they happened.
+   Add a story by adding a page under src/pages/stories/ and a row below, newest first. */
+const stories = [
+  {
+    href: '/stories/this-is-not-it',
+    title: 'This is not it.',
+    when: 'November 2026',
+    about: 'I asked for a picture for a LinkedIn post and got a film. The whole thread, with what I typed.',
+  },
+]
+---
+
+<BaseLayout
+  title="Stories. WCGW"
+  description="How things at WCGW got made, in the order they happened, with what was actually typed."
+  social="How things at WCGW got made, in the order they happened, with what was actually typed."
+  page={pages.stories}
+>
+  <div class="page">
+    <header class="masthead">
+      <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
+    </header>
+
+    <main>
+      <section class="act row stories" aria-labelledby="stories">
+        <p class="gutter">Stories</p>
+        <div class="body">
+          <h1 id="stories">How things here got made</h1>
+          <p>
+            Each story is one thread, in order: what I typed, what came back, and what I typed next.
+          </p>
+          <ul class="tools">
+            {
+              stories.map((s) => (
+                <li>
+                  <p class="tool">
+                    <a class="link" href={s.href}>{s.title}</a>
+                    <span class="status">{s.when}</span>
+                  </p>
+                  <p class="tool-desc">{s.about}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer class="row">
+      <div class="body foot">
+        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        {
+          site.clarityId && (
+            <p>
+              <a class="link" href="/privacy">{consent.privacy}</a> ·{' '}
+              <button class="link" type="button" data-consent-open>{consent.reopen}</button>
+            </p>
+          )
+        }
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    display: block;
+    color: inherit;
+  }
+  .home:focus-visible {
+    outline: 2px solid var(--pencil);
+    outline-offset: 0.2em;
+  }
+  .stories { margin-top: clamp(4.5rem, 3rem + 7vw, 8.75rem); }
+  h1 { margin-top: 0; font-size: inherit; letter-spacing: 0; line-height: inherit; }
+</style>

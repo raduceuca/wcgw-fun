@@ -30,6 +30,7 @@ npm run deploy   # build + Pages direct upload
 src/
 ├── pages/index.astro      # Landing route
 │   pages/privacy.astro    # Privacy notice (Clarity)
+│   pages/stories/         # Stories: index + one page per story (assets in public/stories/<slug>/)
 ├── layouts/BaseLayout.astro  # Head, Clarity tag, consent banner
 ├── components/            # Logo, ConsentBanner
 ├── site.ts                # Site settings and the list of public pages
@@ -40,6 +41,7 @@ src/
 ├── scripts/home.ts        # Client boot
 └── home/                  # Theme, stream, mishaps, physics…
 public/                    # favicon, portraits, og-image, self-hosted fonts
+public/_redirects          # Cloudflare Pages redirects: /it → /stories/this-is-not-it
 functions/_middleware.ts   # Pages Function: Accept: text/markdown → the page's .md copy
 ```
 
@@ -80,3 +82,9 @@ Decided 2026-11-22. Graded by VibeCheck (Lookout re-scan: `POST http://127.0.0.1
 - Fonts are self-hosted (`public/fonts`, `src/styles/fonts.css`, latin + latin-ext): no Google request, no render-blocking stylesheet.
 
 Scaffolded with [claudecraft](https://claudecraft.dev) / [wcgw-starter](https://github.com/raduceuca/wcgw-starter) direction by [@raduceuca](https://x.com/raduceuca).
+
+## Stories
+
+- `/stories` lists one page per story; each is registered in `pages` (src/site.ts) so it gets a canonical URL, a sitemap entry and a markdown copy.
+- A story is told in order, by the clock, in the first person, with the prompts that were actually typed. Prompts may have spelling fixed; say so in the page's credits.
+- Media lives in `public/stories/<slug>/`. Keep videos web-encoded (under 25 MB each, the Pages per-file limit).
