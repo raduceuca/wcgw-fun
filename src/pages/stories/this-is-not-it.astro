@@ -19,7 +19,9 @@ import '../../styles/home.css'
    Rules of the page: the film plays first; headings say what happened, with no morals;
    the turning-point prompts are set large (.shout); every number is sourced in the colophon.
    Copy rules (20 Nov 2026 de-slop pass): no "not X, it's Y", no aphorisms, no reaction lines,
-   no feelings Radu did not type. "The point" is built from his own sentences. */
+   no feelings Radu did not type. "The point" is built from his own sentences.
+   Second pass (23 Nov): "came back" once at most, no passives that hide who did the work, headings
+   that vary in length, no one-line fragments. Dry humour from facts only (e.g. "because LinkedIn"). */
 
 const base = '/stories/this-is-not-it'
 const film = { versions: 25, seconds: 119.5, fps: 30, bpm: 120, pictures: 49 }
@@ -88,8 +90,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
 
 <BaseLayout
   title="This is not it. How a picture became a film."
-  description={`I asked for a picture for a LinkedIn post and ended up with a ${length} film. The whole thread, in order, with what I typed.`}
-  social={`I asked for a picture for a LinkedIn post. ${film.versions} versions later it was a film. Here is the whole thread, in order.`}
+  description={`I asked for a picture for a LinkedIn post and ended up with a ${length} film. Both days, by the clock, with every prompt I typed.`}
+  social={`I asked for a picture for a LinkedIn post. ${film.versions} versions later it was a film. Every prompt is in here.`}
   page={pages.thisIsNotIt}
   image={`${base}/og.png`}
   creator="@raduceuca"
@@ -119,8 +121,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <span class="beat">This is <span class="cut">not</span> <em>it.</em></span>
           </h1>
           <p class="lede">
-            At 00:52 on a Friday I had a picture for a LinkedIn post. At 17:29 the same day I had a film.
-            On Monday I gave it one more round of notes. Here are both days in order, with what I typed.
+            At 00:52 on a Friday I asked for a picture for a LinkedIn post. At 17:29 the same day I had a film.
+            On Monday I gave it notes again. Both days are below, by the clock, with what I typed.
             <a class="link" href="/stories">A WCGW story</a>.
           </p>
         </div>
@@ -129,18 +131,18 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="s1">
         <p class="gutter"><span class="num">00:52</span> A picture</p>
         <div class="body">
-          <h2 id="s1">Ioana Teleanu asked a question.</h2>
+          <h2 id="s1">It started with a question from Ioana Teleanu.</h2>
           <p>
-            She asked designers who left Figma what they use instead. Her read on the answers: most didn’t
-            really leave. I did, late last year. That didn’t fit in a comment, so I wrote a post, and the
-            post needed a picture.
+            She asked designers who left Figma what they use now. Her reading of the replies was that most of
+            them hadn’t left. I had, late last year, and that didn’t fit in a comment. So I wrote a post, and
+            the post needed a picture.
           </p>
           <blockquote class="prompt">
             <p>“Writing this post on LinkedIn, create a nice visual for it with the help of Tony”</p>
           </blockquote>
           <p>
             Tony is the guide inside <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
-            Three pictures came back.
+            It sent three options.
           </p>
           <figure class="shots three">
             <div>
@@ -155,8 +157,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="s2">
         <p class="gutter"><span class="num">00:58</span> A pick</p>
         <div class="body">
-          <h2 id="s2">I picked A.</h2>
-          <p>A is the box you drag in a design tool, with nothing in it, and one word under it. I asked for more of it.</p>
+          <h2 id="s2">I picked the empty box.</h2>
+          <p>A is the box you drag in a design tool, with nothing in it and one word under it. I asked for more of that.</p>
         </div>
       </section>
 
@@ -167,13 +169,13 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
           <img src={`${base}/02-bin.webp`} alt="A crumpled selection box on the floor next to a waste bin." width="640" height="800" loading="lazy" />
           <img src={`${base}/02-dragged.webp`} alt="A selection box almost entirely dragged off the page." width="640" height="800" loading="lazy" />
         </div>
-        <figcaption class="cap"><div class="row"><p class="body">Four more came back. The first is a grave for a rectangle.</p></div></figcaption>
+        <figcaption class="cap"><div class="row"><p class="body">Round two. The first one is a grave for a rectangle, and I kept it.</p></div></figcaption>
       </figure>
 
       <section class="act row step" aria-labelledby="s3">
         <p class="gutter"><span class="num">01:03</span> A grave</p>
         <div class="body">
-          <h2 id="s3">Three notes on a tombstone.</h2>
+          <h2 id="s3">Three notes on a tombstone, after midnight.</h2>
           <blockquote class="prompt">
             <p>“continue refining tombstone concept”</p>
             <p>“1st one. Perhaps the Left. could use some tuning? does it work? will people get it?”</p>
@@ -186,21 +188,20 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
               <div><img src={`${base}/03-final.webp`} alt="The final poster: a selected tombstone and the word Left. in bold." width="640" height="800" loading="lazy" /><p class="v">The one I posted.</p></div>
             </div>
           </figure>
-          <p>It was three minutes past one in the morning. That was the picture for the post.</p>
+          <p>At 01:03 the picture for the post was done. That should have been the end of it.</p>
         </div>
       </section>
 
       <section class="act row step" aria-labelledby="s3b">
         <p class="gutter"><span class="num">09:08</span> Posted</p>
         <div class="body">
-          <h2 id="s3b">It went on LinkedIn eight hours later.</h2>
+          <h2 id="s3b">Eight hours later it was on LinkedIn.</h2>
           <p>
             By the evening it had
             <abbr class="fact" title={`${post.impressions.toLocaleString('en-US')} impressions, ${post.reached.toLocaleString('en-US')} people reached. LinkedIn post analytics export, 20 November 2026`}>about 14,000 impressions</abbr>,
             <abbr class="fact" title="LinkedIn post analytics export, 20 November 2026">{post.comments} comments and {post.saves} saves</abbr>.
             A quarter of the people who saw it were product designers. Some of them work at Figma.
           </p>
-          <p>It did really well.</p>
         </div>
       </section>
 
@@ -209,8 +210,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
         <div class="body">
           <h2 id="s4">My post kept saying “it”.</h2>
           <p>
-            The spark happened while reading my post back to myself. The rhythmicity of it stood out:
-            shapes it, tries to break it, explores it, builds it. Then it hit me.
+            I read the post back to myself and the rhythm of it stood out: shapes it, tries to break it,
+            explores it, builds it. Then it hit me.
           </p>
           <blockquote class="prompt">
             <p>“Is there wordplay here that we can use for it?”</p>
@@ -218,7 +219,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <p>“Maybe you can start with a funny thing about design.”</p>
           </blockquote>
           <p>
-            It came back as a short story called <em>This is not it</em>. It opens: funny thing about
+            What I got was a short story called <em>This is not it</em>. First line: funny thing about
             design, it’s always about it.
           </p>
           <figure class="shots four">
@@ -240,7 +241,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
           <blockquote class="prompt">
             <p>“This is not it. It’s the title. It’s like a book.”</p>
           </blockquote>
-          <p>A set of illustrated plates came back, laid out as an article. I thought the visuals were amazing. The format worried me.</p>
+          <p>Next came a set of illustrated plates, laid out like an article. I thought the visuals were amazing. The format, less so.</p>
           <figure class="loop">
             <video data-loop autoplay muted loop playsinline preload="metadata" poster={`${base}/book.webp`} width="600" height="750">
               <source src={`${base}/book.mp4`} type="video/mp4" />
@@ -262,15 +263,15 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="s6">
         <p class="gutter"><span class="num">12:17</span> A film</p>
         <div class="body">
-          <h2 id="s6">Sixty seconds came back.</h2>
+          <h2 id="s6">Then I asked for a film.</h2>
           <blockquote class="prompt">
             <p>“Starting from these images, can we make a 60-second video manifesto with web technologies? Kinetic typography and lots of small animations. Apple had one that only used a dot.”</p>
           </blockquote>
           <p>
-            The film is a web page. It has a function that takes a time and draws that moment. A browser
-            with no window opens the page
+            The film is a web page. Give it a time and it draws that moment. A browser with no window
+            opens the page
             <abbr class="fact" title={`${film.seconds} s × ${film.fps} frames a second`}>{frames.toLocaleString('en-US')}</abbr>
-            times and takes a screenshot each time. There is no editor and no timeline anywhere.
+            times and takes a screenshot each time. Nobody opens a video editor at any point.
           </p>
           <StoryDeck base={base} cuts={[cut[1]]} />
           <blockquote class="prompt">
@@ -282,8 +283,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="s7">
         <p class="gutter"><span class="num">12:27</span> Too fast</p>
         <div class="body">
-          <h2 id="s7">Version 3 came back seven seconds shorter.</h2>
-          <p>Three versions in forty-one minutes.</p>
+          <h2 id="s7">Three versions in 41 minutes.</h2>
+          <p>Version 3 was seven seconds shorter than version 2. It still felt fast.</p>
         </div>
       </section>
 
@@ -316,10 +317,10 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
         <div class="row">
           <p class="gutter"><span class="num">13:39</span> A key</p>
           <div class="body">
-            <h2 id="s8">I asked for a 3D key.</h2>
+            <h2 id="s8">The key had to feel real.</h2>
             <p>
               The film ends on an F12 key. In Dreamweaver, F12 opened your page in the browser. I wanted the
-              key to feel physical, so I asked for this:
+              key to feel physical, so I asked for a 3D one:
             </p>
             <blockquote class="prompt">
               <p>“do the f12 key real, a 3d render, or something that gets pushed as the climax”</p>
@@ -379,9 +380,9 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <p>“piano piece is not in sync or related to the rest of the video, seems like bad mixing / mastering”</p>
           </blockquote>
           <p>
-            To fix that, the whole picture was retimed to
-            <abbr class="fact" title="The tempo of the score from version 11 on">{film.bpm}</abbr> beats a minute, so
-            the cuts land on beats. Nobody plays the piano. The notes are written out in code.
+            So Claude retimed the whole picture to
+            <abbr class="fact" title="The tempo of the score from version 11 on">{film.bpm}</abbr> beats a minute and put
+            every cut on a beat. The piano is code too, written out note by note.
           </p>
           <StoryDeck base={base} cuts={[cut[11]]} />
           <blockquote class="shout">
@@ -425,7 +426,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
           <p>
             The last ten seconds changed
             <abbr class="fact" title="Versions 14, 16, 17, 18, 19, 20 and 21 all changed the ending">seven</abbr>
-            times. These are my notes from that afternoon, with the time I sent each one and what came back.
+            times between 15:59 and 17:11. Each note below has the time I sent it and the version it turned into.
           </p>
         </div>
       </section>
@@ -478,13 +479,13 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="m1">
         <p class="gutter"><span class="num">10:38</span> Notes</p>
         <div class="body">
-          <h2 id="m1">One note per scene.</h2>
+          <h2 id="m1">First, a review tool.</h2>
           <blockquote class="prompt">
             <p>“Create me a little artifact where I can play each scene in the video individually and provide feedback, individual feedback on each scene, which will then take and compile into a bigger prompt”</p>
           </blockquote>
           <p>
-            It came back at 10:50. The film cut into its scenes, each one on a loop, with Keep, Tweak,
-            Rework or Cut and a box for a note. My notes turned into one prompt I pasted back.
+            I had it at 10:50: the film cut into scenes, each on a loop, with Keep, Tweak, Rework or Cut and
+            a box for a note. My notes compiled into one prompt, and I pasted it back into the chat.
           </p>
         </div>
       </section>
@@ -500,7 +501,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
           <ul class="notes">
             {monday.map(([n, line]) => <li><span class="num">{n}</span>“{line}”</li>)}
           </ul>
-          <p>The biggest change was the tombstone. Figma is no longer named. The rectangle tools are.</p>
+          <p>The biggest change is on the tombstone. On Friday it named Figma. On Monday it mourns the rectangle tools.</p>
           <figure class="pair">
             <div><img src={`${base}/tomb-v22.webp`} alt="Friday: Late last year I left Figma. Not repositioned. Left." width="720" height="900" loading="lazy" /><p class="meta">Friday</p></div>
             <div><img src={`${base}/tomb-v25.webp`} alt="Monday: Late last year, my rectangle tools drew their last breath. They didn’t suffer." width="720" height="900" loading="lazy" /><p class="meta">Monday</p></div>
@@ -512,8 +513,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <figcaption>Ship it. The clouds are cotton wool from Amplifiers, moved at twelve frames a second like stop motion.</figcaption>
           </figure>
           <p>
-            Version 23 came back at 11:34, with a pencil sketch on the Dreamweaver screen and the credits
-            rolling over the beach.
+            At 11:34 version 23 added a pencil sketch on the Dreamweaver screen and rolled the credits over
+            the beach.
           </p>
           <StoryDeck base={base} cuts={[cut[22], cut[23]]} />
         </div>
@@ -522,18 +523,18 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="m3">
         <p class="gutter"><span class="num">11:38</span> One word</p>
         <div class="body">
-          <h2 id="m3">Just.</h2>
+          <h2 id="m3">The script got one more word.</h2>
           <blockquote class="prompt">
             <p>“we drew pictures of it, ‘we just drew pictures of it’ maybe so it’s clear this is what we actually did?”</p>
           </blockquote>
-          <p>Version 24, a minute later.</p>
+          <p>Version 24 had it a minute later.</p>
         </div>
       </section>
 
       <section class="act row step" aria-labelledby="m4">
         <p class="gutter"><span class="num">11:40</span> Rhythm</p>
         <div class="body">
-          <h2 id="m4">One last pass on the rhythm.</h2>
+          <h2 id="m4">Then one more pass on the rhythm.</h2>
           <blockquote class="prompt">
             <p>“can you do another look at the overall rhythm and how well everything syncs together? want to try out maybe another different instrument, or combine piano and acoustic guitar”</p>
           </blockquote>
@@ -543,11 +544,11 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             The pause before the key became two pauses, one per line.
           </p>
           <p>
-            The picture was retimed by a few hundredths of a second so that what you see lands with what you hear.
+            Claude nudged the picture by a few hundredths of a second here and there, so what you see lands with what you hear.
             Of the <abbr class="fact" title="The sharpest changes between frames in the rendered film">52 sharpest hits</abbr>,
             <abbr class="fact" title="Version 24: 27 of 52. Version 25: 32 of 52. Measured on the rendered films against the sound's own list of events.">27 landed within a frame of their sound before, and 32 after</abbr>.
           </p>
-          <p>Version 25 came back at 11:49 with three soundtracks: soft piano, electric piano, and piano with a nylon guitar. I picked the guitar.</p>
+          <p>At 11:49 version 25 had three soundtracks to pick from: soft piano, electric piano, and piano with a nylon guitar. I picked the guitar.</p>
           <StoryDeck base={base} cuts={[cut[25]]} />
           <blockquote class="prompt">
             <p>“perhaps amplifiers gets a different role relative to classic movie roles?”</p>
@@ -559,7 +560,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row step" aria-labelledby="m5">
         <p class="gutter"><span class="num">15:47</span> A cover</p>
         <div class="body">
-          <h2 id="m5">Then a thumbnail.</h2>
+          <h2 id="m5">And a thumbnail, because LinkedIn.</h2>
           <blockquote class="prompt"><p>“generate a linkedin video thumbnail for this”</p></blockquote>
           <figure class="thumbfig">
             <img src={`${base}/thumb.webp`} alt="The thumbnail: the F12 key on paper with a pencil sketch of a monitor and the words see it, above the title This is not it, with not struck through in blue." width="720" height="900" loading="lazy" />
@@ -587,19 +588,19 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <section class="act row" aria-labelledby="point">
         <p class="gutter">The point</p>
         <div class="body">
-          <h2 id="point">Full circle.</h2>
+          <h2 id="point">Back to F12.</h2>
           <p>
             I’ve been waiting for this since 8th grade, when I built my first website in Macromedia
             Dreamweaver. Designing the actual thing, not a mockup of it.
           </p>
           <p>
-            The words I say come with 26 years worth of context, experiences, insights. No rectangle
+            The words I say come with 26 years’ worth of context, experiences, insights. No rectangle
             drawing software can work at the speed of my thoughts. AI is by far the closest.
           </p>
           <p>
-            The first cut of the film came back at 12:17 on Friday and the last at 11:49 on Monday. In
-            between I typed short messages. Claude wrote the code, the piano and the edit.
-            Amplifiers made the pictures. I picked, and I said what looked wrong.
+            The first cut of the film arrived at 12:17 on Friday and the last at 11:49 on Monday. In
+            between I typed short messages and complained a lot. Claude wrote the code, the piano and the
+            edit. Amplifiers built the sets. I picked, and said what looked wrong.
           </p>
           <p>Took only a quarter of a century?</p>
         </div>
@@ -607,9 +608,9 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
 
       <section class="row cta">
         <div class="body">
-          <p class="ask">WCGW does this for product teams.</p>
+          <p class="ask">WCGW does this for product teams, by the month.</p>
           <p>
-            By the month. Write to
+            Write to
             <a class="link" href={`mailto:${site.email}`}>{site.email}</a> or
             <a class="link" href="https://x.com/raduceuca" target="_blank" rel="noopener">@raduceuca</a>.
           </p>
