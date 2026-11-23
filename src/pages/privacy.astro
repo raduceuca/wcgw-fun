@@ -2,15 +2,16 @@
 import Logo from '../components/Logo.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { consent } from '../copy'
-import { site } from '../site'
+import { pages, site } from '../site'
 import '../styles/home.css'
 
 /* The privacy notice Microsoft Clarity's terms require: who runs the site, what is
    recorded, who else gets it, the cookies, and how to change your answer. */
-const updated = '18 November 2026'
+const updated = pages.privacy.modified
+const updatedLabel = new Date(updated).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
 ---
 
-<BaseLayout title="Privacy. WCGW" description="What wcgw.fun records, and what it doesn't.">
+<BaseLayout page={pages.privacy} title="Privacy. WCGW" description="What wcgw.fun records, and what it doesn't.">
   <div class="page">
     <header class="masthead">
       <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
@@ -66,7 +67,7 @@ const updated = '18 November 2026'
             <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.
           </p>
 
-          <p class="updated">Updated {updated}.</p>
+          <p class="updated">Updated <time datetime={updated}>{updatedLabel}</time>.</p>
         </div>
       </section>
     </main>

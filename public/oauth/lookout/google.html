@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Lookout OAuth Relay — Google</title>
+    <link rel="stylesheet" href="/oauth/lookout/relay.css" />
+  </head>
+  <body data-provider="google">
+    <main class="card">
+      <h1>Handing off to Lookout…</h1>
+      <p id="msg">Redirecting your one-time Google authorization code to <code>http://127.0.0.1:8796</code>. No secrets are stored on wcgw.fun.</p>
+      <a id="cta" class="btn" href="http://127.0.0.1:8796/connectors">Continue to Lookout</a>
+    </main>
+    <script src="/oauth/lookout/relay.js" defer></script>
+  </body>
+</html>
