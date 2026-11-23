@@ -1,0 +1,55 @@
+---
+import Logo from '../components/Logo.astro'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import { consent } from '../copy'
+import { site } from '../site'
+import '../styles/home.css'
+
+/* Cloudflare Pages serves this for any path without a file, with a real 404 status.
+   Without it, every unknown URL (robots.txt included) came back as the home page. */
+---
+
+<BaseLayout title="Not found. WCGW" description="There is nothing at this address.">
+  <div class="page">
+    <header class="masthead">
+      <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
+    </header>
+
+    <main>
+      <section class="act row missing" aria-labelledby="missing">
+        <p class="gutter">404</p>
+        <div class="body">
+          <h1 id="missing">Nothing here.</h1>
+          <p>You asked what could go wrong. This, apparently. <a class="link" href="/">Back to the start</a>.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="row">
+      <div class="body foot">
+        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        {
+          site.clarityId && (
+            <p>
+              <a class="link" href="/privacy">{consent.privacy}</a> ·{' '}
+              <button class="link" type="button" data-consent-open>{consent.reopen}</button>
+            </p>
+          )
+        }
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .home {
+    display: block;
+    color: inherit;
+  }
+  .home:focus-visible {
+    outline: 2px solid var(--pencil);
+    outline-offset: 0.2em;
+  }
+  .missing { margin-top: clamp(4.5rem, 3rem + 7vw, 8.75rem); }
+  h1 { margin-top: 0; font-size: inherit; letter-spacing: 0; line-height: inherit; }
+</style>

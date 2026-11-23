@@ -38,6 +38,21 @@ export const pages = {
     modified: '2026-11-18',
     sources: ['src/pages/privacy.astro'],
   },
+  stories: {
+    path: '/stories',
+    published: '2026-11-23',
+    sources: ['src/pages/stories/index.astro'],
+  },
+  thisIsNotIt: {
+    path: '/stories/this-is-not-it',
+    published: '2026-11-23',
+    sources: ['src/pages/stories/this-is-not-it.astro', 'src/components/StoryDeck.astro', 'src/components/StoryCompare.astro'],
+  },
+  theProducer: {
+    path: '/stories/the-producer',
+    published: '2026-11-23',
+    sources: ['src/pages/stories/the-producer.astro', 'src/components/StoryCompare.astro', 'src/scripts/the-producer.ts'],
+  },
 } satisfies Record<string, Page>
 
 export interface Page {

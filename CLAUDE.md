@@ -30,14 +30,19 @@ npm run deploy   # build + Pages direct upload
 src/
 ├── pages/index.astro      # Landing route
 │   pages/privacy.astro    # Privacy notice (Clarity)
+│   pages/stories/         # Stories: index + one page per story (assets in public/stories/<slug>/)
 ├── layouts/BaseLayout.astro  # Head, Clarity tag, consent banner
 ├── components/            # Logo, ConsentBanner
-├── site.ts                # Site settings (URL, Clarity ID)
+├── site.ts                # Site settings and the list of public pages
+├── seo.ts                 # Canonical URLs, page dates (git), JSON-LD graph
+├── markdown.ts            # Built HTML → markdown copies for agents
 ├── copy.ts                # Interface copy outside the manuscript
 ├── styles/home.css        # Paper / Night manuscript styles
 ├── scripts/home.ts        # Client boot
 └── home/                  # Theme, stream, mishaps, physics…
-public/                    # favicon, portraits, og-image
+public/                    # favicon, portraits, og-image, self-hosted fonts
+public/_redirects          # Cloudflare Pages redirects: /it → /stories/this-is-not-it
+functions/_middleware.ts   # Pages Function: Accept: text/markdown → the page's .md copy
 ```
 
 Legacy Vite multi-page tools under `tools/` are separate from the Astro landing deploy.
@@ -64,4 +69,22 @@ Decided 2026-11-18. Scope change: the site now tracks, with consent.
 - Banner copy lives in `src/copy.ts`. Refusing must stay as easy as accepting: two equal buttons.
 - The banner stays generic; `/privacy` (`src/pages/privacy.astro`) is the notice Clarity's terms require. It names Microsoft Clarity, what it records, the cookies, and links Microsoft's privacy statement. Keep it in step with any tracking change, and bump its date.
 
+## Discovery (SEO, AEO, GEO)
+
+Decided 2026-11-22. Graded by VibeCheck (Lookout re-scan: `POST http://127.0.0.1:8796/api/projects/studio/audit`).
+
+- Every public page is listed once in `pages` (`src/site.ts`). Add a page there and it gets a canonical URL, a sitemap entry, JSON-LD, a markdown copy and the Pages Function route. A page without an entry (the 404) is `noindex`.
+- `/sitemap.xml`, `/robots.txt`, `/llms.txt` and `/.well-known/mcp.json` are Astro endpoints in `src/pages/`. robots.txt allows every crawler, AI ones included.
+- Page dates: `dateModified` comes from git (today when a source file has uncommitted edits). The privacy notice keeps its own `modified` date in `pages`, shown on the page.
+- `src/pages/404.astro` gives unknown paths a real 404. Without it Pages served the home page for every path, robots.txt included.
+- The markdown copies are generated from the built `<main>` after the build (`astro.config.mjs`), so they never drift from the page. `dist/_routes.json` runs the Pages Function on the public pages only; everything else is served statically.
+- The MCP card is honest: the site has no MCP server, and the card says so and points at the markdown.
+- Fonts are self-hosted (`public/fonts`, `src/styles/fonts.css`, latin + latin-ext): no Google request, no render-blocking stylesheet.
+
 Scaffolded with [claudecraft](https://claudecraft.dev) / [wcgw-starter](https://github.com/raduceuca/wcgw-starter) direction by [@raduceuca](https://x.com/raduceuca).
+
+## Stories
+
+- `/stories` lists one page per story; each is registered in `pages` (src/site.ts) so it gets a canonical URL, a sitemap entry and a markdown copy.
+- A story is told in order, by the clock, in the first person, with the prompts that were actually typed. Prompts may have spelling fixed; say so in the page's credits.
+- Media lives in `public/stories/<slug>/`. Keep videos web-encoded (under 25 MB each, the Pages per-file limit).

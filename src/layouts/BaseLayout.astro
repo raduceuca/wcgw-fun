@@ -14,6 +14,11 @@ interface Props {
   page?: Page
   /** Write the page in like an agent's reply (src/home/stream.ts). Home only. */
   stream?: boolean
+  /** Share card. Each defaults to the home page's, so existing pages are unchanged. */
+  social?: string
+  image?: string
+  /** X handle of the person who wrote the page, for twitter:creator. */
+  creator?: string
 }
 
 const {
@@ -23,6 +28,9 @@ const {
   themeColorDark = '#161513',
   page,
   stream = false,
+  social = 'Your team can ship anything now. Congratulations. What could go wrong?',
+  image = '/og-image.png',
+  creator = '',
 } = Astro.props
 
 const url = page ? canonical(page.path) : undefined
@@ -45,16 +53,17 @@ const gtmId = import.meta.env.PROD ? site.gtmId : ''
     {graph && <script is:inline type="application/ld+json" set:html={graph} />}
 
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Your team can ship anything now. Congratulations. What could go wrong?" />
+    <meta property="og:description" content={social} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={url ?? site.url} />
-    <meta property="og:image" content={`${site.url}/og-image.png`} />
+    <meta property="og:image" content={`${site.url}${image}`} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content={site.twitter} />
+    {creator && <meta name="twitter:creator" content={creator} />}
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content="Your team can ship anything now. Congratulations. What could go wrong?" />
-    <meta name="twitter:image" content={`${site.url}/og-image.png`} />
+    <meta name="twitter:description" content={social} />
+    <meta name="twitter:image" content={`${site.url}${image}`} />
 
     <meta name="theme-color" content={themeColorLight} media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />

@@ -1,0 +1,951 @@
+---
+import Logo from '../../components/Logo.astro'
+import StoryCompare from '../../components/StoryCompare.astro'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import { consent } from '../../copy'
+import { pages, site } from '../../site'
+import '../../styles/home.css'
+
+/* Story: The model is the talent. You are the producer.
+   Art direction: the page is the record's sleeve. AGAIN blue (#2C4BD4), a little moving paper grain,
+   paper-white type. The pictures are cut off their paper and lie straight on the sleeve, each with its
+   own shadow. Blue belongs to the sleeve here, so the pencil is paper white.
+   Motion: src/scripts/the-producer.ts. Scroll writes --p/--e on [data-p]; CSS here turns them into
+   motion. Records turn with scroll and can be scratched. AGAIN can be pressed (or the A key).
+   The desk is playable. Sound is off until the now-playing bar turns it on.
+   Copy rules: Radu's voice (vocea-radu), no em dashes, dry. Every number is sourced where it stands
+   (hover) and again in the liner notes. Notes in "B3" are as typed on 23 November 2026, Bucharest
+   time; spelling fixed, nothing else. A brief for more: docs/the-producer-motion.md. */
+
+const base = '/stories/the-producer'
+
+/** The pictures. Source: the Amplifiers image sessions, 23 November 2026. In the order they were made. */
+const shots = [
+  ['01-again-v1', 'The AGAIN button, angled, on a black module'],
+  ['02-studio-v1', 'The studio, all black'],
+  ['03-cassette-v1', 'A black cassette'],
+  ['04-mic-v1', 'A black mic on a cable'],
+  ['05-button-v1', 'AGAIN, straight on, black bezel'],
+  ['06-knob-v1', 'An amp knob turned to 11'],
+  ['07-vinyl-v1', 'A black record, blue label'],
+  ['08-vinyl-v2', 'The same record, rounder'],
+  ['09-mic-v2', 'The mic, hanging from a rod'],
+  ['10-mix-v1', 'Eight faders, one blue'],
+  ['11-cassette-blue', 'The cassette, blue'],
+  ['12-mic-blue', 'The mic, blue mount'],
+  ['13-studio-blue', 'The studio, blue speakers'],
+  ['14-mix-blue', 'Eight blue faders'],
+  ['15-vinyl-blue', 'The record, blue'],
+  ['16-mic-blue2', 'The mic, blue all over'],
+  ['17-studio-blue2', 'The studio, every plastic blue'],
+  ['18-button-blue', 'AGAIN, blue bezel'],
+] as const
+const kept = new Set(['11-cassette-blue', '14-mix-blue', '15-vinyl-blue', '16-mic-blue2', '17-studio-blue2', '18-button-blue'])
+const renders = { made: shots.length, kept: kept.size, drawnRounds: 2 }
+
+const src = {
+  rubin: 'https://www.cbsnews.com/news/rick-rubin-60-minutes-transcript-2023-05-28/',
+  eno: 'https://www.moredarkthanshark.org/eno_int_db-jul83.html',
+  tap: 'https://en.wikipedia.org/wiki/Up_to_eleven',
+  cover: 'https://www.producthunt.com/products/replace-cover/launches',
+}
+
+/** What I typed while the pictures were made, in order. */
+const notes = [
+  { at: '10:50', said: 'create visuals for it, maintaining a consistent and beautifully simple aesthetic, NOT SLOP' },
+  { at: '11:14', said: 'Okay, these illustrations are not terrible.' },
+  { at: '11:14', said: 'That’s not a studio microphone. That is a podcast microphone.' },
+  { at: '11:20', said: 'Okay, perhaps we need to do images for all of them.' },
+  { at: '11:20', said: 'I don’t like the angle. I want the angle to be simple. I want the camera to look straight at the button.' },
+  { at: '11:33', said: 'It feels a bit unfinished, to be honest.' },
+  { at: '11:44', said: 'Can we make all plastics blue? That beautiful blue we use on the AGAIN button?' },
+  { at: '11:50', said: 'Make the microphone blue plastics.' },
+]
+
+const mics = [
+  { n: 1, how: 'Drawn in code.', verdict: '“That is a podcast microphone.”', alt: 'A flat drawing of a pill-shaped microphone on a desk stand.' },
+  { n: 2, how: 'Drawn again.', verdict: 'A studio mic now. Still a drawing.', alt: 'A flat drawing of a condenser microphone in a shock mount behind a pop filter.' },
+  { n: 3, how: 'Rendered.', verdict: 'Hangs from a rod.', alt: 'A black studio microphone hanging upside down in a shock mount from a rod.' },
+  { n: 4, how: 'Rendered again.', verdict: 'Every plastic part blue.', alt: 'The same microphone, its body and shock mount in cobalt blue.' },
+]
+
+/** The desk in Fig. 5, as set. Heights are read off the picture, 0 to 100. */
+const desk = [
+  ['kick', 34], ['snare', 62], ['bass', 42], ['vox', 70], ['keys', 52], ['gtr', 24], ['pad', 60], ['fx', 38],
+] as const
+
+const sincere = 'The tools got good enough that taste is the scarce part again. That is good news for anyone who has spent twenty or thirty years learning what good looks like.'.split(' ')
+const shout = 'You are the producer.'.split('')
+---
+
+<BaseLayout
+  title="The model is the talent. You are the producer. WCGW"
+  description="Everybody’s AI output sounds the same. That is a demo. A rant about producers, studios and saying “again”, with pictures made the way it says."
+  social="Everybody’s AI output sounds the same. That is a demo. The model is the talent. You are the producer."
+  page={pages.theProducer}
+  image={`${base}/og.png`}
+  creator="@raduceuca"
+  themeColorLight="#2C4BD4"
+  themeColorDark="#2C4BD4"
+>
+  <a href="#a1" class="skip">Skip to the notes</a>
+
+  <div class="sleeve">
+    <!-- Now playing: shows up once the sleeve's front is gone -->
+    <div class="bar" data-bar aria-label="Now playing">
+      <img class="mini" data-record src={`${base}/record-cut.webp`} alt="" width="44" height="44" />
+      <p class="now"><span class="soft">Now playing</span> <span class="num" data-now-code>A1</span> <span data-now-title>The demo</span></p>
+      <p class="num time" data-now-time>00:00</p>
+      <button class="sound num" type="button" data-sound aria-pressed="false">Sound off</button>
+      <span class="fill" data-now-fill aria-hidden="true"></span>
+    </div>
+
+    <div class="page">
+      <header class="masthead">
+        <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="title" data-p>
+          <p class="kicker">WCGW · Liner notes · <span class="num">23.11.2026</span></p>
+          <h1 id="title">
+            <span class="beat rise" style="--d: 0">The model is the talent.</span>
+            <span class="beat rise soft" style="--d: 1">You are the <span class="under" data-in>producer.</span></span>
+          </h1>
+          <p class="lede rise" style="--d: 2">
+            A rant about demos, records and saying “again”. The pictures were made the way the rant says.
+            <a class="link" href="/stories">A WCGW story</a>.
+          </p>
+          <figure class="deck">
+            <img class="record" data-record src={`${base}/record-cut.webp`} alt="A blue vinyl record with a white label that reads Produced by you. You can drag it to scratch." width="1400" height="1400" draggable="false" />
+            <figcaption class="hint">Drag the record to scratch it.</figcaption>
+          </figure>
+        </section>
+
+        <nav class="tracks row" aria-label="Tracklist">
+          <p class="gutter">Tracklist</p>
+          <ol class="body">
+            <li><a href="#a1"><span class="side">A1</span> The demo</a></li>
+            <li><a href="#a2"><span class="side">A2</span> The talent</a></li>
+            <li><a href="#a3"><span class="side">A3</span> The producer</a></li>
+            <li><a href="#a4"><span class="side">A4</span> In order</a></li>
+            <li><a href="#b1"><span class="side">B1</span> The studio</a></li>
+            <li><a href="#b2"><span class="side">B2</span> The mix</a></li>
+            <li><a href="#b3"><span class="side">B3</span> My credits</a></li>
+            <li><a href="#b4"><span class="side">B4</span> Pro Tip</a></li>
+          </ol>
+        </nav>
+
+        <!-- A1 -->
+        <section class="act row" id="a1" data-track="A1" data-title="The demo" aria-labelledby="a1h" data-p>
+          <p class="gutter"><span class="side">A1</span> The demo</p>
+          <div class="body">
+            <h2 id="a1h" class="sr-only">The demo</h2>
+            <p class="rant">Rant time:</p>
+            <p class="big">Everybody’s AI output sounds <span class="echo" data-text="the same.">the same.</span></p>
+            <p>You know the sound. Three tidy paragraphs. A bulleted list nobody asked for. A closing line that hopes this helps.</p>
+            <p>It is competent. It is on key. It could be anyone’s.</p>
+            <p>In music there is a word for that. It is called a <em>demo.</em></p>
+          </div>
+        </section>
+
+        <figure class="fig slide" data-p data-tilt>
+          <img src={`${base}/fig-1-demo.webp`} alt="A blue cassette tape with demo handwritten on its label." width="2400" height="1350" loading="lazy" />
+          <figcaption><em>Fig. 1</em> The demo. One take, no brief.</figcaption>
+        </figure>
+
+        <!-- A2 -->
+        <section class="act row" id="a2" data-track="A2" data-title="The talent" aria-labelledby="a2h">
+          <p class="gutter"><span class="side">A2</span> The talent</p>
+          <div class="body">
+            <h2 id="a2h">The singer is not the problem.</h2>
+            <p>
+              The model is the talent. I mean that as a compliment. It is the best session singer who ever
+              lived. Any style, any key, first take, at three in the morning, without asking for a car.
+            </p>
+            <p>And still, a great voice alone has never made a record.</p>
+          </div>
+        </section>
+
+        <figure class="fig drop" data-p data-in>
+          <div class="hang">
+            <img data-mic tabindex="0" src={`${base}/fig-2-talent.webp`} alt="A blue studio microphone hanging in its shock mount from a rod. Touch it and it swings." width="2400" height="1350" loading="lazy" />
+            <span class="waves" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+          <figcaption><em>Fig. 2</em> The talent. It can sing anything. Touch it.</figcaption>
+        </figure>
+
+        <!-- A3 -->
+        <section class="act row" id="a3" data-track="A3" data-title="The producer" aria-labelledby="a3h">
+          <p class="gutter"><span class="side">A3</span> The producer</p>
+          <div class="body">
+            <h2 id="a3h">Someone sits on the other side of the glass.</h2>
+            <p>
+              Records get made when someone is on the other side of the glass. Someone who picked the song.
+              Someone who says “again, but like you mean it”. Someone who knows when take four was the one.
+            </p>
+            <p>That person is the producer. In this story, that person is you.</p>
+          </div>
+        </section>
+
+        <figure class="fig press" data-p data-tilt>
+          <div class="pad">
+            <img data-again-img src={`${base}/fig-3-producer.webp`} alt="A single blue push button that says Again, seen from straight above." width="2400" height="1350" loading="lazy" />
+            <button class="hit" type="button" data-again aria-label="Press AGAIN"></button>
+          </div>
+          <figcaption>
+            <em>Fig. 3</em> The producer’s only button. Press it, or press A.
+            <span class="takeline" aria-live="polite"><span class="num">Take <span data-take-n>0</span></span> <span data-take-line>Press it.</span></span>
+          </figcaption>
+        </figure>
+
+        <!-- A4 -->
+        <section class="act row" id="a4" data-track="A4" data-title="In order" aria-labelledby="a4h">
+          <p class="gutter"><span class="side">A4</span> In order</p>
+          <div class="body">
+            <h2 id="a4h">I know what you are about to say. In order:</h2>
+            <dl class="objections" data-in>
+              <dt style="--i: 0">“I am not technical.”</dt>
+              <dd style="--i: 0">
+                Rick Rubin told
+                <a class="link fact" href={src.rubin} rel="noopener" title="CBS News, 60 Minutes, 2023. His words, from the transcript.">60 Minutes</a>:
+                “I have no technical ability. And I know nothing about music.” He said he is paid for the
+                confidence he has in his taste. He has done reasonably well.
+              </dd>
+              <dt style="--i: 1">“So the tools do not matter?”</dt>
+              <dd style="--i: 1">
+                They matter a lot. Brian Eno says he can neither read nor write music, and he gave
+                <a class="link fact" href={src.eno} rel="noopener" title="“The Studio as Compositional Tool”, New Music New York, 1979. Printed in Down Beat, July 1983.">a whole lecture</a>
+                on the recording studio as a tool for composing. The studio was his instrument. Nobody
+                confused it with the artist.
+              </dd>
+              <dt style="--i: 2">“Fine, I will get a better model.”</dt>
+              <dd style="--i: 2">You are shopping for a better singer when you have not picked the song. Different problem.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <!-- The sleeve turns over -->
+        <div class="flip" data-p aria-hidden="true">
+          <div class="card">
+            <p class="face a">Side A</p>
+            <p class="face b">Side B</p>
+          </div>
+        </div>
+        <p class="sr-only">Side B</p>
+
+        <!-- B1 -->
+        <section class="act row" id="b1" data-track="B1" data-title="The studio" aria-labelledby="b1h">
+          <p class="gutter"><span class="side">B1</span> The studio</p>
+          <div class="body">
+            <h2 id="b1h">A studio is a chain.</h2>
+            <p>Things happen before the take and things happen after it. Mixing them up is where most people lose the record.</p>
+            <p>
+              Before the take is where you shape what the voice will sing. The brief. The reference tracks.
+              Who it is for. What is true this week and not two years ago. How you sound when you write, so
+              it stops sounding like everyone else.
+            </p>
+          </div>
+        </section>
+
+        <figure class="fig build" data-p data-tilt>
+          <img src={`${base}/fig-4-studio.webp`} alt="A minimal studio: a desk with a blue mixing console, two blue speakers, a blue microphone with a pop filter, two blue hand drums." width="2400" height="1350" loading="lazy" />
+          <figcaption><em>Fig. 4</em> The studio. Everything around the voice.</figcaption>
+        </figure>
+
+        <section class="act row after" aria-label="Fix it in the mix">
+          <div class="body">
+            <p>Engineers have a phrase for skipping that part: “we will fix it in the mix”. It is famous because it does not work.</p>
+            <p data-in>
+              By my own measurement, a bad brief costs
+              <abbr class="fact coef" title="Source: me. Method: none. Peer review: pending."><span class="num" data-count="4.7">4.7</span> times</abbr>
+              more to fix after the take than before it. This is the Fix It In The Mix Coefficient
+              (FIITMC<sup class="reg">®</sup>). I made it up. It is still correct.
+            </p>
+          </div>
+        </section>
+
+        <!-- B2 -->
+        <section class="act row" id="b2" data-track="B2" data-title="The mix" aria-labelledby="b2h">
+          <p class="gutter"><span class="side">B2</span> The mix</p>
+          <div class="body">
+            <h2 id="b2h">After the take, you mix.</h2>
+            <p>
+              The take is not the record. Somebody sits at the desk and decides what is loud, what is quiet
+              and what goes. The fact check. The edit. The artwork. The version the client actually opens.
+            </p>
+            <p>Nothing gets pushed to the top. Louder was never the point.</p>
+          </div>
+        </section>
+
+        <figure class="fig rise-in" data-p data-tilt>
+          <img src={`${base}/fig-5-mix.webp`} alt="Eight blue faders on a black console, labelled by hand kick, snare, bass, vox, keys, gtr, pad and fx, set at different heights." width="2400" height="1350" loading="lazy" />
+          <figcaption><em>Fig. 5</em> The mix. No fader at the top.</figcaption>
+        </figure>
+
+        <section class="row yourturn" aria-labelledby="desk">
+          <p class="gutter">Your turn</p>
+          <div class="body">
+            <h2 id="desk" class="sr-only">Your turn at the desk</h2>
+            <div class="desk" data-desk data-in>
+              <div class="tape" aria-hidden="true">{desk.map(([name]) => <span>{name}</span>)}</div>
+              <div class="chans">
+                {desk.map(([name, v]) => (
+                  <div class="ch" data-fader data-name={name} data-mix={v} role="slider" tabindex="0" aria-label={`${name} fader`} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-orientation="vertical">
+                    <span class="slot"><span class="cap"></span></span>
+                  </div>
+                ))}
+              </div>
+              <p class="note" data-desk-note aria-live="polite"></p>
+            </div>
+            <p class="soft deskhelp">The desk loads my mix. Drag any fader to the top and see what happens.</p>
+          </div>
+        </section>
+
+        <!-- B3 -->
+        <section class="act row" id="b3" data-track="B3" data-title="My credits" aria-labelledby="b3h">
+          <p class="gutter"><span class="side">B3</span> My credits</p>
+          <div class="body">
+            <h2 id="b3h">The part where I check my own credits.</h2>
+            <p>
+              I should be honest about my standing in the music industry. My only credit is
+              <a class="link fact" href={src.cover} rel="noopener" title="Replace Cover. Product Hunt, Launch of the Day, 28 March 2018.">a little tool that made cover art for Spotify playlists</a>.
+              No gold records were issued.
+            </p>
+            <p>
+              I am a designer. “Make the logo bigger” is the oldest bad brief in my trade. “Make it better”,
+              typed into a chat box, is the same brief with better manners.
+            </p>
+            <p>So here is one record I produced, today. The pictures on this page. What I typed, in order:</p>
+            <ol class="notes" data-p style={`--n: ${notes.length}`}>
+              {notes.map((n, i) => (
+                <li style={`--i: ${i}`}><span class="num">{n.at}</span><q>{n.said}</q></li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <figure class="contact" data-p>
+          <div class="sheet">
+            {mics.map((m, i) => (
+              <div style={`--i: ${i}`}>
+                <img src={`${base}/mic-take-${m.n}.webp`} alt={m.alt} width="800" height="1000" loading="lazy" />
+                <p class="v"><span class="num">Take {m.n}</span> {m.how} {m.verdict}</p>
+              </div>
+            ))}
+          </div>
+          <figcaption>The microphone, take by take. Same model every time.</figcaption>
+        </figure>
+
+        <section class="duo" data-in>
+          <figure class="cmpfig">
+            <StoryCompare
+              before={`${base}/again-angled.webp`}
+              after={`${base}/again-straight.webp`}
+              beforeLabel="Before"
+              afterLabel="After"
+              alt="The blue AGAIN button seen straight from above, compared with an earlier render seen at an angle on a black module."
+            />
+            <figcaption>“I want the camera to look straight at the button.” Drag the line.</figcaption>
+          </figure>
+          <div class="body">
+            <p class="big">Same model on every take. I just kept saying again.</p>
+          </div>
+        </section>
+
+        <figure class="takes" data-p style={`--n: ${shots.length}`}>
+          <ol>
+            {shots.map(([file, what], i) => (
+              <li class:list={[{ kept: kept.has(file) }]} style={`--i: ${i}`}>
+                <img src={`${base}/takes/${file}.webp`} alt={what} width="360" height="360" loading="lazy" />
+                <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              </li>
+            ))}
+          </ol>
+          <figcaption>
+            <abbr class="fact" title={`${renders.made} pictures rendered, ${renders.kept} kept. Amplifiers image sessions, 23 November 2026. Before that, ${renders.drawnRounds} rounds drawn in code.`}>{renders.made} pictures, {renders.kept} kept</abbr>,
+            in the order they were made. The rest were demos.
+          </figcaption>
+        </figure>
+
+        <section class="row sincere" data-p style={`--n: ${sincere.length}`}>
+          <div class="body">
+            <p>{sincere.map((w, i) => <><span class="w" style={`--i: ${i}`}>{w}</span>{' '}</>)}</p>
+          </div>
+        </section>
+
+        <!-- B4 -->
+        <section class="act row" id="b4" data-track="B4" data-title="Pro Tip" aria-labelledby="b4h">
+          <p class="gutter"><span class="side">B4</span> Pro Tip</p>
+          <div class="body">
+            <h2 id="b4h">Next time the output is bland, do not rewrite the prompt.</h2>
+            <p>Ask two producer questions.</p>
+            <ol class="questions">
+              <li data-in><span>What did the voice not know <em class="ring">before<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M8 22C6 9 40 3 66 5S99 16 94 27 50 39 26 36 3 30 12 13" /></svg></em> the take?</span></li>
+              <li data-in><span>What did nobody check <em class="ring">after<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M90 12C80 3 34 2 14 9S1 31 30 36 96 35 95 21 74 6 52 5" /></svg></em> it?</span></li>
+            </ol>
+            <p>Then go and add that piece of the studio. One piece. More gear is not more music. Every producer also knows where the bypass switch is.</p>
+          </div>
+        </section>
+
+        <section class="outro" data-p aria-label="The record">
+          <img class="record" data-record src={`${base}/record-cut.webp`} alt="" width="1400" height="1400" loading="lazy" draggable="false" />
+          <p class="end">
+            <span class="beat">The model is the talent.</span>
+            <span class="beat caps" aria-label="You are the producer.">{shout.map((c, i) => <span class="l" style={`--i: ${i}`} aria-hidden="true">{c === ' ' ? ' ' : c}</span>)}</span>
+          </p>
+        </section>
+
+        <section class="row ps">
+          <div class="body">
+            <p>
+              PS: in <a class="link fact" href={src.tap} rel="noopener" title="This Is Spinal Tap, 1984. Nigel Tufnel: “These go to eleven.”">Spinal Tap</a>
+              the amp goes to <span class="eleven" data-eleven tabindex="0">eleven</span>. Louder was never the point.
+              Nobody remembers the record for the volume.
+            </p>
+            <p class="tag">#ProducedByYou</p>
+          </div>
+        </section>
+
+        <section class="row cta">
+          <div class="body">
+            <p class="ask">WCGW produces for product teams.</p>
+            <p>
+              By the month. Write to <a class="link" href={`mailto:${site.email}`}>{site.email}</a> or
+              <a class="link" href="https://x.com/raduceuca" target="_blank" rel="noopener">@raduceuca</a>.
+            </p>
+          </div>
+        </section>
+
+        <section class="row liner" aria-labelledby="liner">
+          <p class="gutter">Liner notes</p>
+          <div class="body">
+            <h2 id="liner" class="sr-only">Liner notes</h2>
+            <dl class="signs">
+              <dt>Produced by</dt>
+              <dd>Radu Ceucă, by saying “again”.</dd>
+              <dt>Produced by you</dt>
+              <dd><span class="fact" data-credit title="Counted live, in this tab only: presses of AGAIN, faders you moved (of 8), records you scratched, times you swung the mic. Starts at zero on every visit.">Nothing yet.</span></dd>
+              <dt>Words</dt>
+              <dd>Claude, from my rant and my notes. It built this page too. Every “again” is mine.</dd>
+              <dt>Pictures</dt>
+              <dd>
+                <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
+                <span class="num">{renders.made}</span> rendered, <span class="num">{renders.kept}</span> kept, per its session
+                log on 23 November 2026. Before that, <span class="num">{renders.drawnRounds}</span> rounds drawn in code.
+              </dd>
+              <dt>Notes</dt>
+              <dd>Mine, as typed, between 10:50 and 11:50 Bucharest time. Spelling fixed.</dd>
+              <dt>Sources</dt>
+              <dd>
+                Rubin: <a class="link" href={src.rubin} rel="noopener">CBS News, 60 Minutes transcript</a>, 2023.
+                Eno: <a class="link" href={src.eno} rel="noopener">Down Beat</a>, July 1983, from a 1979 lecture.
+                Spinal Tap: <a class="link" href={src.tap} rel="noopener">1984</a>.
+                My credit: <a class="link" href={src.cover} rel="noopener">Product Hunt</a>, 28 March 2018.
+                FIITMC: me.
+              </dd>
+              <dt>Sound</dt>
+              <dd>Off unless you turn it on. Scratch, clicks and crackle are made in the browser, from noise.</dd>
+              <dt>Colour</dt>
+              <dd>#2C4BD4. The AGAIN blue. Every plastic part on this page.</dd>
+              <dt>Typefaces</dt>
+              <dd>EB Garamond, Instrument Sans.</dd>
+              <dt>Faders at the top</dt>
+              <dd><span class="num">0</span>.</dd>
+            </dl>
+          </div>
+        </section>
+      </main>
+
+      <footer class="row">
+        <div class="body foot">
+          <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+          <p><a class="link" href="/stories">More stories</a></p>
+          {
+            site.clarityId && (
+              <p>
+                <a class="link" href="/privacy">{consent.privacy}</a> ·{' '}
+                <button class="link" type="button" data-consent-open>{consent.reopen}</button>
+              </p>
+            )
+          }
+        </div>
+      </footer>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  import '../../scripts/the-producer'
+</script>
+
+<style>
+  /* ================================================================ the sleeve */
+  .sleeve {
+    --bg: #2c4bd4;
+    --ink: #fafafa;
+    --soft: rgb(250 250 250 / 0.72);
+    --hair: rgb(250 250 250 / 0.24);
+    --pencil: #fafafa;
+    --wide: min(100vw - 2.75rem, 66rem);
+    --out: calc(50% - min(50vw - 1.375rem, 33rem));
+    color-scheme: dark;
+    position: relative;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    isolation: isolate;
+    overflow-x: clip;
+  }
+  :global(html:has(.sleeve)),
+  :global(body:has(.sleeve)) { background: #2c4bd4; }
+  :global(body:has(.sleeve) ::selection) { background: rgb(250 250 250 / 0.3); }
+
+  /* Paper grain over everything. It shifts a few times a second, like stock under a lamp. */
+  .sleeve::after {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0.17;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sleeve::after { animation: grain 0.6s steps(3) infinite; }
+  }
+  @keyframes grain {
+    0% { translate: 0 0; }
+    33% { translate: -3% 2%; }
+    66% { translate: 2% -4%; }
+  }
+
+  .home { display: block; color: inherit; }
+  .home:focus-visible { outline: 2px solid var(--pencil); outline-offset: 0.2em; }
+  .num { font-family: var(--sans); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+  .soft { color: var(--soft); }
+  .sleeve :global(.link) { color: inherit; }
+  em { font-style: italic; }
+
+  /* ================================================================ now playing */
+  .bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    height: 3rem;
+    padding: 0 max(1.375rem, calc(50vw - 33rem));
+    background: rgb(44 75 212 / 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--hair);
+    font-size: 0.82em;
+    translate: 0 -105%;
+    transition: translate 0.45s var(--ease-pencil);
+  }
+  .bar:global(.on) { translate: 0 0; }
+  .mini { width: 1.6rem; height: 1.6rem; flex: none; }
+  .now { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .now .num { margin-inline: 0.4em 0.2em; font-size: 0.86em; }
+  .time { color: var(--soft); font-size: 0.82em; cursor: help; }
+  .sound {
+    padding: 0.25em 0.7em;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: none;
+    color: var(--ink);
+    font-size: 0.78em;
+    cursor: pointer;
+  }
+  .sound[aria-pressed='true'] { background: var(--ink); color: var(--bg); }
+  .sound:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .fill { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); }
+  @media (max-width: 34rem) { .time { display: none; } }
+
+  /* ================================================================ the front */
+  .hero {
+    position: relative;
+    display: grid;
+    width: var(--wide);
+    margin-inline: var(--out);
+    padding-top: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+    padding-bottom: var(--act-space);
+  }
+  .kicker { color: var(--soft); font-family: var(--sans); font-size: 0.72em; letter-spacing: 0.14em; text-transform: uppercase; }
+  .hero h1 { margin-top: 0.5em; font-size: clamp(2.7rem, 1.2rem + 5.6vw, 5.7rem); line-height: 0.98; letter-spacing: -0.022em; }
+  .hero h1 .beat { text-wrap: balance; }
+  .hero .lede { margin-top: 1.6rem; max-width: 26rem; color: var(--soft); }
+  .hero .lede .link { color: var(--ink); }
+  .deck { margin: 2.5rem 0 0; justify-self: center; width: min(100%, 30rem); }
+  .deck .record { width: 100%; }
+  .hint { margin-top: 0.6rem; text-align: center; color: var(--soft); font-family: var(--sans); font-size: 0.7em; letter-spacing: 0.12em; text-transform: uppercase; }
+  @media (min-width: 52rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      grid-template-areas: 'kicker kicker' 'title title' 'lede deck';
+      align-items: start;
+    }
+    .kicker { grid-area: kicker; }
+    .hero h1 { grid-area: title; }
+    .hero .lede { grid-area: lede; margin-top: 2.2rem; }
+    .deck {
+      grid-area: deck;
+      width: min(54vw, 44rem);
+      margin-top: -1.5rem;
+      justify-self: end;
+      margin-right: calc(min(50vw - 1.375rem, 33rem) - 50vw);
+    }
+    .hint { text-align: left; padding-left: 12%; }
+  }
+  .record { display: block; height: auto; aspect-ratio: 1; touch-action: none; user-select: none; cursor: grab; }
+  .record:global(.held) { cursor: grabbing; }
+
+  /* The front arrives in three beats, and the record sinks as you scroll away from it */
+  @media (prefers-reduced-motion: no-preference) {
+    .rise { animation: rise 0.9s var(--ease-pencil) both; animation-delay: calc(var(--d) * 140ms + 100ms); }
+    .deck .record { scale: calc(1 - var(--p, 0) * 0.18); }
+  }
+  @keyframes rise { from { opacity: 0; translate: 0 0.5em; } }
+
+  /* The paper pencil */
+  .under { position: relative; white-space: nowrap; }
+  .under::after {
+    content: '';
+    position: absolute;
+    left: -0.04em;
+    right: -0.04em;
+    bottom: -0.06em;
+    height: 0.14em;
+    background: var(--pencil);
+    -webkit-mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .under::after { clip-path: inset(0 100% 0 0); transition: clip-path 0.6s var(--ease-pencil) 0.7s; }
+    :global(.js) .under:global(.is-in)::after { clip-path: inset(0); }
+  }
+
+  /* ================================================================ tracklist */
+  .tracks { padding-block: 1.4rem; border-block: 1px solid var(--hair); }
+  .tracks ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; row-gap: 0.2em; }
+  .tracks a { position: relative; color: inherit; text-decoration: none; transition: color 0.3s; }
+  .tracks a:hover, .tracks a:focus-visible { text-decoration: underline; text-underline-offset: 0.2em; }
+  .tracks a:global(.playing) .side { color: var(--ink); }
+  .tracks a:global(.playing)::before { content: '▸'; position: absolute; left: -1em; font-size: 0.8em; top: 0.15em; }
+  .side { display: inline-block; min-width: 2.2em; color: var(--soft); font-family: var(--sans); font-size: 0.72em; letter-spacing: 0.08em; }
+  .gutter .side { min-width: 0; margin-right: 0.5em; }
+
+  /* ================================================================ the notes */
+  .act { padding-top: var(--act-space); }
+  .act h2 { font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.1rem); line-height: 1.15; letter-spacing: -0.012em; text-wrap: balance; }
+  .rant { color: var(--soft); font-style: italic; }
+  .big { font-size: clamp(1.9rem, 1.25rem + 2.8vw, 3rem); line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
+  .act .body > .big + p { margin-top: 1.2em; }
+  .after { padding-top: 2rem; }
+
+  /* "the same." arrives as three takes that slide into one */
+  .echo { position: relative; display: inline-block; }
+  .echo::before,
+  .echo::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    opacity: calc(0.45 * (1 - var(--e, 1)));
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .echo::before { translate: calc((1 - var(--e, 1)) * -0.9em) calc((1 - var(--e, 1)) * -0.35em); }
+    .echo::after { translate: calc((1 - var(--e, 1)) * 0.9em) calc((1 - var(--e, 1)) * 0.35em); }
+  }
+  /* the section's --e has to reach the echo */
+  .act[data-p] .echo { --e: inherit; }
+
+  .fact { text-decoration: underline dotted rgb(250 250 250 / 0.55); text-decoration-thickness: 0.06em; text-underline-offset: 0.22em; cursor: help; }
+  a.fact { cursor: pointer; }
+
+  /* The objections come in, in order */
+  .objections dt { margin-top: 1.4em; font-size: 1.12em; }
+  .objections dt:first-child { margin-top: 0.4em; }
+  .objections dd { margin: 0.35em 0 0; color: var(--soft); }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .objections dt,
+    :global(.js) .objections dd {
+      opacity: 0;
+      translate: -1.2rem 0;
+      transition: opacity 0.6s, translate 0.7s var(--ease-pencil);
+      transition-delay: calc(var(--i) * 380ms);
+    }
+    :global(.js) .objections dd { transition-delay: calc(var(--i) * 380ms + 120ms); }
+    :global(.js) .objections:global(.is-in) dt,
+    :global(.js) .objections:global(.is-in) dd { opacity: 1; translate: 0 0; }
+  }
+
+  /* ================================================================ the pictures, straight on the sleeve */
+  .fig { width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); }
+  .fig img { display: block; width: 100%; height: auto; transform: perspective(1200px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform 0.4s var(--ease-pencil); }
+  figcaption { margin-top: 0.75em; color: var(--soft); font-size: 0.88em; line-height: 1.45; }
+  figcaption em { color: var(--ink); margin-right: 0.35em; }
+  .fig figcaption { width: min(100%, var(--gutter) + var(--gap) + var(--measure)); margin-inline: auto; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Fig. 1: the tape goes into the deck */
+    .slide img { translate: calc((1 - var(--e, 1)) * -45vw) 0; rotate: calc((1 - var(--e, 1)) * -9deg); opacity: calc(0.2 + var(--e, 1) * 0.8); }
+    /* Fig. 2: the mic comes down on its rod */
+    .drop .hang { translate: 0 calc((1 - var(--e, 1)) * -42%); }
+    /* Fig. 4: the studio opens up */
+    .build img { scale: calc(0.86 + var(--e, 1) * 0.14); opacity: calc(var(--e, 1) * 1.4 - 0.2); }
+    /* Fig. 5: the desk rises */
+    .rise-in img { translate: 0 calc((1 - var(--e, 1)) * 18%); opacity: calc(var(--e, 1) * 1.3 - 0.1); }
+  }
+
+  /* Fig. 2 hangs from its top edge, and swings from there. Waves come off the grille. */
+  .hang { position: relative; }
+  .hang img { transform-origin: 50% 0; cursor: pointer; }
+  .hang img:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  .waves { position: absolute; left: 50%; top: 86%; width: 0; height: 0; pointer-events: none; }
+  .waves i { position: absolute; left: 50%; top: 50%; width: 14rem; height: 14rem; margin: -7rem 0 0 -7rem; border: 1px solid var(--ink); border-radius: 50%; opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .drop:global(.is-in) .waves i { animation: wave 3.6s ease-out infinite; }
+    .drop:global(.is-in) .waves i:nth-child(2) { animation-delay: 1.2s; }
+    .drop:global(.is-in) .waves i:nth-child(3) { animation-delay: 2.4s; }
+  }
+  @keyframes wave { from { scale: 0.15; opacity: 0.7; } to { scale: 1.6; opacity: 0; } }
+
+  /* Fig. 3: a button you can press */
+  .pad { position: relative; }
+  .hit {
+    position: absolute;
+    left: 37%;
+    top: 21%;
+    width: 25%;
+    height: 50%;
+    border: 0;
+    border-radius: 6%;
+    background: transparent;
+    cursor: pointer;
+  }
+  .hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  .hit:disabled { cursor: default; }
+  .takeline { display: block; margin-top: 0.35em; color: var(--ink); font-size: 1.35em; font-style: italic; }
+  .takeline .num { font-style: normal; font-size: 0.55em; color: var(--soft); margin-right: 0.6em; letter-spacing: 0.08em; text-transform: uppercase; }
+  .press:global(.kept) .takeline { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+
+  /* ================================================================ Side A becomes Side B */
+  .flip { margin-top: var(--act-space); padding-top: var(--act-space); border-top: 1px solid var(--hair); perspective: 1400px; }
+  .card { position: relative; display: grid; transform-style: preserve-3d; transform: rotateX(calc(var(--e, 1) * 180deg)); transform-origin: 50% 60%; }
+  .face {
+    grid-area: 1 / 1;
+    backface-visibility: hidden;
+    font-size: clamp(3.4rem, 2rem + 9vw, 9rem);
+    line-height: 0.9;
+    letter-spacing: -0.035em;
+  }
+  .face.a { color: var(--soft); }
+  .face.b { transform: rotateX(180deg); }
+  @media (min-width: 48rem) { .face { padding-left: calc(var(--gutter) + var(--gap)); } }
+
+  /* ================================================================ the coefficient */
+  .coef .num { font-size: 1.1em; }
+  .reg { display: inline-block; font-size: 0.6em; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) [data-in] .reg { scale: 0; transition: scale 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) 1.5s; }
+    :global(.js) [data-in]:global(.is-in) .reg { scale: 1; }
+  }
+
+  /* ================================================================ the desk you can play */
+  .yourturn { margin-top: 3rem; }
+  .desk {
+    --cap: #2c4bd4;
+    position: relative;
+    display: inline-grid;
+    gap: 0;
+    padding: 0.9rem 0.9rem 1.2rem;
+    background: #141414;
+    border-radius: 10px;
+    max-width: 100%;
+  }
+  .tape { display: grid; grid-template-columns: repeat(8, 1fr); background: #f4f2ec; color: #1a1a1a; font-style: italic; font-size: 0.86em; text-align: center; padding: 0.15em 0; rotate: -0.4deg; }
+  .chans { display: grid; grid-template-columns: repeat(8, minmax(2.4rem, 3.4rem)); }
+  .ch { display: grid; justify-items: center; padding: 0.9rem 0 0.2rem; cursor: ns-resize; touch-action: none; outline: none; }
+  .ch + .ch { border-left: 1px solid #262626; }
+  .ch:focus-visible .cap { outline: 2px solid #fafafa; outline-offset: 2px; }
+  .slot { position: relative; display: block; width: 6px; height: 12rem; border-radius: 3px; background: #050505; box-shadow: inset 0 0 0 1px #2a2a2a; }
+  .cap {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--v, 0) * 100%);
+    width: 2rem;
+    height: 1.25rem;
+    margin: 0 0 -0.62rem -1rem;
+    border-radius: 3px;
+    background: linear-gradient(#3f5ee6, var(--cap) 45%, #2340c0);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25);
+  }
+  .cap::after { content: ''; position: absolute; left: 15%; right: 15%; top: 50%; height: 2px; margin-top: -1px; background: #fafafa; }
+  .ch:global(.shake) .cap { animation: shake 0.5s; }
+  @keyframes shake {
+    20% { translate: -3px 0; }
+    40% { translate: 3px 0; }
+    60% { translate: -2px 0; }
+    80% { translate: 2px 0; }
+  }
+  .note {
+    position: absolute;
+    left: 100%;
+    top: 30%;
+    margin-left: 1rem;
+    width: 12rem;
+    font-size: 1.4em;
+    font-style: italic;
+    line-height: 1.1;
+    opacity: 0;
+    translate: -0.5rem 0;
+    transition: opacity 0.3s, translate 0.4s var(--ease-pencil);
+  }
+  .note:global(.on) { opacity: 1; translate: 0 0; }
+  @media (max-width: 60rem) { .note { position: static; width: auto; margin: 0.8rem 0 0; grid-column: 1 / -1; } }
+  .deskhelp { margin-top: 0.9rem; font-size: 0.88em; }
+
+  /* ================================================================ my notes, line by line as you read */
+  .notes { list-style: none; padding: 0; margin-top: 1.2em; border-top: 1px solid var(--hair); }
+  .notes li { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 0.6em; padding: 0.7em 0; border-bottom: 1px solid var(--hair); line-height: 1.4; }
+  .notes .num { color: var(--soft); font-size: 0.78em; padding-top: 0.25em; }
+  .notes q { quotes: '“' '”'; }
+  @media (prefers-reduced-motion: no-preference) {
+    .notes li { opacity: clamp(0.12, calc(var(--p, 1) * (var(--n) + 4) - var(--i)), 1); }
+  }
+
+  /* The four takes of one mic develop like prints */
+  .contact { width: var(--wide); margin: 3rem 0 0; margin-inline: var(--out); }
+  .sheet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  @media (min-width: 44rem) { .sheet { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .sheet img { display: block; width: 100%; height: auto; }
+  .v { margin-top: 0.55em; color: var(--soft); font-size: 0.82em; line-height: 1.4; }
+  .v .num { display: block; color: var(--ink); font-size: 0.85em; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet > div {
+      --k: clamp(0, calc(var(--e, 1) * 5 - var(--i)), 1);
+      opacity: var(--k);
+      filter: blur(calc((1 - var(--k)) * 14px));
+      translate: 0 calc((1 - var(--k)) * 2rem);
+    }
+  }
+
+  .duo { display: grid; gap: 2rem; width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); align-items: center; }
+  .duo > .cmpfig { max-width: 24rem; }
+  @media (min-width: 52rem) {
+    .duo { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); column-gap: clamp(2rem, 5vw, 5rem); }
+    .duo > .cmpfig { max-width: none; }
+  }
+  .cmpfig :global(.cmp) { background: transparent; border: 0; overflow: visible; }
+  .cmpfig :global(.lbl) { background: var(--ink); color: var(--bg); font-family: var(--sans); letter-spacing: 0.06em; }
+  .cmpfig :global(.line) { background: var(--ink); }
+
+  /* ================================================================ eighteen takes, twelve of them demos */
+  .takes { width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); }
+  .takes ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem 0.8rem; }
+  @media (min-width: 40rem) { .takes ol { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .takes li { position: relative; }
+  .takes img { display: block; width: 100%; height: auto; }
+  .takes li .num { position: absolute; left: 0; top: 0; font-size: 0.66em; color: var(--soft); }
+  .takes li:not(.kept)::after {
+    content: '';
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 46%;
+    height: 9%;
+    background: var(--pencil);
+    -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+  }
+  .takes li:nth-child(3n):not(.kept)::after { -webkit-mask-image: var(--mark-strike-2); mask-image: var(--mark-strike-2); }
+  @media (prefers-reduced-motion: no-preference) {
+    .takes li {
+      /* each picture arrives in order, then the demos are struck and fade */
+      --k: clamp(0, calc(var(--e, 1) * (var(--n) + 2) - var(--i)), 1);
+      --x: clamp(0, calc((var(--p, 1) - 0.45) * 8), 1);
+      opacity: var(--k);
+      scale: calc(0.8 + var(--k) * 0.2);
+    }
+    .takes li:not(.kept) img { opacity: calc(1 - var(--x) * 0.62); }
+    .takes li:not(.kept)::after { clip-path: inset(0 calc((1 - var(--x)) * 100%) 0 0); }
+  }
+  @media (prefers-reduced-motion: reduce) { .takes li:not(.kept) img { opacity: 0.38; } }
+
+  /* ================================================================ the one straight line, read word by word */
+  .sincere { margin-top: var(--act-space); padding-block: var(--act-space); border-block: 1px solid var(--hair); }
+  .sincere p { font-size: clamp(1.6rem, 1.15rem + 2vw, 2.4rem); line-height: 1.2; letter-spacing: -0.012em; text-wrap: balance; }
+  @media (prefers-reduced-motion: no-preference) {
+    .sincere .w { opacity: clamp(0.2, calc(var(--p, 1) * (var(--n) * 1.9) - var(--i) - var(--n) * 0.25), 1); transition: opacity 0.15s; }
+  }
+
+  /* ================================================================ two questions, ringed in pencil */
+  .questions { list-style: none; counter-reset: q; padding: 0; margin-top: 1em; }
+  .questions li { counter-increment: q; display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); align-items: baseline; padding: 0.45em 0; font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.3rem); line-height: 1.15; letter-spacing: -0.012em; }
+  .questions li > span { text-wrap: balance; }
+  .questions li::before { content: '0' counter(q); color: var(--soft); font-family: var(--sans); font-size: 0.4em; letter-spacing: 0.06em; }
+  .ring { position: relative; white-space: nowrap; }
+  .ring svg { position: absolute; left: -18%; top: -22%; width: 136%; height: 150%; overflow: visible; pointer-events: none; }
+  .ring path { fill: none; stroke: var(--pencil); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .ring path { stroke-dashoffset: 1; transition: stroke-dashoffset 0.9s var(--ease-pencil) 0.3s; }
+    :global(.js) li:global(.is-in) .ring path { stroke-dashoffset: 0; }
+  }
+
+  /* ================================================================ the record, out of the sleeve */
+  .outro { display: grid; justify-items: center; margin-top: var(--act-space); padding-top: var(--act-space); text-align: center; }
+  .outro .record { width: min(86vw, 40rem); }
+  @media (prefers-reduced-motion: no-preference) {
+    .outro .record { scale: calc(0.6 + var(--e, 1) * 0.4); translate: 0 calc((1 - var(--e, 1)) * -6rem); }
+  }
+  .end { width: var(--wide); margin-top: 2.5rem; font-size: clamp(1.9rem, 0.9rem + 4.6vw, 4.6rem); line-height: 1; letter-spacing: -0.02em; }
+  .caps { text-transform: uppercase; letter-spacing: 0.01em; margin-top: 0.14em; font-size: 0.86em; white-space: nowrap; }
+  .l { display: inline-block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .outro .l {
+      --k: clamp(0, calc(var(--e, 1) * 34 - 12 - var(--i)), 1);
+      opacity: var(--k);
+      translate: 0 calc((1 - var(--k)) * -0.6em);
+      rotate: calc((1 - var(--k)) * -12deg);
+    }
+  }
+
+  .ps { margin-top: var(--act-space); }
+  .ps .body > * + * { margin-top: var(--beat); }
+  .tag { color: var(--soft); font-family: var(--sans); font-size: 0.8em; letter-spacing: 0.04em; }
+  .eleven { position: relative; display: inline-block; cursor: help; outline: none; }
+  .eleven::after {
+    content: '';
+    position: absolute;
+    left: -0.06em;
+    right: -0.06em;
+    top: 0.42em;
+    height: 0.24em;
+    background: var(--pencil);
+    -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    clip-path: inset(0 100% 0 0);
+  }
+  .eleven:global(.loud) { animation: loud 0.9s cubic-bezier(0.3, 1.6, 0.5, 1); }
+  .eleven:global(.loud)::after { clip-path: inset(0); transition: clip-path 0.4s var(--ease-pencil) 0.55s; }
+  @keyframes loud {
+    0% { scale: 1; }
+    25% { scale: 1.9; rotate: -4deg; }
+    35% { rotate: 4deg; }
+    45% { rotate: -3deg; }
+    100% { scale: 1; rotate: 0deg; }
+  }
+
+  .cta { margin-top: var(--act-space); padding-top: var(--act-space); border-top: 1px solid var(--hair); }
+  .ask { font-size: clamp(1.8rem, 1.25rem + 2.6vw, 2.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 0.4em; }
+  .liner { margin-top: var(--act-space); padding-top: var(--act-space); border-top: 1px solid var(--hair); }
+  .liner .signs { row-gap: 0.45em; font-size: 0.92em; line-height: 1.5; }
+  .liner .signs dt { color: var(--soft); }
+  footer { margin-top: var(--act-space); padding-bottom: 3rem; }
+</style>

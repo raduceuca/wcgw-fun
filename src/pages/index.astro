@@ -2,11 +2,12 @@
 import Logo from '../components/Logo.astro'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import { consent } from '../copy'
-import { site } from '../site'
+import { tools } from '../home/tools'
+import { pages, site } from '../site'
 import '../styles/home.css'
 ---
 
-<BaseLayout stream>
+<BaseLayout page={pages.home} stream>
   <a href="#tools" class="skip">Skip to tools</a>
 
   <div class="page">
@@ -115,52 +116,21 @@ import '../styles/home.css'
           <h2 id="act-3">Tools for the aftermath</h2>
           <p>Someone has to. The judgment comes from using the tools, not from yelling at them.</p>
           <ul class="tools">
-            <li>
-              <p class="tool">
-                <a class="link" href="https://standup.wcgw.fun" target="_blank" rel="noopener">Standup</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">Your end-of-day update, written from git and your agents’ sessions</p>
-            </li>
-            <li>
-              <p class="tool">
-                <a class="link" href="https://cartilejunglei.ro" target="_blank" rel="noopener">Cărțile Junglei</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">A card game. Guess which Romanian public figure said it</p>
-            </li>
-            <li>
-              <p class="tool">
-                <a class="link" href="https://vibecheck.wcgw.fun" target="_blank" rel="noopener">VibeCheck</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">Catches what your agent shipped, hands it back, checks the fix</p>
-            </li>
-            <li>
-              <p class="tool">
-                <a class="link" href="https://sloptable.com" target="_blank" rel="noopener">Periodic Table of Slop</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">The elements of AI-generated content</p>
-            </li>
-            <li>
-              <p class="tool">
-                <a class="link" href="https://slopmeter.wtf" target="_blank" rel="noopener">slopmeter.wtf</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">AI slop detection, measured in Altmans</p>
-            </li>
-            <li data-loose-row>
-              <p class="tool"><span>Unhoured</span><span class="status">Coming soon</span></p>
-              <p class="tool-desc">A manifesto for people who sell what they know</p>
-            </li>
-            <li>
-              <p class="tool">
-                <a class="link" href="https://claudecraft.dev" target="_blank" rel="noopener">claudecraft.dev</a>
-                <span class="status">Live</span>
-              </p>
-              <p class="tool-desc">Designer-first boilerplate for Claude Code</p>
-            </li>
+            {
+              tools.map(tool => (
+                <li data-loose-row={tool.url ? undefined : ''}>
+                  {tool.url ? (
+                    <p class="tool">
+                      <a class="link" href={tool.url} target="_blank" rel="noopener">{tool.name}</a>
+                      <span class="status">Live</span>
+                    </p>
+                  ) : (
+                    <p class="tool"><span>{tool.name}</span> <span class="status">Coming soon</span></p>
+                  )}
+                  <p class="tool-desc">{tool.description}</p>
+                </li>
+              ))
+            }
           </ul>
         </div>
       </section>
@@ -206,8 +176,8 @@ import '../styles/home.css'
               <p class="cont">
                 Hire WCGW by the month to stop the wrong things before they reach your users. Say hello:
                 <a class="link" href={`mailto:${site.email}`}>{site.email}</a>,
-                <a class="link" href="https://x.com/raduceuca" target="_blank" rel="noopener">@raduceuca</a> or
-                <a class="link" href="https://x.com/wcgwfun" target="_blank" rel="noopener">@wcgwfun</a>.
+                <a class="link" href={site.profiles.founder[0]} target="_blank" rel="noopener">@raduceuca</a> or
+                <a class="link" href={site.profiles.studio[0]} target="_blank" rel="noopener">@wcgwfun</a>.
               </p>
             </div>
           </div>
@@ -245,6 +215,7 @@ import '../styles/home.css'
         {
           site.clarityId && (
             <p>
+              <a class="link" href="/stories">Stories</a> ·{' '}
               <a class="link" href="/privacy">{consent.privacy}</a> ·{' '}
               <button class="link" type="button" data-consent-open>{consent.reopen}</button>
             </p>
