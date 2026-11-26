@@ -61,11 +61,13 @@ export function htmlToMarkdown(html: string, base: string): string {
       return
     }
     if (!body) return
-    if (liParts) return void liParts.push(body)
+    // A paragraph inside a quote is quoted too: marked on its own line, in quote marks inside a list item.
+    const quoted = tag === 'blockquote' || stack.some((f) => f.tag === 'blockquote')
+    if (liParts) return void liParts.push(quoted && !body.startsWith('“') ? `“${body}”` : body)
     if (tag === 'dt') return void (term = body)
     if (tag === 'dd') return void item(`- **${term}:** ${body}`)
     const heading = tag.match(/^h(\d)$/)
-    out.push(heading ? `${'#'.repeat(Number(heading[1]))} ${body}` : tag === 'blockquote' ? `> ${body}` : body)
+    out.push(heading ? `${'#'.repeat(Number(heading[1]))} ${body}` : quoted ? `> ${body}` : body)
     inList = false
   }
   /** List items sit on consecutive lines, one list per run. */

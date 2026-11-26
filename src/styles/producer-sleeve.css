@@ -1,0 +1,58 @@
+/* The producer's sleeve: what the story (src/pages/stories/the-producer.astro) and its making-of page
+   share. AGAIN blue, paper-white ink, a little moving paper grain. Everything sits under .sleeve. */
+
+.sleeve {
+  --bg: #2c4bd4;
+  --ink: #fafafa;
+  --soft: rgb(250 250 250 / 0.72);
+  --hair: rgb(250 250 250 / 0.24);
+  --pencil: #fafafa;
+  --wide: min(100vw - 2.75rem, 66rem);
+  --out: calc(50% - min(50vw - 1.375rem, 33rem));
+  color-scheme: dark;
+  position: relative;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  isolation: isolate;
+  overflow-x: clip;
+}
+html:has(.sleeve),
+body:has(.sleeve) { background: #2c4bd4; }
+body:has(.sleeve) ::selection { background: rgb(250 250 250 / 0.3); }
+
+/* Paper grain over everything. It shifts a few times a second, like stock under a lamp. */
+.sleeve::after {
+  content: '';
+  position: fixed;
+  inset: -50%;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.17;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sleeve::after { animation: sleeve-grain 0.6s steps(3) infinite; }
+}
+@keyframes sleeve-grain {
+  0% { translate: 0 0; }
+  33% { translate: -3% 2%; }
+  66% { translate: 2% -4%; }
+}
+
+.sleeve .home { display: block; color: inherit; }
+.sleeve .home:focus-visible { outline: 2px solid var(--pencil); outline-offset: 0.2em; }
+.sleeve .num { font-family: var(--sans); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+.sleeve .soft { color: var(--soft); }
+.sleeve .link { color: inherit; }
+.sleeve em { font-style: italic; }
+.sleeve .fact { text-decoration: underline dotted rgb(250 250 250 / 0.55); text-decoration-thickness: 0.06em; text-underline-offset: 0.22em; cursor: help; }
+.sleeve a.fact { cursor: pointer; }
+
+.sleeve .act { padding-top: var(--act-space); }
+.sleeve .act h2 { font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.1rem); line-height: 1.15; letter-spacing: -0.012em; text-wrap: balance; }
+.sleeve .big { font-size: clamp(1.9rem, 1.25rem + 2.8vw, 3rem); line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
+
+.sleeve figcaption { margin-top: 0.75em; color: var(--soft); font-size: 0.88em; line-height: 1.45; }
+.sleeve figcaption em { color: var(--ink); margin-right: 0.35em; }

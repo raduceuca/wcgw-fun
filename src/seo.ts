@@ -40,10 +40,12 @@ interface PageMeta {
   page: Page
   title: string
   description: string
+  /** The share card, a path on the site. */
+  image: string
 }
 
 /** The schema.org graph for a page: the studio, its founder, the site, the page. */
-export function jsonLd({ page, title, description }: PageMeta) {
+export function jsonLd({ page, title, description, image }: PageMeta) {
   const url = canonical(page.path)
   const webPage: Record<string, unknown> = {
     '@type': 'WebPage',
@@ -58,6 +60,19 @@ export function jsonLd({ page, title, description }: PageMeta) {
     publisher: { '@id': ids.studio },
     datePublished: page.published,
     dateModified: modifiedDate(page),
+    primaryImageOfPage: canonical(image),
+  }
+  if (page.path.startsWith('/stories/')) {
+    webPage.mainEntity = {
+      '@type': 'Article',
+      headline: title.replace(/ WCGW$/, ''), // the page title without the site name
+      description,
+      image: canonical(image),
+      author: { '@id': ids.founder },
+      publisher: { '@id': ids.studio },
+      datePublished: page.published,
+      dateModified: modifiedDate(page),
+    }
   }
   if (page.path === '/') {
     webPage.mainEntity = {

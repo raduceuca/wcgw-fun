@@ -1,99 +1,117 @@
 ---
 import Logo from '../../components/Logo.astro'
 import StoryCompare from '../../components/StoryCompare.astro'
-import StoryDeck from '../../components/StoryDeck.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { consent } from '../../copy'
 import { pages, site } from '../../site'
 import '../../styles/home.css'
 
 /* Story: how one picture for a LinkedIn post turned into the film "This is not it."
-   Told in the order it happened, in the first person, with the prompts as typed.
-   Quotes are as typed except for spelling slips, fixed on 20 Nov 2026 at Radu's request, and the
-   four prompts he asked to have tidied: the film request and the Steve Jobs line in step 06,
-   the Volvo pull quote in step 10 (as typed: "each sfx must come from a natural element, like twigs
-   breaking. think volvo philosophy of signal blinker"),
-   and the pull quote in step 07 (as typed: "feels too fast, put more effect into each bit of the
-   story, needs 10x the craftsmanship").
-   Keep the lowercase, the fragments and the bluntness: they are the evidence. The colophon says so.
-   Rules of the page: the film plays first; headings say what happened, with no morals;
-   the turning-point prompts are set large (.shout); every number is sourced in the colophon.
-   Copy rules (20 Nov 2026 de-slop pass): no "not X, it's Y", no aphorisms, no reaction lines,
-   no feelings Radu did not type. "The point" is built from his own sentences.
-   Second pass (23 Nov): "came back" once at most, no passives that hide who did the work, headings
-   that vary in length, no one-line fragments. Dry humour from facts only (e.g. "because LinkedIn"). */
+   Ten chapters at most (24 Nov 2026): the reader does the picking, the saying no, the pressing and
+   the tapping; the prose only sets each one up. The long version, 21 chapters, is kept in
+   backups/this-is-not-it-2026-11-24-21-chapters/.
+   Told in the order it happened, in the first person. Quotes are as typed except for spelling slips,
+   fixed on 20 Nov 2026 at Radu's request, and the prompts he asked to have tidied (the film request,
+   the Steve Jobs line, the Volvo line and the one after version 3).
+   Keep the lowercase, the fragments and the bluntness: they are the evidence.
+   Copy rules: no "not X, it's Y", no aphorisms, no feelings Radu did not type. Dry humour from facts only.
+   Every game has a plain reading: without script, all the text and one film are on the page. */
 
 const base = '/stories/this-is-not-it'
 const film = { versions: 25, seconds: 119.5, fps: 30, bpm: 120, pictures: 49 }
 
 /** The LinkedIn post that started it. Source: LinkedIn post analytics export, 20 November 2026. */
-const post = { at: '9:08', impressions: 13866, reached: 8432, reactions: 49, comments: 32, saves: 30, profileViews: 135 }
+const post = { impressions: 13866, reached: 8432, reactions: 49, comments: 32, saves: 30 }
 
-/* Times in the gutter are Bucharest time on 20 November 2026, then on Monday 23 November. They come from the timestamps of
-   the files themselves (pictures and cuts), the LinkedIn export (the post) and the chat (my notes). */
+/** How tightly picture and sound land. Measured on the rendered films against the sound's own list of events. */
+const hits = { of: 52, before: 27, after: 32 }
+
+/* The gutter counts from the first prompt, as Radu tells it (24 Nov 2026): T+1day is most of the work, T+4days the polish.
+   Clock times are Bucharest time, from the timestamps of the files and the chat. */
 const frames = Math.round(film.seconds * film.fps)
 const length = `${Math.floor(film.seconds / 60)}:${String(Math.floor(film.seconds % 60)).padStart(2, '0')}`
 
-/** Interim cuts that can be played. Lengths come from the files; verdicts are mine. */
-const cut = {
-  1: { v: 1, at: '12:17', len: '1:02', verdict: 'A start.', note: 'Small illustrated workmen and too many sizes of type.' },
-  2: { v: 2, at: '12:27', len: '0:51', verdict: 'In a hurry.', note: 'One size of type, more sound. My note: “not bad v2, think you need to work on rhythm and dramatism.”' },
-  3: { v: 3, at: '12:52', len: '0:44', verdict: 'Wrong direction.', note: 'Seven seconds shorter than version 2. My note had asked for rhythm and drama.' },
-  4: { v: 4, at: '13:08', len: '1:28', verdict: 'The one that stuck.', note: 'Started again without the illustrations. Each line has its own animation.' },
-  5: { v: 5, at: '13:39', len: '1:28', verdict: 'Horrific.', note: 'A 3D key, as requested.' },
-  8: { v: 8, at: '14:15', len: '1:51', verdict: 'Kept.', note: 'A photograph of a key, a finger in four frames, and a selection box that gives up and leaves.' },
-  11: { v: 11, at: '15:05', len: '1:51', verdict: 'On the beat.', note: `The whole picture retimed to ${film.bpm} beats a minute.` },
-  13: { v: 13, at: '15:19', len: '1:51', verdict: 'Half right.', note: 'All nature: wood, stone, water, leaves.' },
-  16: { v: 16, at: '16:18', len: '1:51', verdict: 'Amazing. Still not it.', note: 'The page became a card with a hole in it, and the card fell away.' },
-  22: { v: 22, at: 'Fri 17:29', len: '1:49', verdict: 'Friday’s last cut.', note: 'Soft piano, a beach behind the page.' },
-  23: { v: 23, at: 'Mon 11:34', len: '1:59', verdict: 'After my notes.', note: 'Rocket clouds, a tombstone for rectangle tools, a pencil sketch, rolling credits.' },
-  25: { v: 25, at: 'Mon 11:49', len: '1:59', verdict: 'After the rhythm pass.', note: 'Piano and nylon guitar. The final one.' },
+/** The two rounds of pictures. `mine` is the one I kept. */
+const rounds = {
+  one: [
+    { src: '01-a', name: 'A. An empty selection.', alt: 'An empty blue selection box with a rope pulling one corner, above the word Left.', mine: true },
+    { src: '01-b', name: 'B. Robots.', alt: 'A row of small robots combing an orange scribble into a browser window.' },
+    { src: '01-c', name: 'C. An old monitor.', alt: 'An old beige monitor next to a laptop on a desk.' },
+  ],
+  two: [
+    { src: '02-voice', name: 'The voice', alt: 'A black voice waveform bursting through a selection box.' },
+    { src: '02-bin', name: 'The bin', alt: 'A crumpled selection box on the floor next to a waste bin.' },
+    { src: '02-tombstone', name: 'The grave', alt: 'A grey stone slab on grass inside a selection box, with a dead rose, above the word Left.', mine: true },
+    { src: '02-dragged', name: 'The getaway', alt: 'A selection box almost entirely dragged off the page.' },
+  ],
 }
 
-/** Monday 23 November: the notes I sent on the film, by scene, in my words (spelling fixed). */
-const monday = [
-  [2, 'transitions must preserve at least one element so it feels natural.'],
-  [3, 'ship it still feels weak, can we get some actual booster rocket clouds forming at bottom as it launches?'],
-  [7, 'Last year, the rectangle pulling tools drew their last breath. Didn’t suffer, they just went away.'],
-  [12, 'think we need to hold a few extra seconds on this screen.'],
-  [15, 'Not long. Keep it fun.'],
-]
+/** What I was shown, and what I typed after it. `v: 0` is the book that came first. */
+const tries = [
+  { v: 0, name: 'The book', file: 'book', note: 'Illustrated plates, laid out like an article.', typed: ['I don’t know if this format is ever going to work', 'Starting from these frames, can we make a 60-second video manifesto with web technologies? Kinetic typography and lots of small animations. Think "Designed in California" from Apple.'] },
+  { v: 1, note: 'Small illustrated workmen and too many sizes of type.', typed: ['look, imagine you are at Apple and Steve Jobs is reviewing this tomorrow morning'] },
+  { v: 2, note: 'One size of type, more sound.', typed: ['not bad v2, think you need to work on rhythm and dramatism.'] },
+  { v: 3, note: 'Seven seconds shorter. I had asked for rhythm and drama.', typed: ['feels too fast. every beat of the story needs its own idea.'] },
+  { v: 4, note: 'Started again without the illustrations.', typed: ['do the f12 key real, a 3d render, or something that gets pushed as the climax'] },
+  { v: 8, note: 'A photograph of a key, and a selection box that gives up and leaves.', typed: ['think we need piano sounds, look at this'] },
+  { v: 13, note: 'Wood, stone, water, leaves.', typed: ['natural sounds need more work, maybe meet half way natural and the ones you had before'] },
+  { v: 16, note: 'The page became a card with a hole in it, and the card fell away.', typed: ['amazing, put my x handle in there on the final card.'] },
+  { v: 22, note: 'Soft piano, a beach behind the page.', typed: ['ship it still feels weak, can we get some actual booster rocket clouds forming at bottom as it launches?'] },
+  { v: 23, note: 'Rocket clouds, a pencil sketch, rolling credits.', typed: ['we drew pictures of it, ‘we just drew pictures of it’ maybe so it’s clear this is what we actually did?'] },
+  { v: 25, note: 'Piano and nylon guitar.', typed: [] },
+].map((t) => ({ ...t, name: t.name ?? `Version ${t.v}`, file: t.file ?? `cut-v${t.v}` }))
 
 /** The afternoon the ending was made, by the clock (Bucharest, 20 November 2026):
-    what I typed and when, then the version that came back and when its file was written. */
+    what I typed and when, then the version that came back. */
 const afternoon = [
-  { at: '15:59', said: 'transition here is lazy.', v: 14, back: '16:08', got: 'Every shape gets its own selection box.', alt: 'Nine pastel shapes, each inside its own selection box, above the line Push it.' },
-  { at: '16:01', said: 'or rather have just the drag handles, but the whole bg is a photo', v: 14, back: '16:08', got: 'The photo fills the frame. The handles stay.', alt: 'A photo of leaves fills the frame, with eight selection handles and the line That’s it.' },
-  { at: '16:16', said: 'like they were a window into something, or the page was a cardboard with a cutout in the center', v: 16, back: '16:18', got: 'The page is a card with a hole in it. It falls.', alt: 'A paper card with a photo-shaped hole tilting as it falls, the handles left behind.' },
-  { at: '16:24', said: 'amazing, put my x handle in there on the final card.', v: 17, back: '16:27', got: 'My handle is on the last card.', alt: 'The leaves with That’s it. and the credit Radu Ceuca, @raduceuca, wcgw.fun.' },
-  { at: '16:40', said: 'Need one final touch of cinematography genius there', v: 18, back: '16:46', got: 'The last frame says “This is it.”', alt: 'The leaves with the line This is it.' },
-  { at: '16:49', said: 'this is not it → this is "still" not it → this is it?', v: 19, back: '16:52', got: 'The middle state.', alt: 'The photo of leaves selected inside a paper page, above the line This is still not it.' },
-  { at: '16:52', said: 'took a quarter of a century should move to final slide with full bleed picture, right?', v: 20, back: '16:58', got: 'The quarter of a century is on the last frame.', alt: 'The leaves with This is it. Took a quarter of a century.' },
-  { at: '17:11', said: 'the image must have a deeper meaning.', v: 21, back: '17:15', got: 'A Caribbean beach. The wireframe is gone.', alt: 'A photo of a palm over turquoise water selected inside a paper page, above the line This is still not it.' },
+  { at: '15:59', said: 'transition here is lazy.', v: 14, got: 'Every shape gets its own selection box.', alt: 'Nine pastel shapes, each inside its own selection box, above the line Push it.' },
+  { at: '16:01', said: 'or rather have just the drag handles, but the whole bg is a photo', v: 14, got: 'The photo fills the frame. The handles stay.', alt: 'A photo of leaves fills the frame, with eight selection handles and the line That’s it.' },
+  { at: '16:16', said: 'like they were a window into something, or the page was a cardboard with a cutout in the center', v: 16, got: 'The page is a card with a hole in it. It falls.', alt: 'A paper card with a photo-shaped hole tilting as it falls, the handles left behind.' },
+  { at: '16:24', said: 'amazing, put my x handle in there on the final card.', v: 17, got: 'My handle is on the last card.', alt: 'The leaves with That’s it. and the credit Radu Ceuca, @raduceuca, wcgw.fun.' },
+  { at: '16:40', said: 'Need one final touch of cinematography genius there', v: 18, got: 'The last frame says “This is it.”', alt: 'The leaves with the line This is it.' },
+  { at: '16:49', said: 'this is not it → this is "still" not it → this is it?', v: 19, got: 'The middle state.', alt: 'The photo of leaves selected inside a paper page, above the line This is still not it.' },
+  { at: '16:52', said: 'took a quarter of a century should move to final slide with full bleed picture, right?', v: 20, got: 'The quarter of a century is on the last frame.', alt: 'The leaves with This is it. Took a quarter of a century.' },
+  { at: '17:11', said: 'the image must have a deeper meaning.', v: 21, got: 'A Caribbean beach. The wireframe is gone.', alt: 'A photo of a palm over turquoise water selected inside a paper page, above the line This is still not it.' },
 ]
 
-/** Things I typed that day that lean on the word "it", in order. Spelling fixed, nothing else. */
+/** Things I typed that day that lean on the word "it". Spelling fixed, nothing else. */
 const its = [
   'does it work? will people get it?',
-  'Is there wordplay here that we can use for it?',
-  'Think of it like a short story, and I want to post it to X.',
-  'This is not it. It’s the title. It’s like a book.',
-  'I don’t need it to move. It can be static.',
-  'You select it as if it was an image, but then you get to actually push it',
+  'this is not it. That is the title. it’s like a book.',
+  'i don’t need it to move. it can remain static.',
+  'you select it as if it was an image, but then you get to actually push it',
   'this is it should be on the final final frame',
   'the rhythmicity of it stood out. then it hit me.',
   'no real reason, sometimes it’s gut',
 ]
-/** Split a line around every whole word "it", so each one can be set like the film sets it. */
+/** Split a line around every whole word "it", so each one can be found. */
 const mark = (line: string) => line.split(/\b(it)\b/i)
+const itCount = its.reduce((n, line) => n + (mark(line).length - 1) / 2, 0)
+
+/** Everything there is to find, in page order. The order is printed before it is found, `what` after
+    (the script fills in the ones that depend on the reader). Every one can be done by touch. */
+const finds = [
+  { id: 'sound', to: 'film', say: 'Turn it up.', what: 'Piano and guitar.' },
+  { id: 'reply', to: 's1', say: 'Pick it.', what: 'An empty selection.' },
+  { id: 'grave', to: 'round-two', say: 'Pick it again.', what: 'The grave.' },
+  { id: 'its', to: 's3', say: 'Find it.', what: `All ${itCount}, no help.` },
+  { id: 'ship', to: 's4', say: 'Ship it.' },
+  { id: 'no', to: 's4', say: 'Say no to it.', what: 'To the end.' },
+  { id: 'render', to: 's5', say: 'Uncover it.', what: 'Horrific.' },
+  { id: 'key', to: 's5', say: 'Push it.', what: 'Rectangles.' },
+  { id: 'beat', to: 's6', say: 'Beat it.' },
+  { id: 'figma', to: 's8', say: 'Bury it.', what: 'Figma.' },
+  { id: 'note', to: 'note', say: 'Say it.', what: `Version ${film.versions + 1}.` },
+]
 ---
 
 <BaseLayout
-  title="This is not it. How a picture became a film."
-  description={`I asked for a picture for a LinkedIn post and ended up with a ${length} film. Both days, by the clock, with every prompt I typed.`}
-  social={`I asked for a picture for a LinkedIn post. ${film.versions} versions later it was a film. Every prompt is in here.`}
+  title="The Accidental Manifesto. WCGW"
+  description={`I asked for a picture for a LinkedIn post and ended up with a ${length} film. See where you would have stopped.`}
+  social={`I asked for a picture for a LinkedIn post. ${film.versions} versions later it was a film. Say when you would have stopped.`}
   page={pages.thisIsNotIt}
   image={`${base}/og.png`}
+  imageAlt="The Accidental Manifesto. I asked for a picture for a post. I got a film. 25 versions, zero timelines. Beside it, a thumb about to press an F12 key inside a selection box."
   creator="@raduceuca"
 >
   <a href="#s1" class="skip">Skip to the story</a>
@@ -103,8 +121,24 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
     </header>
 
+    <nav class="toc" data-toc aria-label="Contents"></nav>
+
+    <aside class="finds" data-finds aria-label="Found on this page">
+      <button class="tally" type="button" popovertarget="finds">
+        <span data-last></span>
+        <span class="count"><span class="call-out">Find the easter eggs. </span><span class="num" data-n>0</span> of <span class="num">{finds.length}</span> found</span>
+      </button>
+      <p class="sr-only" aria-live="polite" data-told></p>
+      <div class="list" id="finds" popover>
+        <p class="state" data-state>This is not it.</p>
+        <ol>
+          {finds.map((f) => <li data-find={f.id} data-what={f.what}><a href={`#${f.to}`}>{f.say}</a> <span data-what-now></span></li>)}
+        </ol>
+      </div>
+    </aside>
+
     <main>
-      <section class="hero wide" id="film">
+      <section class="hero" id="film">
         <div class="hero-film">
           <video data-hero autoplay muted loop playsinline preload="metadata" poster={`${base}/poster.jpg`} width="1080" height="1350">
             <source src={`${base}/this-is-not-it.mp4`} type="video/mp4" />
@@ -116,219 +150,187 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
         </div>
         <div class="hero-copy">
           <h1>
-            <span class="beat">I asked for a picture for a post.</span>
-            <span class="beat">I got a film.</span>
-            <span class="beat">This is <span class="cut">not</span> <em>it.</em></span>
+            <span class="beat">The Accidental Manifesto.</span>
           </h1>
           <p class="lede">
-            On Friday at 00:52 I asked for a picture for a LinkedIn post. By 17:29 I had a film, and on Monday
-            I gave it notes anyway. All of it is below, by the clock, with my prompts as I typed them.
-            <a class="link" href="/stories">A WCGW story</a>.
+            From an image for a LinkedIn post to a short manifesto film about design.<br/>
           </p>
+          <p class="lede dare jsonly">
+            This page hides <abbr class="fact" title="Easter eggs. The corner counts them as you find them.">{finds.length} things</abbr>.
+          </p>
+          <p class="call"><a class="link" href="#s1">Start looking ↓</a></p>
         </div>
       </section>
 
       <section class="act row step" aria-labelledby="s1">
-        <p class="gutter"><span class="num">00:52</span> Picture</p>
-        <div class="body">
-          <h2 id="s1">Ioana Teleanu started it.</h2>
-          <p>
-            She asked designers who left Figma what they use now, and read the replies as most of them never
-            leaving. I left late last year, which is too long for a comment. So I wrote a post, and posts
-            need pictures.
-          </p>
+        <p class="gutter"><span class="num">Morning</span> Picture</p>
+        <div class="body" data-pick>
+          <h2 id="s1">Once Upon a Time in Claude.</h2>
           <blockquote class="prompt">
-            <p>“Writing this post on LinkedIn, create a nice visual for it with the help of Tony”</p>
+            <p>Preparing this post for LinkedIn, create a nice visual for it with Tony from Amplifiers</p>
           </blockquote>
           <p>
-            Tony is the guide inside <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
-            Three options:
+            Tony, the guide inside <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>,
+            delivered three options. Which one is it?
           </p>
           <figure class="shots three">
             <div>
-              <div><img src={`${base}/01-a.webp`} alt="An empty blue selection box with a rope pulling one corner, above the word Left." width="640" height="800" loading="lazy" /><p class="v">A. I picked this one.</p></div>
-              <div><img src={`${base}/01-b.webp`} alt="A row of small robots combing an orange scribble into a browser window." width="640" height="800" loading="lazy" /><p class="v">B. Robots.</p></div>
-              <div><img src={`${base}/01-c.webp`} alt="An old beige monitor next to a laptop on a desk." width="640" height="800" loading="lazy" /><p class="v">C. An old monitor.</p></div>
+              {
+                rounds.one.map((o) => (
+                  <div>
+                    <div class="opt" data-opt data-mine={o.mine}>
+                      <img src={`${base}/${o.src}.webp`} alt={o.alt} width="640" height="800" loading="lazy" />
+                      <button class="hit" type="button" aria-label={`Pick ${o.name}`} />
+                    </div>
+                    <p class="v">{o.name}</p>
+                  </div>
+                ))
+              }
             </div>
           </figure>
+          <p class="answer" data-answer>A. The box you drag in a design tool, with nothing inside and one word under it.</p>
+          <p>I asked Claude to stare into the emptiness some more.</p>
+
+          <p>
+            Context: Ioana Teleanu asked designers who left Figma what they use now, and read the replies as most of them never
+            leaving. I left late last year, which is too long for a comment. So I wrote a post, and posts
+            need pictures. Right?
+          </p>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="s2">
-        <p class="gutter"><span class="num">00:58</span> Pick</p>
-        <div class="body">
-          <h2 id="s2">I picked the empty box.</h2>
-          <p>The box you drag in a design tool, with nothing inside and one word under it. I asked for more.</p>
-        </div>
-      </section>
-
-      <figure class="bleed">
+      <figure class="bleed" id="round-two" data-pick>
         <div class="strip four">
-          <img src={`${base}/02-tombstone.webp`} alt="A grey stone slab on grass inside a selection box, with a dead rose, above the word Left." width="640" height="800" loading="lazy" />
-          <img src={`${base}/02-voice.webp`} alt="A black voice waveform bursting through a selection box." width="640" height="800" loading="lazy" />
-          <img src={`${base}/02-bin.webp`} alt="A crumpled selection box on the floor next to a waste bin." width="640" height="800" loading="lazy" />
-          <img src={`${base}/02-dragged.webp`} alt="A selection box almost entirely dragged off the page." width="640" height="800" loading="lazy" />
+          {
+            rounds.two.map((o) => (
+              <div class="opt" data-opt data-mine={o.mine}>
+                <img src={`${base}/${o.src}.webp`} alt={o.alt} width="640" height="800" loading="lazy" />
+                <button class="hit" type="button" aria-label={`Pick ${o.name}`} />
+              </div>
+            ))
+          }
         </div>
-        <figcaption class="cap"><div class="row"><p class="body">Round two. I kept the grave.</p></div></figcaption>
+        <figcaption class="cap"><div class="row"><div class="body">
+          <p>Round two. Which one would you put on LinkedIn?</p>
+          <p class="answer" data-answer>I kept the grave.</p>
+        </div></div></figcaption>
       </figure>
 
-      <section class="act row step" aria-labelledby="s3">
-        <p class="gutter"><span class="num">01:03</span> Tombstone</p>
+      <section class="act row step" aria-labelledby="s2">
+        <p class="gutter"><span class="num">T+60min</span> Tombstone</p>
         <div class="body">
-          <h2 id="s3">Three notes on a tombstone, after midnight.</h2>
+          <h2 id="s2">The Post Always Rings Twice.</h2>
           <blockquote class="prompt">
-            <p>“continue refining tombstone concept”</p>
-            <p>“1st one. Perhaps the Left. could use some tuning? does it work? will people get it?”</p>
-            <p>“can we use bold, not ultrabold for left? and maybe make it a wee bit smaller? think apple ads from 80s quality”</p>
+            <p>Like the 1st one. Does it work? will people get it?</p>
+            <p>Can we use bold, not ultrabold for copy? And maybe make it a wee bit smaller? think Apple ads from 80s.</p>
           </blockquote>
-          <figure class="shots three">
-            <div>
-              <div><img src={`${base}/03-epitaph.webp`} alt="The tombstone with an epitaph carved into it." width="640" height="800" loading="lazy" /><p class="v">Try one. An epitaph.</p></div>
-              <div><img src={`${base}/03-badge.webp`} alt="The tombstone with a small blue size badge under it." width="640" height="800" loading="lazy" /><p class="v">Try two. A size badge.</p></div>
-              <div><img src={`${base}/03-final.webp`} alt="The final poster: a selected tombstone and the word Left. in bold." width="640" height="800" loading="lazy" /><p class="v">The one I posted.</p></div>
-            </div>
+          <figure class="poster">
+            <img src={`${base}/03-final.webp`} alt="The final poster: a selected tombstone and the word Left. in bold." width="640" height="800" loading="lazy" />
           </figure>
-          <p>At 01:03 the picture for the post was done. That should have been the end of it.</p>
-        </div>
-      </section>
-
-      <section class="act row step" aria-labelledby="s3b">
-        <p class="gutter"><span class="num">09:08</span> Posted</p>
-        <div class="body">
-          <h2 id="s3b">Eight hours later it was on LinkedIn.</h2>
           <p>
-            By the evening it had
-            <abbr class="fact" title={`${post.impressions.toLocaleString('en-US')} impressions, ${post.reached.toLocaleString('en-US')} people reached. LinkedIn post analytics export, 20 November 2026`}>about 14,000 impressions</abbr>,
-            <abbr class="fact" title="LinkedIn post analytics export, 20 November 2026">{post.comments} comments and {post.saves} saves</abbr>.
+            Couple hours later it was on LinkedIn. A tombstone. Great work, Radu! By that evening, it had
+            <abbr class="fact" title={`${post.impressions.toLocaleString('en-US')} impressions, ${post.reached.toLocaleString('en-US')} people reached. LinkedIn post analytics export, 20 November 2026`}>about 14,000 impressions</abbr>.
             A quarter of the people who saw it were product designers. Some of them work at Figma.
           </p>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="s4">
-        <p class="gutter"><span class="num">12:04</span> Wordplay</p>
+      <section class="act row step" aria-labelledby="s3">
+        <p class="gutter"><span class="num">T+1day</span> Wordplay</p>
         <div class="body">
-          <h2 id="s4">My post kept saying “it”.</h2>
-          <p>
-            I read the post back. Shapes it, tries to break it, explores it, builds it. Then it hit me.
-          </p>
+          <h2 id="s3">Eight its and a maybe.</h2>
+          <p>I read <abbr class="fact" title="The word it, counted in the LinkedIn post of 20 November 2026, it’s included: where it sits, cleans it up, shapes it, tries to break it, explores it, builds it, until it’s right, a mockup of it">the post</abbr> back. Shapes it, tries to break it, explores it, builds it. Then it hit me.</p>
           <blockquote class="prompt">
-            <p>“Is there wordplay here that we can use for it?”</p>
-            <p>“Think of it like a short story, and I want to post it to X.”</p>
-            <p>“Maybe you can start with a funny thing about design.”</p>
+            <p>Is there "it" wordplay here that we can use for more dramat?</p>
+            <p>Maybe you can start off with a funny provocative thing about design.</p>
           </blockquote>
+          <p>My prompts kept saying it too. <span class="jsonly">Click every “it” below.</span></p>
+        </div>
+      </section>
+
+      <div class="hunt" data-hunt>
+        <p class="score">
+          <span aria-live="polite"><span class="num" data-found>0</span> of <span class="num">{itCount}</span>. <em data-miss></em></span>
+          <button class="link" type="button" data-show>Show me</button>
+        </p>
+        <ul class="its">
+          {
+            its.map((line) => (
+              <li>
+                <blockquote class="prompt">
+                  <p>{line.split(' ').map((word, i) => <Fragment>{i > 0 && ' '}{mark(word).length > 1 ? <span class="word">{mark(word).map((part, j) => (j % 2 ? <em class="it">{part}</em> : part))}</span> : word}</Fragment>)}</p>
+                </blockquote>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="row">
+        <div class="body">
           <p>
             I got a short story called <em>This is not it</em>. First line: funny thing about design, it’s
             always about it.
           </p>
-          <figure class="shots four">
-            <div>
-              <div><img src={`${base}/05-it.webp`} alt="The word it. inside a selection box." width="640" height="800" loading="lazy" /></div>
-              <div><img src={`${base}/05-not-it.webp`} alt="A grey placeholder rectangle above the line This is not it." width="640" height="800" loading="lazy" /></div>
-              <div><img src={`${base}/05-f12.webp`} alt="A beige F12 key inside a selection box." width="640" height="800" loading="lazy" /></div>
-              <div><img src={`${base}/05-thats-it.webp`} alt="A wireframe next to a real website, above the line That’s it." width="640" height="800" loading="lazy" /></div>
-            </div>
-            <figcaption>The second picture is now the first frame of the film. The third is the key at the end.</figcaption>
-          </figure>
         </div>
-      </section>
+      </div>
 
-      <section class="act row step" aria-labelledby="s5">
-        <p class="gutter"><span class="num">12:07</span> Book</p>
+      <section class="act row step" aria-labelledby="s4">
+        <p class="gutter"><span class="num">T+1day</span> Hollywood!</p>
         <div class="body">
-          <h2 id="s5">It tried to be a book.</h2>
-          <blockquote class="prompt">
-            <p>“This is not it. It’s the title. It’s like a book.”</p>
-          </blockquote>
-          <p>Then illustrated plates, laid out like an article. I thought the visuals were amazing. The format, less so.</p>
-          <figure class="loop">
-            <video data-loop autoplay muted loop playsinline preload="metadata" poster={`${base}/book.webp`} width="600" height="750">
-              <source src={`${base}/book.mp4`} type="video/mp4" />
-            </video>
-            <figcaption>The book, scrolled. It was meant to preview an X article.</figcaption>
-          </figure>
-          <blockquote class="shout">
-            <p>“I don’t know if this format is ever going to work”</p>
-            <footer>Me, looking at my own book.</footer>
-          </blockquote>
-        </div>
-      </section>
-
-      <figure class="bleed">
-        <img class="wide-img" src={`${base}/06-museum-wide.webp`} alt="A wireframe in a gold frame on a museum wall, behind a rope." width="1600" height="992" loading="lazy" />
-        <figcaption class="cap"><div class="row"><p class="body">One of the plates. It became the museum scene.</p></div></figcaption>
-      </figure>
-
-      <section class="act row step" aria-labelledby="s6">
-        <p class="gutter"><span class="num">12:17</span> Film</p>
-        <div class="body">
-          <h2 id="s6">Then I asked for a film.</h2>
-          <blockquote class="prompt">
-            <p>“Starting from these images, can we make a 60-second video manifesto with web technologies? Kinetic typography and lots of small animations. Apple had one that only used a dot.”</p>
-          </blockquote>
+          <h2 id="s4">Thank You for Not Shipping.</h2>
           <p>
-            The film is a web page. Give it a time, it draws that moment. A browser with no window opens it
-            <abbr class="fact" title={`${film.seconds} s × ${film.fps} frames a second`}>{frames.toLocaleString('en-US')}</abbr>
-            times and screenshots each one. No video editor was opened, or harmed.
+            At first, it dreamt of being a book. Then there were {film.versions} versions of a film. Here are the ones
+            worth arguing about. <span class="jsonly">Ship it the moment you would have. Or say what I said.</span>
           </p>
-          <StoryDeck base={base} cuts={[cut[1]]} />
-          <blockquote class="prompt">
-            <p>“imagine you are at apple and Steve Jobs is reviewing this tomorrow morning”</p>
-          </blockquote>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="s7">
-        <p class="gutter"><span class="num">12:27</span> Too fast</p>
-        <div class="body">
-          <h2 id="s7">Three versions in 41 minutes.</h2>
-          <p>I asked for rhythm and drama. Version 3 came out seven seconds shorter.</p>
+      <div class="wide say" data-say data-versions={film.versions}>
+        <figure class="screen">
+          <video controls playsinline muted loop preload="none" poster={`${base}/${tries[0].file}.webp`} width="544" height="680" data-screen>
+            <source src={`${base}/${tries[0].file}.mp4`} type="video/mp4" />
+          </video>
+        </figure>
+        <div class="talk">
+          <ol class="thread" data-thread>
+            {
+              tries.map((t, i) => (
+                <li class:list={{ now: i === 0 }} data-try data-v={t.v} data-name={t.name} data-src={`${base}/${t.file}.mp4`} data-poster={`${base}/${t.file}.webp`}>
+                  <p class="back">
+                    {t.v ? <Fragment>Version <span class="num">{t.v}</span></Fragment> : t.name}. {t.note}
+                  </p>
+                  {
+                    t.typed.length > 0 && (
+                      <blockquote class="prompt">
+                        {t.typed.map((line) => <p>{line}</p>)}
+                      </blockquote>
+                    )
+                  }
+                </li>
+              ))
+            }
+          </ol>
+          <p class="end" data-end aria-live="polite"></p>
+          <p class="call">
+            <button class="link" type="button" data-no>Not it.</button>
+            <button class="link" type="button" data-ship>Ship it.</button>
+          </p>
         </div>
-      </section>
+      </div>
 
-      <figure class="wide trio">
-        {
-          [cut[2], cut[3], cut[4]].map((c) => (
-            <div class="tv">
-              <video controls playsinline preload="none" poster={`${base}/cut-v${c.v}.webp`} width="544" height="680">
-                <source src={`${base}/cut-v${c.v}.mp4`} type="video/mp4" />
-              </video>
-              <p class="meta">Version <span class="num">{c.v}</span> · <span class="num">{c.at}</span> · <span class="num">{c.len}</span></p>
-              <p>{c.verdict}</p>
-              <p class="note">{c.note}</p>
-            </div>
-          ))
-        }
-      </figure>
-
-      <section class="row after">
-        <div class="body">
-          <blockquote class="shout">
-            <p>“feels too fast. every beat of the story needs its own idea.”</p>
-            <footer>Me, after version 3.</footer>
-          </blockquote>
-          <p>Version 4 dropped the illustrations and started again.</p>
-        </div>
-      </section>
-
-      <section class="act night" aria-labelledby="s8">
+      <section class="act night" aria-labelledby="s5">
         <div class="row">
-          <p class="gutter"><span class="num">13:39</span> F12</p>
+          <p class="gutter"><span class="num">T+1day</span> F12</p>
           <div class="body">
-            <h2 id="s8">The key had to feel real.</h2>
-            <p>
-              The film ends on F12, the Dreamweaver key that opened your page in a browser. I wanted it
-              physical:
-            </p>
-            <blockquote class="prompt">
-              <p>“do the f12 key real, a 3d render, or something that gets pushed as the climax”</p>
-            </blockquote>
+            <h2 id="s5">Dial F12 for Mockup.</h2>
+            <p>The film ends on F12, the Dreamweaver key that opened your page in a browser.</p>
           </div>
         </div>
 
         <div class="wide duo">
           <blockquote class="shout">
-            <p>“Oh no, the 3D you did is just horrific.”</p>
+            <p>Oh no, the 3D you did is just horrific.</p>
             <footer>Me, after version 5.</footer>
           </blockquote>
           <figure class="cmpfig">
@@ -339,92 +341,76 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
               afterLabel="Version 8"
               alt="A photographed beige F12 key with a fingertip pressing it, compared with a glossy 3D render of the same key."
             />
-            <figcaption>Drag the line. Version 5 is a render. Version 8 is a photograph with a finger on it.</figcaption>
+            <figcaption>Drag the line. A render on one side, a photograph with a finger on the other.</figcaption>
           </figure>
         </div>
 
         <div class="wide duo flip">
           <figure class="press">
-            <button class="key" type="button" data-press data-f="0" aria-label="Press the F12 key">
-              <img src={`${base}/press-0.webp`} alt="A beige F12 key on paper." width="820" height="1025" loading="lazy" />
-              <img src={`${base}/press-1.webp`} alt="" width="820" height="1025" loading="lazy" />
-              <img src={`${base}/press-2.webp`} alt="" width="820" height="1025" loading="lazy" />
-              <img src={`${base}/press-3.webp`} alt="" width="820" height="1025" loading="lazy" />
+            <button class="key" type="button" data-press data-f="0" aria-label="Hold the F12 key">
+              <img src={`${base}/press-0.webp`} alt="A beige F12 key on paper." width="820" height="1025" loading="lazy" draggable="false" />
+              <img src={`${base}/press-1.webp`} alt="" width="820" height="1025" loading="lazy" draggable="false" />
+              <img src={`${base}/press-2.webp`} alt="" width="820" height="1025" loading="lazy" draggable="false" />
+              <img src={`${base}/press-3.webp`} alt="" width="820" height="1025" loading="lazy" draggable="false" />
             </button>
-            <figcaption>
-              The key from version 8, and a finger in four frames.
-              <span class="jsonly">Press it. F12 on your own keyboard works too.</span>
-            </figcaption>
           </figure>
-          <div class="side">
+          <div class="push">
+            <p class="ask jsonly">Push it. Hold it down to see this page the way a rectangle tool does.</p>
             <blockquote class="prompt">
-              <p>“It’s a real button. You select it as if it was an image, but then you get to actually push it”</p>
-              <p>“must see how the f12 button is pressed, even if you render this as stop motion animation and png sequence”</p>
+              <p>It’s a real button. You select it as if it was an image, but then you get to actually push it</p>
+              <p>must see how the F12 button is pressed, even if we render this as stop motion animation png sequence</p>
             </blockquote>
-            <StoryDeck base={base} cuts={[cut[5], cut[8]]} />
           </div>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="s9">
-        <p class="gutter"><span class="num">15:05</span> Piano</p>
+      <section class="act row step" aria-labelledby="s6">
+        <p class="gutter"><span class="num">T+1day</span> Piano</p>
         <div class="body">
-          <h2 id="s9">The piano was off the beat.</h2>
+          <h2 id="s6">Dude, Where’s My Beat?</h2>
           <blockquote class="prompt">
-            <p>“think we need piano sounds, look at this”</p>
-          </blockquote>
-          <p>The link was Apple’s “Designed by Apple in California” ad.</p>
-          <blockquote class="prompt">
-            <p>“piano piece is not in sync or related to the rest of the video, seems like bad mixing / mastering”</p>
+            <p>piano piece is not in sync or related to the rest of the video, seems like bad mixing / mastering</p>
           </blockquote>
           <p>
             So Claude retimed the whole picture to
-            <abbr class="fact" title="The tempo of the score from version 11 on">{film.bpm}</abbr> beats a minute and put
-            every cut on a beat. The piano is code too, written out note by note.
+            <abbr class="fact" title="The tempo of the score from version 11 on">{film.bpm}</abbr> beats a minute. In the final
+            cut, <abbr class="fact" title={`The sharpest changes between frames in the rendered film. Version 24: ${hits.before} of ${hits.of}. Version 25: ${hits.after} of ${hits.of}. Measured against the sound's own list of events.`}>{hits.after} of the {hits.of} sharpest hits</abbr>
+            land within a frame of their sound.
           </p>
-          <StoryDeck base={base} cuts={[cut[11]]} />
+          <div class="beat-game" data-beat-game data-bpm={film.bpm} data-fps={film.fps} data-film={`${hits.after} of ${hits.of}`}>
+            <p>Beat that. Four beats to get ready, then sixteen taps.</p>
+            <p class="voices">
+              <button type="button" class="tab" aria-pressed="false" data-voice={`${base}/snd-beep.wav`}>beep</button>
+              <button type="button" class="tab" aria-pressed="true" data-voice={`${base}/snd-twig.wav`}>twig</button>
+              <button type="button" class="tab" aria-pressed="false" data-voice={`${base}/snd-hammer.wav`}>hammer</button>
+            </p>
+            <button type="button" class="pad" data-pad>Start</button>
+            <div class="taps" data-taps aria-hidden="true"></div>
+            <p class="score" data-score aria-live="polite"></p>
+          </div>
+          <blockquote class="prompt">
+            <p>each sound must come from nature, like a twig snapping. think of the Volvo turn signal story.</p>
+            <p>natural sounds need more work, maybe half natural and half the ones you had before</p>
+          </blockquote>
+          <p>
+            <a class="link" href="https://news.yahoo.com/volvo-snapped-stick-turn-signal-175500792.html" rel="noopener">Volvo built its turn signal from a snapped stick</a>.
+            The film clicks in twigs and small hammers.
+          </p>
           <blockquote class="shout">
-            <p>“I am NOT a robot, right?”</p>
+            <p>I am NOT a robot, right?</p>
             <footer>Me, hearing a synthetic voice play me.</footer>
           </blockquote>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="s10">
-        <p class="gutter"><span class="num">15:19</span> Twigs</p>
+      <section class="act row step" aria-labelledby="s7">
+        <p class="gutter"><span class="num">T+1day</span> Endings</p>
         <div class="body">
-          <h2 id="s10">Twigs, then half twigs, then hammers.</h2>
-          <blockquote class="shout">
-            <p>“each sound must come from nature, like a twig snapping. think of the volvo turn signal.”</p>
-            <footer>Me, about the clicks.</footer>
-          </blockquote>
-          <p>
-            <a class="link" href="https://news.yahoo.com/volvo-snapped-stick-turn-signal-175500792.html" rel="noopener">Volvo built its turn signal from a snapped stick</a>.
-            I wanted that, so every beep became wood, stone, water and leaves.
-          </p>
-          <p class="hear">
-            Hear them:
-            <button class="link" type="button" data-snd={`${base}/snd-beep.wav`}>the beep</button>,
-            <button class="link" type="button" data-snd={`${base}/snd-twig.wav`}>a twig</button>,
-            <button class="link" type="button" data-snd={`${base}/snd-hammer.wav`}>a small hammer</button>.
-          </p>
-          <StoryDeck base={base} cuts={[cut[13]]} />
-          <blockquote class="prompt">
-            <p>“natural sounds need more work, maybe meet half way natural and the ones you had before”</p>
-            <p>“the water sounds in the beginning make no sense, need something that is more work related? workshop sounds?”</p>
-          </blockquote>
-          <p>The film now clicks in twigs and small hammers.</p>
-        </div>
-      </section>
-
-      <section class="act row step" aria-labelledby="s11">
-        <p class="gutter"><span class="num">15:59</span> Endings</p>
-        <div class="body">
-          <h2 id="s11">Seven endings in one afternoon.</h2>
+          <h2 id="s7">The Neverending Ending.</h2>
           <p>
             The last ten seconds changed
             <abbr class="fact" title="Versions 14, 16, 17, 18, 19, 20 and 21 all changed the ending">seven</abbr>
-            times between 15:59 and 17:11. My notes, and what each one turned into:
+            times between 15:59 and 17:11.
           </p>
         </div>
       </section>
@@ -435,12 +421,12 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <Fragment>
               <div class:list={['said', { on: i === 0 }]} style={`--i:${i + 1}`} data-beat>
                 <p class="when num">{n.at}</p>
-                <blockquote><p>“{n.said}”</p></blockquote>
+                <blockquote><p>{n.said}</p></blockquote>
               </div>
               <figure class:list={['frame', { on: i === 0 }]} data-frame>
                 <img src={`${base}/end-${i + 1}.webp`} alt={n.alt} width="720" height="900" loading="lazy" />
                 <figcaption>
-                  Version <span class="num">{n.v}</span> · <span class="num">{n.back}</span>. {n.got}
+                  Version <span class="num">{n.v}</span>. {n.got}
                 </figcaption>
               </figure>
             </Fragment>
@@ -448,167 +434,67 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
         }
       </div>
 
-      <section class="row after">
-        <div class="body">
-          <StoryDeck base={base} cuts={[cut[16]]} />
-        </div>
-      </section>
-
       <figure class="bleed beach">
         <div class="scene">
           <img class="wide-img" src={`${base}/beach-wide.webp`} alt="A Caribbean beach: turquoise water and a palm leaning over white sand." width="1632" height="699" loading="lazy" />
           <div class="card" aria-hidden="true"></div>
           <div class="win" aria-hidden="true"></div>
         </div>
-        <figcaption class="cap"><div class="row"><p class="body">The photo behind the page. I asked for a deeper meaning and then for a Caribbean beach. No real reason. It is aspirational, and sometimes it’s gut.</p></div></figcaption>
+        <figcaption class="cap"><div class="row"><p class="body">I asked for a deeper meaning and then for a Caribbean beach. No real reason. It is aspirational, and sometimes it’s gut.</p></div></figcaption>
       </figure>
 
-      <section class="act row day" aria-labelledby="mon">
-        <p class="gutter">Monday</p>
+      <section class="act row day" aria-labelledby="s8">
+        <p class="gutter"><span class="num">T+4days</span> Back</p>
         <div class="body">
-          <h2 id="mon">Three days later I wanted to post it.</h2>
+          <h2 id="s8">Weekend at Figma’s.</h2>
+          <p>
+            Most of this was done on T+1day. Then life happened. I didn’t get a chance to come back and polish until today.
+          </p>
+          <p>The old tombstone named Figma. The new one mourns all rectangle tools.</p>
+          <figure class="cmpfig" data-from="94">
+            <StoryCompare
+              before={`${base}/tomb-v22.webp`}
+              after={`${base}/tomb-v25.webp`}
+              beforeLabel="T+1day"
+              afterLabel="T+4days"
+              alt="Two tombstones. T+1day: Late last year I left Figma. Not repositioned. Left. T+4days: Late last year, my rectangle tools drew their last breath. They didn’t suffer."
+            />
+            <figcaption>Drag to bury Figma, or dig it up.</figcaption>
+          </figure>
           <blockquote class="shout">
-            <p>“I really want to post it today.”</p>
-            <footer>Me, at 10:38.</footer>
+            <p>I really want to post it today.</p>
+            <footer>Me, yesterday at 10:38am.</footer>
           </blockquote>
         </div>
       </section>
 
-      <section class="act row step" aria-labelledby="m1">
-        <p class="gutter"><span class="num">10:38</span> Notes</p>
-        <div class="body">
-          <h2 id="m1">First, a review page.</h2>
-          <blockquote class="prompt">
-            <p>“Create me a little artifact where I can play each scene in the video individually and provide feedback, individual feedback on each scene, which will then take and compile into a bigger prompt”</p>
-          </blockquote>
-          <p>
-            At 10:50 I had every scene on a loop, with Keep, Tweak, Rework or Cut and a box for a note. It
-            turned my notes into one prompt, and I pasted that back.
-          </p>
-        </div>
-      </section>
-
-      <figure class="wide shot">
-        <img src={`${base}/review.webp`} alt="The review page: the film on the left, the scenes listed on the right, each with a note box. Scene 3 is marked Rework with a note about rocket clouds." width="1200" height="737" loading="lazy" />
-      </figure>
-
-      <section class="act row step" aria-labelledby="m2">
-        <p class="gutter"><span class="num">11:12</span> The notes</p>
-        <div class="body">
-          <h2 id="m2">Nine scenes got a note.</h2>
-          <ul class="notes">
-            {monday.map(([n, line]) => <li><span class="num">{n}</span>“{line}”</li>)}
-          </ul>
-          <p>The tombstone changed most. Friday’s named Figma. Monday’s mourns all rectangle tools.</p>
-          <figure class="pair">
-            <div><img src={`${base}/tomb-v22.webp`} alt="Friday: Late last year I left Figma. Not repositioned. Left." width="720" height="900" loading="lazy" /><p class="meta">Friday</p></div>
-            <div><img src={`${base}/tomb-v25.webp`} alt="Monday: Late last year, my rectangle tools drew their last breath. They didn’t suffer." width="720" height="900" loading="lazy" /><p class="meta">Monday</p></div>
-          </figure>
-          <figure class="loop">
-            <video data-loop autoplay muted loop playsinline preload="metadata" poster={`${base}/launch.webp`} width="600" height="750">
-              <source src={`${base}/launch.mp4`} type="video/mp4" />
-            </video>
-            <figcaption>Ship it. The clouds are cotton wool from Amplifiers, moved at twelve frames a second like stop motion.</figcaption>
-          </figure>
-          <p>
-            At 11:34 version 23 added a pencil sketch on the Dreamweaver screen and rolled the credits over
-            the beach.
-          </p>
-          <StoryDeck base={base} cuts={[cut[22], cut[23]]} />
-        </div>
-      </section>
-
-      <section class="act row step" aria-labelledby="m3">
-        <p class="gutter"><span class="num">11:38</span> Just</p>
-        <div class="body">
-          <h2 id="m3">Plus one word.</h2>
-          <blockquote class="prompt">
-            <p>“we drew pictures of it, ‘we just drew pictures of it’ maybe so it’s clear this is what we actually did?”</p>
-          </blockquote>
-          <p>Version 24 had it a minute later.</p>
-        </div>
-      </section>
-
-      <section class="act row step" aria-labelledby="m4">
-        <p class="gutter"><span class="num">11:40</span> Rhythm</p>
-        <div class="body">
-          <h2 id="m4">One more pass on rhythm.</h2>
-          <blockquote class="prompt">
-            <p>“can you do another look at the overall rhythm and how well everything syncs together? want to try out maybe another different instrument, or combine piano and acoustic guitar”</p>
-          </blockquote>
-          <p>
-            “It had a key for exactly this.” was on screen for
-            <abbr class="fact" title="Seven words in 1.3 seconds, measured from the caption timings">1.3 seconds</abbr>,
-            which is not reading time. The pause before the key became two, one per line.
-          </p>
-          <p>
-            Claude nudged the picture by a few hundredths of a second here and there, so what you see lands with what you hear.
-            Of the <abbr class="fact" title="The sharpest changes between frames in the rendered film">52 sharpest hits</abbr>,
-            <abbr class="fact" title="Version 24: 27 of 52. Version 25: 32 of 52. Measured on the rendered films against the sound's own list of events.">27 landed within a frame of their sound before, and 32 after</abbr>.
-          </p>
-          <p>At 11:49 version 25 had three soundtracks to pick from: soft piano, electric piano, and piano with a nylon guitar. I picked the guitar.</p>
-          <StoryDeck base={base} cuts={[cut[25]]} />
-          <blockquote class="prompt">
-            <p>“perhaps amplifiers gets a different role relative to classic movie roles?”</p>
-          </blockquote>
-          <p>Amplifiers made the pictures. The type, the boxes and the cursor are code. So the credit says Sets and props.</p>
-        </div>
-      </section>
-
-      <section class="act row step" aria-labelledby="m5">
-        <p class="gutter"><span class="num">15:47</span> Thumbnail</p>
-        <div class="body">
-          <h2 id="m5">And a thumbnail, because LinkedIn.</h2>
-          <blockquote class="prompt"><p>“generate a linkedin video thumbnail for this”</p></blockquote>
-          <figure class="thumbfig">
-            <img src={`${base}/thumb.webp`} alt="The thumbnail: the F12 key on paper with a pencil sketch of a monitor and the words see it, above the title This is not it, with not struck through in blue." width="720" height="900" loading="lazy" />
-            <figcaption>Made from a frame of the film, with the title on top.</figcaption>
-          </figure>
-        </div>
-      </section>
-
-      <section class="act row" aria-labelledby="its">
-        <p class="gutter">It</p>
-        <div class="body">
-          <h2 id="its">My notes kept saying “it” too.</h2>
-          <ul class="its">
-            {
-              its.map((line) => (
-                <li>
-                  “{mark(line).map((part, i) => (i % 2 ? <em class="it" style={`--n:${(i - 1) / 2}`}>{part}</em> : part))}”
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </section>
-
-      <section class="act row" aria-labelledby="point">
+      <section class="act row step" aria-labelledby="point">
         <p class="gutter">The point</p>
         <div class="body">
-          <h2 id="point">Back to F12.</h2>
+          <h2 id="point">Back to the F12.</h2>
           <p>
             I’ve been waiting for this since 8th grade, when I built my first website in Macromedia
             Dreamweaver. Designing the actual thing, not a mockup of it.
           </p>
+          <p>No rectangle drawing software can work at the speed of my thoughts.</p>
           <p>
-            The words I say come with 26 years’ worth of context, experiences, insights. No rectangle
-            drawing software can work at the speed of my thoughts. AI is by far the closest.
+            I typed short messages and complained a lot.
           </p>
-          <p>
-            The first cut of the film arrived at 12:17 on Friday and the last at 11:49 on Monday. In
-            between I typed short messages and complained a lot. Claude wrote the code, the piano and the
-            edit. Amplifiers built the sets. I picked, and said what looked wrong.
-          </p>
-          <p>Took only a quarter of a century?</p>
         </div>
       </section>
 
-      <section class="row cta">
+      <section class="row cta" id="note">
         <div class="body">
-          <p class="ask">WCGW does this for product teams, by the month.</p>
+          <p class="ask">Somewhere there is a version {film.versions + 1}.<br />It is still not it.</p>
+          <form class="note-form" data-note data-to={site.email} data-version={film.versions + 1}>
+            <p class="voices">
+              {['Keep', 'Tweak', 'Rework', 'Cut'].map((w) => <button type="button" class="tab" aria-pressed={w === 'Rework' ? 'true' : 'false'} data-verdict={w}>{w}</button>)}
+            </p>
+            <textarea rows="3" aria-label={`Your note for version ${film.versions + 1}`} placeholder="lowercase is fine" data-clarity-mask="true"></textarea>
+            <button class="link" type="submit">Send me the note</button>
+          </form>
           <p>
-            Write to
+            WCGW does this for product teams, by the month. Write to
             <a class="link" href={`mailto:${site.email}`}>{site.email}</a> or
             <a class="link" href="https://x.com/raduceuca" target="_blank" rel="noopener">@raduceuca</a>.
           </p>
@@ -623,70 +509,44 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
             <dt>Directed by</dt>
             <dd>Radu Ceucă, by complaining.</dd>
             <dt>Code, piano, edit</dt>
-            <dd>Claude. It wrote this page too, and argued back.</dd>
-            <dt>The days</dt>
+            <dd>Claude & Neon. It wrote this page too, and argued back.</dd>
+            <dt>Sets and props</dt>
             <dd>
-              Friday 20 November 2026, Bucharest time. First picture <span class="num">00:52</span>, post <span class="num">09:08</span>,
-              first cut <span class="num">12:17</span>, Friday’s last cut <span class="num">17:29</span>. Monday 23 November: review
-              page <span class="num">10:50</span>, notes <span class="num">11:12</span>, version 25 <span class="num">11:49</span>.
-              Times come from the files’ own timestamps, the LinkedIn export and the chat.
+              <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
+              <span class="num">{film.pictures}</span> pictures and
+              <span class="num">4</span> cotton-wool clouds.
+            </dd>
+            <dt>Film</dt>
+            <dd>
+              A web page, screenshotted <span class="num">{frames.toLocaleString('en-US')}</span> times.
+              <span class="num">{film.seconds}</span> seconds at <span class="num">{film.fps}</span> frames a second. No video editor was opened, or harmed.
             </dd>
             <dt>The post</dt>
             <dd>
               <span class="num">{post.impressions.toLocaleString('en-US')}</span> impressions,
               <span class="num">{post.reached.toLocaleString('en-US')}</span> people reached,
-              <span class="num">{post.reactions}</span> reactions, <span class="num">{post.comments}</span> comments,
-              <span class="num">{post.saves}</span> saves. LinkedIn post analytics export, the same evening.
-            </dd>
-            <dt>Sets and props</dt>
-            <dd>
-              <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>. Tony planned the first three.
-              <span class="num">{film.pictures}</span> pictures in two image sessions
-              (<span class="num">35</span> and <span class="num">10</span>, per its own log on 20 November 2026), usually three or
-              four per idea, and <span class="num">4</span> cotton-wool clouds on Monday. The finger on the key is four edits of one photo. Its hook writer helped with
-              the X post.
+              <span class="num">{post.reactions}</span> reactions, <span class="num">{post.comments}</span> comments.
             </dd>
             <dt>Prompts</dt>
-            <dd>Mine. Spelling fixed, and a few of them tidied where I rambled. The lowercase and the tone are original.</dd>
-            <dt>Thread</dt>
-            <dd>One, over two days.</dd>
-            <dt>Versions</dt>
-            <dd><span class="num">{film.versions}</span>. Counted in the thread, v1 to v{film.versions}.</dd>
-            <dt>Film</dt>
-            <dd>
-              <span class="num">{length}</span>, which is <span class="num">{film.seconds}</span> seconds.
-              <span class="num">{frames.toLocaleString('en-US')}</span> frames at <span class="num">{film.fps}</span> a second.
-              <span class="num">{film.bpm}</span> beats a minute from version 11 on.
-            </dd>
-            <dt>Endings</dt>
-            <dd><span class="num">7</span>. Versions 14, 16, 17, 18, 19, 20 and 21, over <span class="num">72</span> minutes of notes, 15:59 to 17:11.</dd>
+            <dd>Radu Ceucă.</dd>
+            <dt>Set</dt>
+            <dd>Bucharest.</dd>
             <dt>Sound</dt>
             <dd>
-              Piano and nylon guitar from the FluidR3 soundfont, sequenced in code. Twigs and hammers are public-domain
-              recordings from <a class="link" href="https://opengameart.org" rel="noopener">OpenGameArt</a>. Volvo snapped about
-              <span class="num">300</span> sticks for its turn signal
-              (<a class="link" href="https://news.yahoo.com/volvo-snapped-stick-turn-signal-175500792.html" rel="noopener">Car and Driver</a>).
+              Piano and nylon guitar from the FluidR3 soundfont. Twigs and hammers from <a class="link" href="https://opengameart.org" rel="noopener">OpenGameArt</a>.
             </dd>
             <dt>Typeface</dt>
-            <dd>EB Garamond, here and in the film.</dd>
-            <dt>F12</dt>
-            <dd>Works on this page too.</dd>
+            <dd>EB Garamond</dd>
             <dt>Timelines</dt>
             <dd><span class="num">0</span>.</dd>
           </dl>
-        </div>
-      </section>
-
-      <section class="row">
-        <div class="body closing">
-          <p>Somewhere there is a version {film.versions + 1}.<br />It is still not it.</p>
         </div>
       </section>
     </main>
 
     <footer class="row">
       <div class="body foot">
-        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        <p>© <span id="year">2026</span> <a class="link" href="/">WCGW</a>, the studio of Radu Ceucă.</p>
         <p><a class="link" href="/stories">More stories</a></p>
         {
           site.clarityId && (
@@ -702,6 +562,33 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
 </BaseLayout>
 
 <script>
+  // Found: every game reports here once. The count sits in the corner and opens the list; nothing is stored.
+  const tally = document.querySelector<HTMLElement>('[data-finds]')
+  const list = tally?.querySelector<HTMLElement>('.list')
+  const rows = [...(tally?.querySelectorAll<HTMLElement>('[data-find]') ?? [])]
+  let fade = 0
+  function find(id: string, what?: string) {
+    const row = rows.find((r) => r.dataset.find === id)
+    if (!tally || !row || row.classList.contains('got')) return
+    row.classList.add('got')
+    const now = row.querySelector('[data-what-now]')
+    if (now) now.textContent = what ?? row.dataset.what ?? ''
+    const line = (row.textContent ?? '').replace(/\s+/g, ' ').trim()
+    const n = rows.filter((r) => r.classList.contains('got')).length
+    const all = n === rows.length
+    const state = all ? 'This is it.' : n > 1 ? 'This is still not it.' : 'This is not it.'
+    const set = (sel: string, text: string) => tally.querySelector(sel)!.replaceChildren(text)
+    set('[data-n]', String(n))
+    set('[data-state]', state)
+    set('[data-last]', all ? state : line)
+    set('[data-told]', `${line} ${n} of ${rows.length} found. ${all ? state : ''}`)
+    tally.classList.add('new')
+    tally.classList.toggle('all', all)
+    clearTimeout(fade)
+    if (!all) fade = window.setTimeout(() => tally.classList.remove('new'), 3500)
+  }
+  list?.addEventListener('click', (e) => e.target instanceof HTMLAnchorElement && list.hidePopover())
+
   // The film plays muted in the hero; one button gives it its sound back, from the top.
   const hero = document.querySelector<HTMLVideoElement>('[data-hero]')
   const sound = document.querySelector<HTMLButtonElement>('[data-sound]')
@@ -716,57 +603,236 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       if (!hero.muted) {
         hero.currentTime = 0
         void hero.play()
+        find('sound')
       }
       sound.textContent = (hero.muted ? sound.dataset.on : sound.dataset.off) ?? ''
       sound.setAttribute('aria-pressed', String(!hero.muted))
     })
   }
 
-  // Small looping clips behave like GIFs, unless motion is unwelcome.
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.querySelectorAll<HTMLVideoElement>('[data-loop]').forEach((v) => {
-      v.removeAttribute('autoplay')
-      v.pause()
-      v.controls = true
+  // Pick one. A wrong picture is told so; mine gets the handles and the answer.
+  document.querySelectorAll<HTMLElement>('[data-pick]').forEach((game) => {
+    const answer = game.querySelector<HTMLElement>('[data-answer]')
+    if (!answer) return
+    const mine = answer.textContent ?? ''
+    answer.setAttribute('aria-live', 'polite')
+    answer.textContent = ''
+    const opts = [...game.querySelectorAll<HTMLElement>('[data-opt]')]
+    opts.forEach((opt) =>
+      opt.querySelector('button')?.addEventListener('click', () => {
+        const right = opt.hasAttribute('data-mine')
+        opt.classList.add(right ? 'yes' : 'no')
+        answer.classList.toggle('unsaid', !right)
+        answer.textContent = right ? `This is it. ${mine}` : 'This is not it.'
+        if (!right) return
+        opts.forEach((o) => o.querySelector('button')?.remove())
+        find(game.id ? 'grave' : 'reply')
+      }),
+    )
+  })
+
+  // Find it: every "it" becomes a button in the sentence.
+  const hunt = document.querySelector<HTMLElement>('[data-hunt]')
+  if (hunt) {
+    const found = hunt.querySelector('[data-found]')
+    const miss = hunt.querySelector('[data-miss]')
+    const show = hunt.querySelector<HTMLButtonElement>('[data-show]')
+    const all = [...hunt.querySelectorAll<HTMLElement>('.it')].map((em) => {
+      const b = document.createElement('button')
+      b.type = 'button'
+      b.textContent = em.textContent
+      b.setAttribute('aria-pressed', 'false')
+      em.replaceChildren(b)
+      return em
+    })
+    let helped = false
+    const spot = (em: HTMLElement) => {
+      em.classList.add('found')
+      if (miss) miss.textContent = ''
+      em.querySelector('button')?.setAttribute('aria-pressed', 'true')
+      const line = em.closest('li')
+      line?.classList.toggle('done', !line.querySelector('.it:not(.found)'))
+      const left = all.filter((x) => !x.classList.contains('found')).length
+      if (found) found.textContent = String(all.length - left)
+      if (left) return
+      show?.remove()
+      if (!helped) find('its')
+    }
+    all.forEach((em) => em.addEventListener('click', () => spot(em), { once: true }))
+    // Any other word is told what every wrong picture is told.
+    hunt.querySelector('.its')?.addEventListener('click', (e) => {
+      const line = (e.target as Element).closest('li')
+      if (!miss || !line || (e.target as Element).closest('.it')) return
+      miss.textContent = 'This is not it.'
+      line.classList.add('huh')
+      line.addEventListener('animationend', () => line.classList.remove('huh'), { once: true })
+    })
+    show?.addEventListener('click', () => {
+      helped = true
+      all.forEach((em, i) => setTimeout(() => spot(em), i * 60))
     })
   }
 
-  // Decks: one player, several versions.
-  document.querySelectorAll<HTMLElement>('[data-deck]').forEach((deck) => {
-    const video = deck.querySelector('video')
-    const tabs = [...deck.querySelectorAll<HTMLButtonElement>('[data-v]')]
-    if (!video) return
-    const put = (f: string, text = '') => {
-      const el = deck.querySelector(`[data-f="${f}"]`)
-      if (el) el.textContent = text
+  // Say when: the cuts come one at a time. "Not it" sends what I typed and brings the next one.
+  const say = document.querySelector<HTMLElement>('[data-say]')
+  const screen = say?.querySelector<HTMLVideoElement>('[data-screen]')
+  if (say && screen) {
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const total = Number(say.dataset.versions)
+    const tries = [...say.querySelectorAll<HTMLElement>('[data-try]')]
+    const thread = say.querySelector<HTMLElement>('[data-thread]')
+    const end = say.querySelector<HTMLElement>('[data-end]')
+    const no = say.querySelector<HTMLButtonElement>('[data-no]')
+    const ship = say.querySelector<HTMLButtonElement>('[data-ship]')
+    let at = 0
+    const play = () => {
+      if (!calm) void screen.play().catch(() => {})
     }
-    tabs.forEach((tab) =>
-      tab.addEventListener('click', () => {
-        tabs.forEach((t) => t.setAttribute('aria-pressed', String(t === tab)))
-        video.pause()
-        video.poster = tab.dataset.poster ?? ''
-        video.src = tab.dataset.src ?? ''
-        video.load()
-        put('v', tab.dataset.v)
-        put('at', tab.dataset.at)
-        put('len', tab.dataset.len)
-        put('verdict', tab.dataset.verdict)
-        put('note', tab.dataset.note)
+    const down = () => thread?.scrollTo({ top: thread.scrollHeight, behavior: calm ? 'auto' : 'smooth' })
+    no?.addEventListener('click', () => {
+      tries[at].classList.add('told')
+      if (end) end.textContent = ''
+      if (at === tries.length - 1) {
+        find('no')
+        if (end) end.innerHTML = `Then <a class="link" href="#note">write version ${total + 1}</a>.`
+        no.remove()
+        ship?.remove()
+        return
+      }
+      at++
+      const next = tries[at]
+      next.classList.add('now')
+      screen.poster = next.dataset.poster ?? ''
+      screen.src = next.dataset.src ?? ''
+      play()
+      no.textContent = 'Not it.'
+      if (ship) ship.hidden = false
+      down()
+    })
+    ship?.addEventListener('click', () => {
+      const v = Number(tries[at].dataset.v)
+      const more = total - v
+      if (!end || !no) return
+      end.textContent = !more
+        ? `Version ${v}. This is it.`
+        : v
+          ? `You’d have shipped version ${v}. I asked for ${more} more.`
+          : `You’d have shipped the book. I asked for ${more} versions of a film.`
+      find('ship', v ? `Version ${v}.` : 'The book.')
+      ship.hidden = true
+      no.textContent = more ? 'Keep going' : 'Still not it.'
+      down()
+    })
+    if (!calm) {
+      const first = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return
+          first.disconnect()
+          if (at === 0) play()
+        },
+        { threshold: 0.5 },
+      )
+      first.observe(screen)
+    }
+    // Only one film with sound at a time.
+    screen.addEventListener('volumechange', () => {
+      if (hero && !hero.muted && !screen.muted) hero.pause()
+    })
+  }
+
+  // Beat that: sixteen taps against the film's tempo, judged by the film's own rule, one frame either way.
+  const beat = document.querySelector<HTMLElement>('[data-beat-game]')
+  if (beat) {
+    const every = 60 / Number(beat.dataset.bpm)
+    const frame = 1000 / Number(beat.dataset.fps)
+    const ready = 4
+    const count = 16
+    const pad = beat.querySelector<HTMLButtonElement>('[data-pad]')
+    const score = beat.querySelector('[data-score]')
+    const row = beat.querySelector('[data-taps]')
+    const voices = [...beat.querySelectorAll<HTMLButtonElement>('[data-voice]')]
+    const ticks = Array.from({ length: count }, () => row?.appendChild(document.createElement('i')))
+    let ctx: AudioContext | undefined
+    const buffers = new Map<string, AudioBuffer>()
+    const voice = () => voices.find((v) => v.getAttribute('aria-pressed') === 'true')?.dataset.voice ?? ''
+    const load = async () => {
+      ctx ??= new AudioContext()
+      await ctx.resume()
+      const url = voice()
+      let buffer = buffers.get(url)
+      if (!buffer) {
+        buffer = await ctx.decodeAudioData(await (await fetch(url)).arrayBuffer())
+        buffers.set(url, buffer)
+      }
+      return { ctx, buffer }
+    }
+    const click = (c: AudioContext, buffer: AudioBuffer, when = 0) => {
+      const s = c.createBufferSource()
+      s.buffer = buffer
+      s.connect(c.destination)
+      s.start(when)
+    }
+    voices.forEach((v) =>
+      v.addEventListener('click', async () => {
+        voices.forEach((x) => x.setAttribute('aria-pressed', String(x === v)))
+        const { ctx: c, buffer } = await load()
+        click(c, buffer)
       }),
     )
-    // Only one film at a time.
-    video.addEventListener('play', () => {
-      document.querySelectorAll('video').forEach((v) => {
-        if (v !== video && !v.hasAttribute('data-hero') && !v.hasAttribute('data-loop')) v.pause()
-      })
-      if (hero && !hero.muted) hero.pause()
+    let zero = 0 // performance time of the first beat to tap; 0 when nothing is playing
+    let hits = new Set<number>()
+    const start = async () => {
+      if (!pad) return
+      pad.textContent = 'Ready'
+      hits = new Set()
+      ticks.forEach((t) => t?.removeAttribute('class'))
+      if (score) score.textContent = ''
+      document.querySelectorAll('video').forEach((v) => !v.muted && v.pause())
+      const { ctx: c, buffer } = await load()
+      const t0 = c.currentTime + 0.25
+      for (let i = 0; i < ready + count; i++) click(c, buffer, t0 + i * every)
+      const heard = (t0 - c.currentTime + (c.outputLatency || c.baseLatency || 0) + ready * every) * 1000
+      zero = performance.now() + heard
+      for (let i = ready; i > 0; i--) setTimeout(() => (pad.textContent = String(i)), heard - i * every * 1000)
+      setTimeout(() => (pad.textContent = 'Tap'), heard - every * 400)
+      setTimeout(() => {
+        zero = 0
+        pad.textContent = 'Again'
+        if (score) score.textContent = `${hits.size} of ${count} within a frame. The film: ${beat.dataset.film}.`
+        const [landed, of] = (beat.dataset.film ?? '').split(' of ').map(Number)
+        if (hits.size / count > landed / of) find('beat', `${hits.size} of ${count}.`)
+      }, heard + count * every * 1000)
+    }
+    const tap = (when: number) => {
+      const i = Math.round((when - zero) / (every * 1000))
+      const tick = ticks[i]
+      if (!tick || tick.className) return
+      const on = Math.abs(when - zero - i * every * 1000) <= frame
+      tick.className = on ? 'on' : 'off'
+      if (on) hits.add(i)
+    }
+    const press = (when: number) => (zero ? tap(when) : pad?.textContent === 'Ready' ? undefined : void start())
+    pad?.addEventListener('pointerdown', (e) => press(e.timeStamp))
+    pad?.addEventListener('keydown', (e) => {
+      if (e.repeat || (e.key !== ' ' && e.key !== 'Enter')) return
+      e.preventDefault()
+      press(e.timeStamp)
     })
-  })
+  }
 
-  // Hear a twig.
-  document.querySelectorAll<HTMLButtonElement>('[data-snd]').forEach((b) =>
-    b.addEventListener('click', () => void new Audio(b.dataset.snd).play().catch(() => {})),
-  )
+  // Your note for the next version, in the four words of my review page. It opens your own mail.
+  const note = document.querySelector<HTMLFormElement>('[data-note]')
+  if (note) {
+    const words = [...note.querySelectorAll<HTMLButtonElement>('[data-verdict]')]
+    words.forEach((w) => w.addEventListener('click', () => words.forEach((x) => x.setAttribute('aria-pressed', String(x === w)))))
+    note.querySelector('textarea')?.addEventListener('change', (e) => (e.target as HTMLTextAreaElement).value.trim() && find('note'))
+    note.addEventListener('submit', (e) => {
+      e.preventDefault()
+      const word = words.find((w) => w.getAttribute('aria-pressed') === 'true')?.dataset.verdict
+      const body = note.querySelector('textarea')?.value ?? ''
+      location.href = `mailto:${note.dataset.to}?subject=${encodeURIComponent(`Version ${note.dataset.version}: ${word}`)}&body=${encodeURIComponent(body)}`
+    })
+  }
 
   // The ending, pinned: the note crossing the middle of the window picks the frame beside it.
   document.querySelectorAll<HTMLElement>('[data-reel]').forEach((reel) => {
@@ -785,22 +851,52 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     beats.forEach((b) => mid.observe(b))
   })
 
-  // The key can be pressed: four photographs, played as stop motion. The real F12 presses it too.
+  // The key can be held: four photographs, played as stop motion. While it is down, the page is drawn as rectangles.
   const key = document.querySelector<HTMLButtonElement>('[data-press]')
   if (key) {
     const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
-    const steps: [string, number][] = calm
-      ? [['3', 0], ['0', 420]]
-      : [['1', 0], ['2', 80], ['3', 160], ['2', 460], ['1', 530], ['0', 600]]
-    let busy = false
-    const press = () => {
-      if (busy) return
-      busy = true
-      steps.forEach(([f, ms]) => setTimeout(() => (key.dataset.f = f), ms))
-      setTimeout(() => (busy = false), steps[steps.length - 1][1] + 40)
+    const root = document.documentElement
+    const least = 900
+    let since = 0
+    let timers: number[] = []
+    const run = (steps: [number, string][]) => {
+      timers.forEach(clearTimeout)
+      timers = steps.map(([ms, f]) =>
+        window.setTimeout(() => {
+          key.dataset.f = f
+          root.classList.toggle('mock', f === '3')
+          if (f === '3') find('key')
+        }, ms),
+      )
     }
-    key.addEventListener('click', press)
-    addEventListener('keydown', (e) => e.key === 'F12' && press())
+    const down = () => {
+      if (since) return
+      since = performance.now()
+      run(calm ? [[0, '3']] : [[0, '1'], [80, '2'], [160, '3']])
+    }
+    const up = () => {
+      if (!since) return
+      const wait = Math.max(0, least - (performance.now() - since))
+      since = 0
+      const back = timers
+      timers = []
+      run(calm ? [[wait, '0']] : [[wait, '2'], [wait + 70, '1'], [wait + 140, '0']])
+      timers.push(...back)
+    }
+    const pulse = () => {
+      down()
+      up()
+    }
+    key.addEventListener('pointerdown', (e) => {
+      if (e.button) return
+      key.setPointerCapture(e.pointerId)
+      down()
+    })
+    key.addEventListener('pointerup', up)
+    key.addEventListener('pointercancel', up)
+    key.addEventListener('contextmenu', (e) => e.preventDefault())
+    key.addEventListener('click', (e) => e.detail === 0 && pulse())
+    addEventListener('keydown', (e) => e.key === 'F12' && !e.repeat && pulse())
   }
 
   // The paper falls off the beach once half the picture is in view, however tall it is.
@@ -818,6 +914,54 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     fall.observe(scene)
   }
 
+  // Contents: one line per chapter, taken from its heading (its first sentence when long) so the two never drift.
+  const toc = document.querySelector<HTMLElement>('[data-toc]')
+  if (toc) {
+    const chapters = [...document.querySelectorAll<HTMLElement>('.act[aria-labelledby]')].map((section) => {
+      const a = document.createElement('a')
+      a.href = `#${section.getAttribute('aria-labelledby')}`
+      const heading = (section.querySelector('h2')?.textContent ?? '').replace(/\s+/g, ' ').trim()
+      const title = document.createElement('span')
+      title.textContent = (heading.length > 44 && heading.match(/^.*?[.?!](?=\s|$)/)?.[0]) || heading
+      a.append(title)
+      toc.append(a)
+      return { section, a }
+    })
+
+    // Mark the chapter being read. Ticks turn light on the dark chapter and step aside for full-width pictures.
+    const dark = document.querySelector('.night')
+    const pictures = [...document.querySelectorAll('.bleed :is(.strip, .wide-img)')]
+    const covers = (el: Element | null, y: number) => {
+      if (!el) return false
+      const r = el.getBoundingClientRect()
+      return r.top <= y && y <= r.bottom
+    }
+    const mark = () => {
+      if (!toc.offsetHeight) return
+      const now = chapters.filter((c) => c.section.getBoundingClientRect().top <= innerHeight * 0.2).pop()
+      const at = chapters.map(({ a }) => {
+        const r = a.getBoundingClientRect()
+        const y = (r.top + r.bottom) / 2
+        return { a, dark: covers(dark, y), over: pictures.some((p) => covers(p, y)) }
+      })
+      toc.classList.toggle('dark', covers(dark, innerHeight / 2))
+      at.forEach((t) => {
+        t.a.classList.toggle('dark', t.dark)
+        t.a.classList.toggle('over', t.over)
+        if (t.a === now?.a) t.a.setAttribute('aria-current', 'location')
+        else t.a.removeAttribute('aria-current')
+      })
+    }
+    let due = 0
+    const soon = () => {
+      cancelAnimationFrame(due)
+      due = requestAnimationFrame(mark)
+    }
+    addEventListener('scroll', soon, { passive: true })
+    addEventListener('resize', soon)
+    mark()
+  }
+
   // F12 still shows you the real thing.
   console.log('%cThis is it.', 'font: italic 32px Georgia, serif')
   console.log('In Dreamweaver, F12 opened your page in the browser. Here it opened this.')
@@ -827,11 +971,15 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     const range = cmp.querySelector('input')
     if (!range) return
     const set = () => cmp.style.setProperty('--x', `${range.value}%`)
+    // Dragged all the way to the side worth seeing: the render, or the grave without Figma.
+    const dug = cmp.closest('[data-from]') ? () => Number(range.value) <= 10 && find('figma') : () => Number(range.value) >= 90 && find('render')
     range.addEventListener('input', set)
+    range.addEventListener('input', dug)
+    range.value = cmp.closest<HTMLElement>('[data-from]')?.dataset.from ?? range.value
     set()
   })
 
-  // The pencil underlines a shout as it comes into view; the + × dividers blink.
+  // The pencil underlines a shout as it comes into view.
   const seen = new IntersectionObserver(
     (entries) =>
       entries.forEach((e) => {
@@ -841,7 +989,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       }),
     { threshold: 0.6 },
   )
-  document.querySelectorAll('.shout, .blink, .its li').forEach((el) => seen.observe(el))
+  document.querySelectorAll('.shout').forEach((el) => seen.observe(el))
 </script>
 
 <style>
@@ -860,10 +1008,12 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     margin-inline: calc(50% - min(50vw - 1.375rem, 33rem));
   }
 
-  /* The film is the hero. It is already playing. */
+  /* The film is the hero. It is already playing. The title starts under the logo, where every page's
+     does; the film runs out to the wide edge. */
   .hero {
     display: grid;
     gap: 2rem;
+    width: calc(50% + min(50vw - 1.375rem, 33rem));
     padding-top: clamp(2.5rem, 1.5rem + 4vw, 5rem);
     padding-bottom: var(--act-space);
   }
@@ -886,13 +1036,18 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     font-size: 0.92em;
   }
   .hero-film { max-width: 24rem; }
+  .hero .lede + .dare { margin-top: 0.6em; }
+  :global(.js) .hero .dare { display: block; }
+  .hero .call { margin-top: 1em; }
   @media (min-width: 40rem) {
     .hero {
-      grid-template-columns: minmax(0, 1fr) minmax(0, min(27rem, 44%));
+      /* The film and its sound button fit in the window. */
+      grid-template-columns: minmax(0, 1fr) minmax(0, min(27rem, 44%, max(18rem, (100svh - 21rem) * 0.8)));
       column-gap: clamp(1.75rem, 5vw, 5rem);
-      align-items: center;
+      align-items: start;
+      padding-top: clamp(4.5rem, 3rem + 7vw, 8.75rem);
     }
-    .hero-film { order: 2; max-width: none; }
+    .hero-film { order: 2; max-width: none; margin-top: calc(var(--display) * 0.2); } /* level with the capitals */
   }
 
   /* The blue pencil cuts "not". Struck by default; drawn in when motion is welcome. */
@@ -936,20 +1091,13 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
   .step { padding-top: var(--act-space); border-top: 1px solid var(--hair); }
   .gutter .num { margin-right: 0.4em; }
   .step h2,
+  .day h2,
   .night h2 {
     font-size: clamp(1.45rem, 1.2rem + 1vw, 1.8rem);
     line-height: 1.2;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
-
-  /* What I typed. A hair line down the side, nothing else. */
-  .prompt {
-    margin-inline: 0;
-    padding-left: 1.4em;
-    border-left: 1px solid var(--hair);
-  }
-  .prompt p + p { margin-top: 0.55em; }
 
   /* A turning point: the prompt at display size, underlined by the pencil. */
   .shout {
@@ -1007,16 +1155,17 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
   @media (min-width: 40rem) {
     .shots.four > div { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   }
-  /* A verdict under each try */
+  /* Every picture here can be selected, like in the tool I left. (Hover it.) So can the pad you tap. */
   .v {
     margin-top: 0.4em;
     color: var(--soft);
     font-size: 0.85em;
     line-height: 1.35;
   }
-  /* Every picture here can be selected, like in the tool I left. (Hover it.) */
-  .shots > div > div { position: relative; }
-  .shots > div > div::after,
+  .opt::after,
+  .its .prompt p::after,
+  .finds.all .tally::after,
+  .pad,
   .win {
     --p: linear-gradient(var(--pencil), var(--pencil));
     --w: linear-gradient(var(--bg), var(--bg));
@@ -1030,18 +1179,6 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     outline: 1.5px solid var(--pencil);
     outline-offset: -5px;
   }
-  .shots > div > div::after {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    aspect-ratio: 4 / 5;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .shots > div > div:hover::after { opacity: 1; }
-
   .cmpfig { max-width: 22rem; }
 
   /* The key is the climax, so its chapter is the one dark room: the film's black, edge to edge,
@@ -1055,7 +1192,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     color-scheme: dark;
     width: 100vw;
     margin-inline: calc(50% - 50vw);
-    padding-block: var(--act-space);
+    margin-top: var(--act-space);
+    padding-block: calc(var(--act-space) * 1.4);
     background: var(--bg);
     color: var(--ink);
   }
@@ -1070,10 +1208,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
   .night .cmpfig,
   .press { max-width: 24rem; }
   .duo { display: grid; gap: 2rem; }
-  .side > * + * { margin-top: var(--beat); }
-  @media (max-width: 56rem) {
-    .side :global(.deck) { grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr); column-gap: 1.1rem; }
-  }
+  .push > * + * { margin-top: 1.2em; }
+  :global(.js) .push .jsonly { display: block; }
   @media (min-width: 40rem) {
     .duo {
       grid-template-columns: minmax(0, 1fr) minmax(0, min(27rem, 44%));
@@ -1097,6 +1233,8 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     overflow: hidden;
     cursor: pointer;
   }
+  .key,
+  .key img { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
   .key:focus-visible {
     outline: 2px solid var(--pencil);
     outline-offset: 2px;
@@ -1128,6 +1266,25 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     text-wrap: balance;
   }
   .when { color: var(--soft); margin-bottom: 0.4em; }
+
+  /* Every prompt is a grey bubble on the right, one per message, like my side of a chat. */
+  .prompt,
+  .shout,
+  .said blockquote {
+    display: grid;
+    justify-items: end;
+    margin-inline: 0;
+  }
+  .prompt p + p { margin-top: 0.55em; }
+  .prompt p,
+  .shout p,
+  .said blockquote p {
+    max-width: 88%;
+    padding: 0.7rem 1.15rem;
+    border-radius: 1.2rem;
+    background: color-mix(in srgb, var(--ink) 8%, var(--bg));
+  }
+  .said .when { text-align: right; }
   .frame { max-width: min(17rem, 78%); margin-top: 1rem; margin-bottom: 2.75rem; }
   .frame img {
     display: block;
@@ -1149,7 +1306,7 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
       grid-row: var(--i);
       display: grid;
       align-content: center;
-      min-height: 64svh;
+      min-height: 40svh;
       color: var(--soft);
       transition: color 0.3s;
     }
@@ -1169,60 +1326,69 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
   @media (min-width: 44rem) and (prefers-reduced-motion: no-preference) {
     :global(.js) .frame { transition: opacity 0.35s; }
   }
-  .hear button { font: inherit; }
-
-  /* Three cuts side by side, wider than the column */
-  .trio {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.2rem;
-    margin-top: 1.6rem;
-    margin-bottom: 0.4rem;
-  }
-  .trio video {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    border: 1px solid var(--hair);
-    background: var(--hair);
-  }
-  .tv > * + * { margin-top: 0.35em; }
-  .tv .meta { margin-top: 0.6em; }
-  .tv .meta,
-  .tv .note { color: var(--soft); }
-  .tv .note { font-size: 0.92em; line-height: 1.45; }
-  @media (max-width: 40rem) {
-    .trio {
-      grid-template-columns: repeat(3, 68vw);
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      padding-bottom: 0.4rem;
-    }
-    .tv { scroll-snap-align: start; }
-  }
-  .after { margin-top: 0; }
-  .loop { max-width: 22rem; }
-  .loop video {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 4 / 5;
-    border: 1px solid var(--hair);
-    background: var(--hair);
-  }
-
   /* Every "it" I typed, in italic as the film sets it, and marked with the blue pencil. */
+  .hunt { margin-top: var(--beat); }
+  /* My prompts, strewn across the window. One with every “it” found gets the handles. */
   .its {
     list-style: none;
-    margin-top: 1.4em;
+    display: grid;
+    gap: 1.1rem;
+    margin-block: 1.5rem 3rem;
     padding: 0;
-    font-size: clamp(1.45rem, 1.1rem + 1.6vw, 2.2rem);
-    line-height: 1.24;
-    letter-spacing: -0.012em;
+    line-height: 1.3;
   }
-  .its li { text-wrap: balance; }
-  .its li + li { margin-top: 0.6em; }
+  /* --w fits a bubble to its own line breaks. */
+  .its li { width: fit-content; max-width: min(92%, var(--w, 100%)); font-size: calc(1em * var(--s)); rotate: var(--r); }
+  .its li:nth-child(7n + 1) { --s: 1.45; --r: -2deg; --w: 8.2em; }
+  .its li:nth-child(7n + 2) { --s: 1.1; --r: 1.5deg; --w: 11em; justify-self: end; }
+  .its li:nth-child(7n + 3) { --s: 1.25; --r: 0.8deg; --w: 10.4em; justify-self: center; }
+  .its li:nth-child(7n + 4) { --s: 1.15; --r: -1.2deg; --w: 11em; }
+  .its li:nth-child(7n + 5) { --s: 1.5; --r: 2deg; --w: 9.4em; justify-self: end; }
+  .its li:nth-child(7n + 6) { --s: 1.3; --r: 1.4deg; --w: 11.8em; }
+  .its li:nth-child(7n + 7) { --s: 1.15; --r: -2.4deg; justify-self: end; }
+  .its .prompt { display: block; margin: 0; }
+  .its .prompt p { position: relative; max-width: none; text-wrap: balance; }
+  .its .prompt p::after { content: ''; position: absolute; inset: -0.5rem; opacity: 0; pointer-events: none; }
+  .its .done .prompt p::after { opacity: 1; }
+  @media (min-width: 48rem) {
+    .its {
+      --all: min(100vw - 2.75rem, 66rem);
+      width: var(--all);
+      margin-inline: calc(50% - var(--all) / 2);
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1.6rem 1rem;
+      margin-block: 2.5rem 4.5rem;
+    }
+    .its li { max-width: min(100%, var(--w, 100%)); }
+    .its li:nth-child(7n + 1) { --s: 1.6; --r: -3deg; --w: 8.8em; grid-column: 1 / 8; }
+    .its li:nth-child(7n + 2) { --r: 2.5deg; grid-column: 8 / 13; margin-top: 3.5rem; }
+    .its li:nth-child(7n + 3) { --r: 1.2deg; grid-column: 3 / 8; justify-self: start; }
+    .its li:nth-child(7n + 4) { --s: 1.2; --r: -2deg; --w: 15em; grid-column: 1 / 7; grid-row: 3; }
+    .its li:nth-child(7n + 5) { --s: 1.75; --r: 3.5deg; grid-column: 7 / 13; grid-row: 2 / span 2; align-self: center; }
+    .its li:nth-child(7n + 6) { --s: 1.35; --r: 2deg; grid-column: 2 / 8; margin-top: 0.8rem; }
+    .its li:nth-child(7n + 7) { --r: -4deg; grid-column: 8 / 13; justify-self: center; margin-top: 2rem; }
+  }
+  @media (min-width: 74rem) {
+    .its { --all: min(100vw - 9rem, 84rem); row-gap: 2.2rem; }
+    .its li:nth-child(7n + 1) { --s: 2.1; --w: 100%; }
+    .its li:nth-child(7n + 3) { --s: 1.5; }
+    .its li:nth-child(7n + 4) { --s: 1.3; }
+    .its li:nth-child(7n + 5) { --s: 2.4; }
+    .its li:nth-child(7n + 6) { --s: 1.7; --w: 10.9em; }
+  }
+  @media (min-width: 84rem) {
+    .its li:nth-child(7n + 2) { --w: 100%; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .its .prompt p::after { transition: opacity 0.2s 0.15s; }
+    .its li.huh { animation: huh 0.3s; }
+  }
+  @keyframes huh {
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .word { white-space: nowrap; }
+  .hunt + .row + .act { margin-top: var(--act-space); }
   .it {
     position: relative;
     font-style: italic;
@@ -1239,31 +1405,18 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
     mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
     pointer-events: none;
   }
-  .it:nth-of-type(even)::after {
+  .word:nth-of-type(even) .it::after {
     -webkit-mask-image: var(--mark-line-2);
     mask-image: var(--mark-line-2);
   }
   @media (prefers-reduced-motion: no-preference) {
     :global(.js) .it::after {
       clip-path: inset(0 100% 0 0);
-      transition: clip-path 0.3s var(--ease-pencil) calc(var(--n) * 260ms + 150ms);
+      transition: clip-path 0.3s var(--ease-pencil);
     }
-    :global(.js) .is-in .it::after { clip-path: inset(0); }
   }
-
-  /* Monday */
-  .day h2 { margin-bottom: 0; }
-  .notes { list-style: none; padding: 0; margin-top: 1.2em; }
-  .notes li { position: relative; padding-left: 2.2em; text-wrap: pretty; }
-  .notes li + li { margin-top: 0.6em; }
-  .notes .num { position: absolute; left: 0; top: 0.2em; color: var(--soft); }
-  .notes .num::before { content: 'Scene '; position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .shot img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
-  .thumbfig { max-width: 18rem; }
-  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; max-width: 30rem; }
-  .pair img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
-  .pair .meta { margin-top: 0.4em; color: var(--soft); }
-  .thumbfig img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
+  :global(.js) .it:not(.found)::after { clip-path: inset(0 100% 0 0); }
+  :global(.js) .it.found::after { clip-path: inset(0); }
 
   /* One ask */
   .cta { margin-top: var(--act-space); }
@@ -1343,5 +1496,396 @@ const mark = (line: string) => line.split(/\b(it)\b/i)
   .cap {
     width: min(100% - 2.75rem, var(--gutter) + var(--gap) + var(--measure));
     margin: 0.6em auto 0;
+  }
+
+  /* Games. Without script none of their controls show; the text and the pictures do. */
+  .tab {
+    padding: 0 0 0.1em;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: none;
+    color: var(--soft);
+    font: inherit;
+    cursor: pointer;
+  }
+  .tab[aria-pressed='true'] { color: var(--ink); border-bottom-color: var(--pencil); }
+  .tab:hover { color: var(--ink); }
+  .voices { display: flex; flex-wrap: wrap; gap: 1.2em; }
+  .score { color: var(--soft); }
+
+  /* Pick one */
+  .opt { position: relative; background: var(--bg); }
+  .opt img { transition: opacity 0.2s; }
+  .hit { display: none; }
+  :global(.js) .hit {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .hit:focus-visible { outline: 2px solid var(--pencil); outline-offset: -6px; }
+  .opt::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .opt:hover::after,
+  .opt.yes::after { opacity: 1; }
+  .opt.no::after { opacity: 0; }
+  .opt.no img { opacity: 0.16; }
+  .opt.no .hit { pointer-events: none; }
+  .opt::before {
+    content: 'This is not it.';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    font-size: clamp(0.95rem, 0.6rem + 1.2vw, 1.5rem);
+    font-style: italic;
+    text-align: center;
+    opacity: 0;
+  }
+  .opt.no::before { opacity: 1; }
+  .answer:empty { min-height: 1lh; }
+  .answer.unsaid { opacity: 0; } /* the picture says so; this is for screen readers */
+  .cap p + p { margin-top: 0; }
+  .poster { max-width: 22rem; }
+  .poster img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); background: var(--hair); }
+
+  /* Find it: plain until found */
+  :global(.js) .it:not(.found) { font-style: inherit; }
+  .it :global(button) {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    cursor: pointer;
+  }
+  .it.found :global(button) { cursor: default; }
+  /* A bigger place to hit than two letters. */
+  .it :global(button::before) { content: ''; position: absolute; inset: -0.3em -0.25em; }
+  .it:not(.found) :global(button:hover) { color: var(--pencil); }
+  .hunt .score { display: none; position: sticky; z-index: 1; top: 0; width: fit-content; padding: 0.5em 0.7em; margin-left: -0.7em; background: var(--bg); }
+  @media (min-width: 48rem) { .hunt .score { margin-left: calc(var(--gutter) + var(--gap) - 0.7em); } }
+  :global(.js) .hunt .score { display: block; }
+  :global(.js) .its li { cursor: pointer; }
+  .score .link { margin-left: 0.8em; }
+
+  /* Say when: the cut on the left, the thread on the right */
+  .say { display: grid; gap: 1.4rem; margin-top: 2.5rem; }
+  .screen video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border: 1px solid var(--hair);
+    background: var(--hair);
+  }
+  .thread { list-style: none; margin: 0; padding: 0; }
+  .thread li + li { margin-top: 1.4em; }
+  .thread .back { color: var(--soft); }
+  .thread .prompt { margin: 0.8em 0 0; }
+  .thread .prompt p + p { margin-top: 0.5em; }
+  .call { display: none; }
+  :global(.js) .call {
+    display: flex;
+    gap: 1.1em;
+    margin-top: 0.5em;
+    font-size: clamp(1.8rem, 1.25rem + 2.6vw, 2.7rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+  .call .link { text-decoration-thickness: 1px; }
+  .call [hidden] { display: none; }
+  .end:not(:empty) { margin-top: 1em; }
+  :global(.js) .thread li:not(.now),
+  :global(.js) .thread li:not(.told) .prompt { display: none; }
+  @media (min-width: 48rem) {
+    .say {
+      grid-template-columns: minmax(0, min(27rem, 44%)) minmax(0, 1fr);
+      column-gap: clamp(1.75rem, 5vw, 5rem);
+    }
+    :global(.js) .talk {
+      display: flex;
+      flex-direction: column;
+      height: 0;
+      min-height: 100%;
+    }
+    :global(.js) .thread {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+    }
+    :global(.js) .thread li:first-child { margin-top: auto; }
+  }
+  @media (max-width: 47.99rem) {
+    :global(.js) .talk { display: flex; flex-direction: column; }
+    :global(.js) .call { order: -1; }
+    :global(.js) .end { order: -1; margin-top: 0; }
+    :global(.js) .thread { display: flex; flex-direction: column-reverse; margin-top: 1.4em; }
+    :global(.js) .thread li + li { margin-top: 0; margin-bottom: 1.4em; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .told .prompt p { animation: sent 0.25s ease-out; }
+  }
+  @keyframes sent {
+    from { opacity: 0; transform: translateY(0.6em); }
+  }
+
+  /* Beat that */
+  .beat-game { display: none; }
+  :global(.js) .beat-game { display: block; }
+  .beat-game > * + * { margin-top: 0.9em; }
+  .pad {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 1.1em 0;
+    border: 0;
+    color: var(--ink);
+    font: inherit;
+    font-size: clamp(1.8rem, 1.25rem + 2.6vw, 2.7rem);
+    line-height: 1.12;
+    cursor: pointer;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .pad:active { color: var(--pencil); }
+  .taps { display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 0.35rem; }
+  .taps :global(i) { height: 0.7rem; border-bottom: 1px solid var(--hair); }
+  .taps :global(i.off) { border-bottom-color: var(--ink); }
+  .taps :global(i.on) {
+    border: 0;
+    background: var(--pencil);
+    -webkit-mask: var(--mark-line-1) 0 100% / 100% 70% no-repeat;
+    mask: var(--mark-line-1) 0 100% / 100% 70% no-repeat;
+  }
+  .beat-game .score:empty { min-height: 1lh; }
+
+  /* Version 26 */
+  .note-form { display: none; }
+  :global(.js) .note-form { display: block; margin-bottom: 2em; }
+  .note-form > * + * { margin-top: 0.9em; }
+  .note-form textarea {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1.15rem;
+    border: 0;
+    border-radius: 1.2rem;
+    background: color-mix(in srgb, var(--ink) 8%, var(--bg));
+    color: var(--ink);
+    font: inherit;
+    resize: vertical;
+  }
+  .note-form textarea::placeholder { color: var(--soft); opacity: 1; }
+  .note-form textarea:focus-visible { outline: 2px solid var(--pencil); outline-offset: 2px; }
+
+  /* Held, the key shows the page the way a rectangle tool does. The key stays real. */
+  :global(.mock main :is(h1, h2, p, li, dt, dd, figcaption, footer, abbr, .lbl)) {
+    color: transparent !important;
+    background: var(--hair) !important;
+    border-radius: 0 !important;
+  }
+  :global(.mock main :is(h1, h2, p, li, dt, dd, figcaption, footer) *) {
+    color: transparent !important;
+    background: none !important;
+    text-decoration-color: transparent !important;
+  }
+  :global(.mock main :is(p, em, .link, .line)::after),
+  :global(.mock main .line) { opacity: 0 !important; }
+  :global(.mock main :is(img, video):not(.key img)) {
+    object-position: -200vw 0;
+    background:
+      linear-gradient(to top right, transparent calc(50% - 1px), var(--soft) calc(50% - 0.5px), var(--soft) calc(50% + 0.5px), transparent calc(50% + 1px)),
+      linear-gradient(to bottom right, transparent calc(50% - 1px), var(--soft) calc(50% - 0.5px), var(--soft) calc(50% + 0.5px), transparent calc(50% + 1px)),
+      var(--bg) !important;
+    outline: 1px solid var(--soft);
+    outline-offset: -1px;
+  }
+
+  /* Found: a count in the corner, and the list behind it. All found, it gets the handles. */
+  .finds { display: none; }
+  :global(.js) .finds { display: block; }
+  .tally {
+    position: fixed;
+    z-index: 4;
+    right: 1rem;
+    bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    max-width: calc(100% - 2rem);
+    padding: 0.35em 0.9em;
+    border: 1px solid var(--hair);
+    background: var(--bg);
+    color: var(--soft);
+    font: inherit;
+    font-size: 0.86em;
+    line-height: 1.5;
+    cursor: pointer;
+  }
+  .tally::before { content: ''; position: absolute; inset: -0.4rem; }
+  .tally:hover,
+  .finds.new .tally,
+  .finds:has(:popover-open) .tally { color: var(--ink); }
+  .tally:focus-visible { outline: 2px solid var(--pencil); outline-offset: 2px; }
+  .tally [data-last] { display: none; font-style: italic; }
+  .finds.new [data-last] { display: inline; margin-right: 0.6em; }
+  .finds.all .tally::after { content: ''; position: absolute; inset: -8px; pointer-events: none; background-color: transparent; }
+  .finds.new .call-out { display: none; } /* a find takes its place */
+  .finds.new .count { color: var(--soft); }
+  .list {
+    inset: auto 1rem calc(4.5rem + env(safe-area-inset-bottom, 0px)) auto;
+    width: min(22.5rem, 100% - 2rem);
+    max-height: calc(100svh - 6rem);
+    margin: 0;
+    padding: 1.1rem 1.4rem 1.2rem;
+    border: 1px solid var(--hair);
+    background: var(--bg);
+    color: var(--ink);
+    overflow: auto;
+  }
+  .list .state { margin: 0 0 0.6em; font-size: 1.35em; font-style: italic; line-height: 1.2; }
+  .list ol { list-style: none; margin: 0; padding: 0; counter-reset: find; }
+  .list li {
+    display: grid;
+    grid-template-columns: 1.4em auto 1fr;
+    column-gap: 0.8em;
+    align-items: baseline;
+    counter-increment: find;
+  }
+  .list li::before {
+    content: counter(find);
+    color: var(--soft);
+    font: 0.8em/1 var(--sans);
+    font-variant-numeric: lining-nums tabular-nums;
+    text-align: right;
+  }
+  .list a {
+    padding-block: 0.35em;
+    color: var(--soft);
+    line-height: 1.3;
+    text-decoration: underline 0.06em transparent;
+    text-underline-offset: 0.22em;
+  }
+  .list a:is(:hover, :focus-visible) { text-decoration-color: currentColor; }
+  .list .got a { color: var(--ink); }
+  .list .got::before { color: var(--pencil); }
+  .list [data-what-now] { color: var(--pencil); font-style: italic; text-align: right; }
+  /* Room under the footer, so the count never sits on its links. */
+  :global(.js) .page > footer { padding-bottom: 4.5rem; }
+
+  /* Contents: a tick per chapter down the left edge, the pencil on the one you are reading.
+     Pointing at it opens a numbered page, each tick giving way to its number. Only where the margin can hold the ticks. */
+  .act h2[id] { scroll-margin-top: 2.5rem; }
+  .toc { display: none; }
+  @media (min-width: 74rem) and (min-height: 30rem) {
+    .toc {
+      --row: min(2.75rem, (100svh - 8rem) / 10);
+      position: fixed;
+      z-index: 5;
+      inset: 0 auto 0 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 2.75rem 0 1.25rem;
+      border-right: 1px solid var(--hair);
+      font-size: clamp(1rem, var(--row) * 0.5, 1.25rem);
+      counter-reset: chapter;
+      clip-path: inset(0 calc(100% - 3.25rem) 0 0);
+      pointer-events: none;
+    }
+    .toc:is(:hover, :has(:focus-visible)) {
+      background: var(--bg);
+      clip-path: inset(0);
+      pointer-events: auto;
+    }
+    .toc :global(a) {
+      display: grid;
+      grid-template-columns: 1.6rem 1fr;
+      column-gap: 1.1em;
+      align-items: center;
+      height: var(--row);
+      color: var(--ink);
+      line-height: 1;
+      text-decoration: none;
+      white-space: nowrap;
+      counter-increment: chapter;
+      pointer-events: auto;
+    }
+    .toc :global(a::before) {
+      content: counter(chapter);
+      grid-area: 1 / 1;
+      color: var(--soft);
+      font: 0.8em/1 var(--sans);
+      font-variant-numeric: lining-nums tabular-nums;
+      text-align: right;
+    }
+    .toc :global(span) {
+      position: relative;
+      grid-area: 1 / 2;
+      justify-self: start;
+      text-decoration: underline 0.06em transparent;
+      text-underline-offset: 0.22em;
+    }
+    .toc :global(a:is(:hover, :focus-visible) span) { text-decoration-color: color-mix(in srgb, var(--ink) 32%, transparent); }
+    .toc :global(a::after) {
+      content: '';
+      grid-area: 1 / 1;
+      height: 0.4rem;
+      background: linear-gradient(var(--soft), var(--soft)) 0 50% / 0.7rem 1px no-repeat;
+      opacity: 0.6;
+    }
+    .toc :global(a[aria-current]::before) { color: var(--pencil); }
+    .toc :global(a[aria-current] span::after) {
+      content: '';
+      position: absolute;
+      left: -0.04em;
+      right: -0.04em;
+      bottom: -0.42em;
+      height: 0.42em;
+    }
+    .toc :global(a[aria-current]::after),
+    .toc :global(a[aria-current] span::after) {
+      background: var(--pencil);
+      opacity: 1;
+      -webkit-mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+      mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+    }
+    /* Open, the names take over from the ticks. */
+    .toc:is(:hover, :has(:focus-visible)) :global(a::after),
+    .toc:not(:hover, :has(:focus-visible)) :global(a::before) { opacity: 0; }
+    .toc:not(:hover, :has(:focus-visible)) :global(a.over) { opacity: 0; }
+    .toc.dark:is(:hover, :has(:focus-visible)),
+    .toc:not(:hover, :has(:focus-visible)) :global(a.dark) {
+      --bg: #0a0a0a;
+      --ink: #e6e0d4;
+      --soft: #9b9486;
+      --hair: #34312c;
+      --pencil: #9db0ff;
+    }
+  }
+  @media (min-width: 74rem) and (prefers-reduced-motion: no-preference) {
+    .toc { transition: clip-path 0.3s var(--ease-pencil) 0.1s, background-color 0s 0.4s; }
+    .toc:is(:hover, :has(:focus-visible)) { transition-delay: 0.1s, 0.1s; }
+    .toc :global(a),
+    .toc :global(a::before),
+    .toc :global(a::after) { transition: opacity 0.2s; }
+    .toc :global(a span) { transition: text-decoration-color 0.2s; }
+    .toc :global(a[aria-current]::after) { animation: toc-mark 0.35s var(--ease-pencil); }
+  }
+  @keyframes toc-mark {
+    from { clip-path: inset(0 100% 0 0); }
   }
 </style>

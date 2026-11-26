@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { canonical, markdownPath } from '../../seo'
-import { pages, site } from '../../site'
+import { livePages, site } from '../../site'
 
 /**
  * An honest MCP card: wcgw.fun is a site to read, not an app to drive, so it lists no
@@ -15,7 +15,7 @@ export const GET: APIRoute = () =>
     remotes: [],
     resources: {
       llms: canonical('/llms.txt'),
-      markdown: Object.values(pages).map(page => canonical(markdownPath(page.path))),
+      markdown: livePages.map(page => canonical(markdownPath(page.path))),
       sitemap: canonical('/sitemap.xml'),
     },
     related: [

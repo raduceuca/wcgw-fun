@@ -11,7 +11,7 @@ describe('seo', () => {
   })
 
   it('describes the studio, its founder, the site and the page, with dates and profiles', () => {
-    const graph = jsonLd({ page: pages.privacy, title: 'Privacy. WCGW', description: 'd' })['@graph']
+    const graph = jsonLd({ page: pages.privacy, title: 'Privacy. WCGW', description: 'd', image: '/og-image.png' })['@graph']
     const byType = Object.fromEntries(graph.map(node => [node['@type'], node]))
     expect(Object.keys(byType)).toEqual(['Organization', 'Person', 'WebSite', 'WebPage'])
     expect(byType.Organization.sameAs).toContain('https://x.com/wcgwfun')
@@ -20,7 +20,7 @@ describe('seo', () => {
   })
 
   it('lists the tools on the home page only', () => {
-    const home = jsonLd({ page: pages.home, title: 't', description: 'd' })['@graph'].at(-1) as Record<string, any>
+    const home = jsonLd({ page: pages.home, title: 't', description: 'd', image: '/og-image.png' })['@graph'].at(-1) as Record<string, any>
     expect(home.mainEntity.itemListElement.length).toBeGreaterThan(0)
     expect(home.dateModified).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })

@@ -20,6 +20,8 @@ export const GET: APIRoute = () => {
 
 - [Home](${canonical(markdownPath(pages.home.path))}): the studio, what it says no to, its tools, and how to hire it.
 - [Privacy](${canonical(markdownPath(pages.privacy.path))}): what the site records (Microsoft Clarity), the cookies, and how to change your answer.
+- [Stories](${canonical(markdownPath(pages.stories.path))}): illustrated stories from the aftermath.
+- [The Accidental Manifesto](${canonical(markdownPath(pages.thisIsNotIt.path))}): how one picture for a LinkedIn post became a two-minute film in 25 versions.
 
 ## Tools
 

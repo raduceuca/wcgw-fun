@@ -5,23 +5,34 @@ import { consent } from '../../copy'
 import { pages, site } from '../../site'
 import '../../styles/home.css'
 
-/* Stories: how things here got made, told in the order they happened.
-   Add a story by adding a page under src/pages/stories/ and a row below, newest first. */
+/* Stories: illustrated stories from the aftermath.
+   Add a story by adding a page under src/pages/stories/, an entry in `pages` (src/site.ts) and a row
+   below, newest first. A row whose page is a draft shows in `npm run dev` only. */
 const stories = [
   {
+    page: pages.theProducer,
+    href: '/stories/the-producer',
+    title: 'The model is the talent. You are the producer.',
+    when: 'November 2026',
+    about: 'Everybody’s AI output sounds the same. A rant about demos, records and saying “again”, with the takes.',
+  },
+  {
+    page: pages.thisIsNotIt,
     href: '/stories/this-is-not-it',
-    title: 'This is not it.',
+    title: 'The Accidental Manifesto.',
     when: 'November 2026',
     about: 'I asked for a picture for a LinkedIn post and ended up with a two-minute film, 25 versions and a tombstone for rectangle tools.',
   },
-]
+].filter((story) => import.meta.env.DEV || !('draft' in story.page && story.page.draft))
 ---
 
 <BaseLayout
   title="Stories. WCGW"
-  description="How things at WCGW got made, told by the clock, with the prompts left in."
-  social="How things at WCGW got made, told by the clock, with the prompts left in."
+  description="Illustrated stories from the aftermath. Interactive pieces, part essay, part short story."
+  social="Illustrated stories from the aftermath. Interactive pieces, part essay, part short story."
   page={pages.stories}
+  image="/stories/og.png"
+  imageAlt="The WCGW logo above the line: Illustrated stories from the aftermath. Interactive pieces, part essay, part short story."
 >
   <div class="page">
     <header class="masthead">
@@ -29,20 +40,23 @@ const stories = [
     </header>
 
     <main>
-      <section class="act row stories" aria-labelledby="stories">
-        <p class="gutter">Stories</p>
+      <section class="hero">
+        <h1>Illustrated stories from the aftermath.</h1>
+        <p class="lede">
+          Interactive pieces, part essay, part short story.
+        </p>
+      </section>
+
+      <section class="act row" aria-labelledby="stories">
+        <p class="gutter" id="stories">Stories</p>
         <div class="body">
-          <h1 id="stories">How things here got made</h1>
-          <p>
-            One chat per story, by the clock, with my prompts left in and the spelling fixed.
-          </p>
           <ul class="tools">
             {
               stories.map((s) => (
                 <li>
                   <p class="tool">
                     <a class="link" href={s.href}>{s.title}</a>
-                    <span class="status">{s.when}</span>
+                    <span class="status">{"draft" in s.page && s.page.draft ? "Draft, dev only" : s.when}</span>
                   </p>
                   <p class="tool-desc">{s.about}</p>
                 </li>
@@ -55,7 +69,7 @@ const stories = [
 
     <footer class="row">
       <div class="body foot">
-        <p>© <span id="year">2026</span> WCGW, the studio of Radu Ceucă.</p>
+        <p>© <span id="year">2026</span> <a class="link" href="/">WCGW</a>, the studio of Radu Ceucă.</p>
         {
           site.clarityId && (
             <p>
@@ -78,6 +92,5 @@ const stories = [
     outline: 2px solid var(--pencil);
     outline-offset: 0.2em;
   }
-  .stories { margin-top: clamp(4.5rem, 3rem + 7vw, 8.75rem); }
-  h1 { margin-top: 0; font-size: inherit; letter-spacing: 0; line-height: inherit; }
+  h1 { text-wrap: balance; }
 </style>

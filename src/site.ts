@@ -48,6 +48,19 @@ export const pages = {
     published: '2026-11-23',
     sources: ['src/pages/stories/this-is-not-it.astro', 'src/components/StoryDeck.astro', 'src/components/StoryCompare.astro'],
   },
+  theProducer: {
+    path: '/stories/the-producer',
+    published: '2026-11-23',
+    draft: true,
+    sources: ['src/pages/stories/the-producer.astro', 'src/scripts/the-producer.ts', 'src/components/ProducerDesk.astro', 'src/scripts/producer-desk.ts', 'src/scripts/producer-music.ts', 'src/scripts/producer-deck.worklet.js', 'src/stories/the-producer.ts', 'src/styles/producer-sleeve.css'],
+  },
+  /** The session behind the producer story, kept off the story itself. */
+  theProducerMakingOf: {
+    path: '/stories/the-producer/making-of',
+    published: '2026-11-23',
+    draft: true,
+    sources: ['src/pages/stories/the-producer/making-of.astro', 'src/components/StoryCompare.astro', 'src/stories/the-producer.ts', 'src/styles/producer-sleeve.css'],
+  },
 } satisfies Record<string, Page>
 
 export interface Page {
@@ -57,4 +70,16 @@ export interface Page {
   /** ISO date. Set only when the page shows its own date; otherwise git dates it from `sources`. */
   modified?: string
   sources: string[]
+  /**
+   * Dev only. `npm run dev` serves and lists it; a production build leaves it out entirely
+   * (no page, no assets under its path, no sitemap entry, no story card, no short link).
+   * Delete the line to publish.
+   */
+  draft?: boolean
 }
+
+/** What a production build publishes: every page in `pages` except drafts. */
+export const livePages: Page[] = Object.values(pages as Record<string, Page>).filter(page => !page.draft)
+
+/** Draft paths, removed from dist/ after a production build. */
+export const draftPaths: string[] = Object.values(pages as Record<string, Page>).filter(page => page.draft).map(page => page.path)

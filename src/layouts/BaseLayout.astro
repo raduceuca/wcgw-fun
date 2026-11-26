@@ -17,6 +17,8 @@ interface Props {
   /** Share card. Each defaults to the home page's, so existing pages are unchanged. */
   social?: string
   image?: string
+  /** What the share card shows, for people who can't see it. */
+  imageAlt?: string
   /** X handle of the person who wrote the page, for twitter:creator. */
   creator?: string
 }
@@ -30,11 +32,14 @@ const {
   stream = false,
   social = 'Your team can ship anything now. Congratulations. What could go wrong?',
   image = '/og-image.png',
+  imageAlt = 'The WCGW logo above the line: Your team can ship anything now. Congratulations. What could go wrong?',
   creator = '',
 } = Astro.props
 
 const url = page ? canonical(page.path) : undefined
-const graph = page && JSON.stringify(jsonLd({ page, title, description }))
+const graph = page && JSON.stringify(jsonLd({ page, title, description, image }))
+/** A story is an article; everything else is a page of the site. */
+const article = page?.path.startsWith('/stories/') ?? false
 
 /** GTM runs in production builds only, so local dev clicks stay out of the data (Clarity loads via GTM). */
 const gtmId = import.meta.env.PROD ? site.gtmId : ''
@@ -54,9 +59,14 @@ const gtmId = import.meta.env.PROD ? site.gtmId : ''
 
     <meta property="og:title" content={title} />
     <meta property="og:description" content={social} />
-    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    {article && <meta property="article:published_time" content={page?.published} />}
     <meta property="og:url" content={url ?? site.url} />
     <meta property="og:image" content={`${site.url}${image}`} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content={site.twitter} />
@@ -64,6 +74,7 @@ const gtmId = import.meta.env.PROD ? site.gtmId : ''
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={social} />
     <meta name="twitter:image" content={`${site.url}${image}`} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
     <meta name="theme-color" content={themeColorLight} media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
