@@ -1,0 +1,41 @@
+---
+import LookoutPage from '../../components/LookoutPage.astro'
+import { pages } from '../../site'
+---
+
+<LookoutPage
+  page={pages.lookout}
+  label="Lookout"
+  title="Lookout. WCGW"
+  description="A Mac app that puts a creator's numbers in one window: site traffic, speed and social stats."
+>
+  <h1 id="notice">Lookout</h1>
+  <p>
+    A Mac app from WCGW. It puts the numbers for the things you make in one window and the menu bar:
+    who visited the site, how fast it loaded, and how the videos are doing.
+  </p>
+
+  <h2>What it reads</h2>
+  <ul>
+    <li>Site traffic and speed, from Cloudflare, Google Analytics and Microsoft Clarity.</li>
+    <li>YouTube and Instagram stats for your own channels.</li>
+    <li>TikTok stats for your own account, after you sign in with TikTok.</li>
+  </ul>
+
+  <h2>TikTok</h2>
+  <p>
+    Under Connectors, TikTok opens TikTok's own sign-in page in your browser. You approve four
+    permissions: your name (<code>user.info.basic</code>), your username
+    (<code>user.info.profile</code>), your follower, like and video counts (<code>user.info.stats</code>),
+    and your public videos with their views, likes, comments and shares (<code>video.list</code>). Lookout then shows your followers and the last 24 hours and 7 days of
+    views and likes, and refreshes them on a schedule. It reads. It never posts, comments or follows.
+  </p>
+
+  <h2>Where it runs</h2>
+  <p>
+    On your Mac, nowhere else. There is no Lookout account and no Lookout server. After TikTok's
+    sign-in, <code>wcgw.fun/oauth/lookout/tiktok</code> hands the one-time code to the app on your
+    Mac and keeps nothing. Your stats and keys stay on your Mac.
+    <a class="link" href="/lookout/privacy">The privacy policy</a> has the details.
+  </p>
+</LookoutPage>

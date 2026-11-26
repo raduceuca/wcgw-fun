@@ -1,0 +1,72 @@
+---
+import LookoutPage from '../../components/LookoutPage.astro'
+import { pages, site } from '../../site'
+---
+
+<LookoutPage
+  page={pages.lookoutPrivacy}
+  label="Privacy"
+  title="Lookout privacy. WCGW"
+  description="What Lookout reads from your accounts, where it keeps it, and how to delete it."
+>
+  <h1 id="notice">Lookout privacy policy</h1>
+  <p>
+    Lookout is a Mac app made by WCGW, the studio of Radu Ceucă in Bucharest, Romania. This policy
+    covers the app. The website has <a class="link" href="/privacy">its own</a>.
+  </p>
+
+  <h2>What Lookout reads</h2>
+  <p>Only what you connect. From TikTok, after you sign in and approve it:</p>
+  <ul>
+    <li>Your profile: open ID, display name and username.</li>
+    <li>Your counts: followers, likes and videos.</li>
+    <li>Your public videos: ID, title, description, date, link, and view, like, comment and share counts.</li>
+  </ul>
+  <p>
+    From the other services you connect (Cloudflare, Google, Microsoft Clarity, YouTube, Instagram),
+    the traffic and stats for the sites and accounts you pick.
+  </p>
+
+  <h2>Where it is kept</h2>
+  <p>
+    On your Mac. Access tokens are encrypted (AES-256-GCM) with a key held in your macOS Keychain.
+    Stats are kept in a database file in <code>~/Library/Application Support/Lookout</code>. Lookout
+    has no server and no accounts, and sends none of this to WCGW.
+  </p>
+
+  <h2>The sign-in relay</h2>
+  <p>
+    TikTok only returns to an HTTPS address, so after you approve, TikTok sends your browser to
+    <code>wcgw.fun/oauth/lookout/tiktok</code> with a one-time code. That page passes the code to the
+    app on your Mac (<code>127.0.0.1</code>) and removes it from the address bar. It has no analytics,
+    sets no cookies and stores nothing. The app swaps the code for a token directly with TikTok.
+  </p>
+
+  <h2>What it is used for</h2>
+  <p>
+    Showing you your own numbers. Nothing is sold, shared, used for ads or used to train models.
+  </p>
+
+  <h2>Who else sees it</h2>
+  <p>
+    No one through Lookout. Lookout talks to each service's own API, under that service's privacy
+    policy: <a class="link" href="https://www.tiktok.com/legal/page/global/privacy-policy/en" rel="noopener">TikTok's</a>
+    for TikTok.
+  </p>
+
+  <h2>Deleting it</h2>
+  <ul>
+    <li>Disconnect: the bin icon next to TikTok in Lookout's Connectors deletes the token.</li>
+    <li>Revoke: TikTok app, Settings and privacy, Security, Manage app permissions, Lookout, Remove access.</li>
+    <li>Everything: quit Lookout and delete <code>~/Library/Application Support/Lookout</code>.</li>
+  </ul>
+
+  <h2>Children</h2>
+  <p>Lookout is not meant for anyone under 18.</p>
+
+  <h2>Changes and questions</h2>
+  <p>
+    A change to this policy changes the date below. Write to
+    <a class="link" href={`mailto:${site.email}`}>{site.email}</a>.
+  </p>
+</LookoutPage>

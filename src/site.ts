@@ -38,6 +38,24 @@ export const pages = {
     modified: '2026-11-18',
     sources: ['src/pages/privacy.astro'],
   },
+  /** Lookout, the Mac app. TikTok's app review reads these three pages. */
+  lookout: {
+    path: '/lookout',
+    published: '2026-11-26',
+    sources: ['src/pages/lookout/index.astro', 'src/components/LookoutPage.astro'],
+  },
+  lookoutPrivacy: {
+    path: '/lookout/privacy',
+    published: '2026-11-26',
+    modified: '2026-11-26',
+    sources: ['src/pages/lookout/privacy.astro', 'src/components/LookoutPage.astro'],
+  },
+  lookoutTerms: {
+    path: '/lookout/terms',
+    published: '2026-11-26',
+    modified: '2026-11-26',
+    sources: ['src/pages/lookout/terms.astro', 'src/components/LookoutPage.astro'],
+  },
   stories: {
     path: '/stories',
     published: '2026-11-23',

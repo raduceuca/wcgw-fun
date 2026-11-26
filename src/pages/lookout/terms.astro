@@ -1,0 +1,58 @@
+---
+import LookoutPage from '../../components/LookoutPage.astro'
+import { pages, site } from '../../site'
+---
+
+<LookoutPage
+  page={pages.lookoutTerms}
+  label="Terms"
+  title="Lookout terms. WCGW"
+  description="The terms for using Lookout, WCGW's Mac app."
+>
+  <h1 id="notice">Lookout terms of service</h1>
+  <p>
+    These terms are between you and WCGW, the studio of Radu Ceucă in Bucharest, Romania. Using
+    Lookout means you accept them.
+  </p>
+
+  <h2>What you get</h2>
+  <p>
+    Lookout is a Mac app that shows stats from accounts and sites you connect. It is free, and it
+    reads; it never posts for you.
+  </p>
+
+  <h2>Your accounts</h2>
+  <p>
+    Connect only accounts you own or may use. Each service's own terms still apply, including
+    <a class="link" href="https://www.tiktok.com/legal/page/global/terms-of-service/en" rel="noopener">TikTok's</a>.
+    You can disconnect any account at any time. How Lookout treats your data is in the
+    <a class="link" href="/lookout/privacy">privacy policy</a>.
+  </p>
+
+  <h2>Don't</h2>
+  <p>
+    Use Lookout to break the law or another service's terms, or to read accounts that are not
+    yours.
+  </p>
+
+  <h2>No warranty</h2>
+  <p>
+    Lookout is provided as is. Numbers come from other services and can be late, partial or wrong.
+    A service can change or close its API, and the matching part of Lookout can stop working.
+  </p>
+
+  <h2>Liability</h2>
+  <p>
+    As far as the law allows, WCGW is not liable for indirect or lost-profit damages from using
+    Lookout. Nothing here limits rights you have under consumer law.
+  </p>
+
+  <h2>Changes and ending</h2>
+  <p>
+    WCGW may change these terms; a change changes the date below. You can stop at any time by
+    deleting the app. Romanian law applies.
+  </p>
+
+  <h2>Contact</h2>
+  <p><a class="link" href={`mailto:${site.email}`}>{site.email}</a></p>
+</LookoutPage>
