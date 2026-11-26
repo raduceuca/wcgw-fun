@@ -1,0 +1,154 @@
+---
+/*
+  The mix, made playable: one board, 32 channels wide, built from Fig. 5's own desk (board.py), taking
+  Fig. 5's own caps, so the faders on the picture are the faders you move. Edge to edge where the window
+  is wide enough for every fader to be held; on smaller ones the board keeps its size and you slide along it.
+  The channels (names, stems, my mix) are CHANNELS in producer-music.ts.
+  Script: src/scripts/producer-desk.ts. Sound: src/scripts/producer-music.ts.
+  Layers and positions: Claude outputs/producer-visuals/desk/layers.py and board.py.
+*/
+import { CHANNELS, MY_PAN } from '../scripts/producer-music'
+
+const base = '/stories/the-producer/desk'
+// Everything below is in the plate's own pixels (board.py, 4564 x 1160): the desk sits at 15, 11 inside it.
+const [W, H] = [4376, 999]
+const PITCH = 135.6
+const x = (px: number) => `${(px / W) * 100}%`
+const y = (px: number) => `${(px / H) * 100}%`
+const plate = `left:${x(-15)};top:${y(-11)};width:${x(4564)}`
+// a strip, the cap on it at the top of its travel (inside the strip), and how far the cap goes
+const strip = (i: number) => 17 + PITCH * i
+const cap = { left: 21, top: 277, w: 112, h: 187 }
+const [TOP, BOTTOM] = [354, 844] // the cap's centre at 100 and at 0
+const knobY = 217 // the knobs' row
+const label = (name: string) => name.replace(/^gtr([LR])$/, 'gtr $1')
+const ticks = Array.from({ length: 12 }, (_, i) => i)
+---
+
+<div class="pd" data-pd data-top={TOP / H} data-bottom={BOTTOM / H} style={`--travel:${y(BOTTOM - TOP)};--ratio:${W / H}`}>
+  <div class="reach">
+    <div class="room">
+      <div class="desk" data-pd-desk role="group" aria-label="Mixing desk, 32 channels">
+        <img class="plate" src={`${base}/board.webp`} alt="" width="3400" height="864" loading="lazy" draggable="false" style={plate} />
+        {CHANNELS.map(([name], i) => {
+          const p = MY_PAN[name] ?? 0
+          return (
+            <span
+              class="pan" data-pd-pan data-name={name} data-pan={p}
+              role="slider" tabindex="0" aria-label={`${label(name)} pan`}
+              aria-valuemin="-100" aria-valuemax="100" aria-valuenow={p} aria-valuetext={p ? `${Math.abs(p)} ${p < 0 ? 'left' : 'right'}` : 'centre'}
+              title="Pan: left to right. Drag up or down, or use the arrow keys. Double-click centres."
+              style={`left:${x(strip(i) + PITCH / 2)};top:${y(knobY)};--p:${p / 100}`}
+            ></span>
+          )
+        })}
+        {CHANNELS.map(([name, , , , , mix], i) => (
+          <div
+            class="ch" data-pd-ch data-name={name} data-mix={mix}
+            role="slider" tabindex="0" aria-label={`${label(name)} fader`}
+            aria-valuemin="0" aria-valuemax="100" aria-valuenow={mix} aria-orientation="vertical"
+            style={`left:${x(strip(i))};width:${x(PITCH)};--v:${mix / 100}`}
+          >
+            <div class="mover">
+              <img class="cap" data-pd-cap src={`${base}/cap-${(i % 8) + 1}.webp`} alt="" width={cap.w} height={cap.h} draggable="false"
+                style={`left:${(cap.left / PITCH) * 100}%;width:${(cap.w / PITCH) * 100}%;top:${y(cap.top)}`} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <p class="lyric" data-pd-lyric aria-hidden="true"></p>
+  <div class="transport">
+    <button class="btn play" type="button" data-pd-play aria-pressed="false">
+      <svg viewBox="0 0 12 12" aria-hidden="true"><path class="i-play" d="M3 1.5v9l7.5-4.5z" /><path class="i-stop" d="M2.5 2.5h7v7h-7z" /></svg>
+      <span data-pd-play-label>Play</span>
+    </button>
+    <button class="btn" type="button" data-pd-stutter disabled>Hold to stutter <kbd>S</kbd></button>
+    <button class="btn" type="button" data-pd-recall>My mix</button>
+    <span class="meter" data-pd-meter aria-hidden="true">{ticks.map(() => <i></i>)}</span>
+    <span class="pos num" data-pd-pos aria-hidden="true">116 BPM</span>
+  </div>
+  <p class="pd-note" data-pd-note aria-live="polite"></p>
+</div>
+
+<script>
+  import '../scripts/producer-desk'
+</script>
+
+<style>
+  .pd { --ink-c: var(--ink, #fafafa); --soft-c: var(--soft, rgb(250 250 250 / 0.72)); --hair-c: var(--hair, rgb(250 250 250 / 0.24)); position: relative; }
+  /* the board runs the window wide, and past it when a fader would get too small to hold: then you slide
+     along it (the page itself never scrolls sideways). Room below for its shadow. */
+  .reach { width: 100vw; margin: 0 calc(50% - 50vw) -2.5rem; overflow: auto hidden; overscroll-behavior-x: contain; scrollbar-width: none; scroll-padding-inline: 3rem; }
+  .reach::-webkit-scrollbar { display: none; }
+  .room { box-sizing: border-box; min-width: max-content; padding: 1rem 1.375rem 3.5rem; overflow: clip; }
+  .desk {
+    position: relative; width: max(100vw - 2.75rem, 86rem); max-width: max(86rem, calc((100svh - 16rem) * var(--ratio)));
+    aspect-ratio: var(--ratio); margin-inline: auto; user-select: none; -webkit-user-select: none;
+  }
+  /* the pan knobs: Fig. 6's blue knob, turned by the value (-1 left, 1 right, 135 degrees each way) */
+  .pan {
+    position: absolute; z-index: 1; width: 2.2%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+    background: url(/stories/the-producer/pads-knob-1.webp) center / 100% no-repeat;
+    rotate: calc(var(--p, 0) * 135deg); cursor: ns-resize; touch-action: pan-x; outline: none;
+  }
+  .pan:focus-visible { outline: 2px solid var(--ink-c); outline-offset: 2px; }
+  .plate { position: absolute; height: auto; max-width: none; pointer-events: none; }
+  .ch { position: absolute; top: 0; height: 100%; touch-action: manipulation; cursor: ns-resize; outline: none; -webkit-tap-highlight-color: transparent; }
+  .mover { position: absolute; inset: 0; transform: translateY(calc((1 - var(--v, 0)) * var(--travel))); will-change: transform; pointer-events: none; }
+  .cap { position: absolute; height: auto; max-width: none; pointer-events: auto; touch-action: pan-x; cursor: grab; }
+  .ch:global(.held) .cap { cursor: grabbing; }
+  /* focus ring hugs the cap, not the strip */
+  .ch:focus-visible .cap { outline: 2px solid var(--ink-c); outline-offset: 1px; border-radius: 6px; }
+  .ch:global(.shake) .mover { animation: pd-shake 0.5s; }
+  @keyframes pd-shake {
+    0%, 100% { translate: 0 0; } 20% { translate: -3px 0; } 40% { translate: 3px 0; } 60% { translate: -2px 0; } 80% { translate: 2px 0; }
+  }
+
+  .lyric {
+    min-height: 1.5em; margin: 1rem 0 0; font-size: 1.35em; font-style: italic; line-height: 1.2; color: var(--ink-c);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .lyric:global(.on) { opacity: 1; }
+  .transport { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 0.7rem; margin-top: 0.6rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.45em;
+    padding: 0.4em 0.95em; border: 1px solid var(--hair-c); border-radius: 999px;
+    background: none; color: var(--ink-c); font: inherit; font-size: 0.86em; cursor: pointer;
+    touch-action: manipulation; -webkit-user-select: none; user-select: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .btn:hover { border-color: var(--ink-c); }
+  .btn:focus-visible { outline: 2px solid var(--ink-c); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.45; cursor: default; border-color: var(--hair-c); }
+  .btn[aria-pressed='true'], .btn:global(.down) { background: var(--ink-c); color: var(--bg, #2c4bd4); border-color: var(--ink-c); }
+  .play { font-size: 1em; padding: 0.5em 1.2em; }
+  .play svg { width: 0.75em; height: 0.75em; fill: currentColor; }
+  .play .i-stop { display: none; }
+  .play[aria-pressed='true'] .i-play { display: none; }
+  .play[aria-pressed='true'] .i-stop { display: inline; }
+  kbd { font: inherit; font-size: 0.8em; padding: 0 0.4em; border: 1px solid currentColor; border-radius: 4px; opacity: 0.7; }
+
+  .meter { display: inline-flex; align-items: flex-end; gap: 3px; height: 1.1em; margin-left: auto; }
+  .meter i { display: block; width: 3px; height: 100%; background: var(--ink-c); opacity: 0.18; transform-origin: 50% 100%; transition: opacity 0.08s; }
+  .meter :global(i.lit) { opacity: 1; }
+  .pos { min-width: 5.5em; text-align: right; color: var(--soft-c); font-size: 0.82em; font-variant-numeric: tabular-nums; }
+
+  .pd-note {
+    min-height: 1.4em; margin: 0.8rem 0 0; font-size: 1.2em; font-style: italic; line-height: 1.2;
+    opacity: 0; translate: 0 0.4rem; transition: opacity 0.3s, translate 0.4s var(--ease-pencil, ease-out);
+  }
+  .pd-note:global(.on) { opacity: 1; translate: 0 0; }
+
+  @media (hover: none) { kbd { display: none; } }
+  @media (max-width: 40rem) {
+    .meter { display: none; }
+    .pos { margin-left: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ch:global(.shake) .mover { animation: none; }
+    .pd-note { transition: none; translate: none; }
+  }
+</style>

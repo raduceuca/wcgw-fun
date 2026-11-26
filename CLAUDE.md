@@ -86,5 +86,7 @@ Scaffolded with [claudecraft](https://claudecraft.dev) / [wcgw-starter](https://
 ## Stories
 
 - `/stories` lists one page per story; each is registered in `pages` (src/site.ts) so it gets a canonical URL, a sitemap entry and a markdown copy.
-- A story is told in order, by the clock, in the first person, with the prompts that were actually typed. Prompts may have spelling fixed; say so in the page's credits.
+- A story is told in order, by the clock, in the first person, with the prompts that were actually typed. Prompts may have spelling fixed, without a note.
 - Media lives in `public/stories/<slug>/`. Keep videos web-encoded (under 25 MB each, the Pages per-file limit).
+- Drafts: `draft: true` on a page in `pages` (src/site.ts) makes it dev only. `npm run dev` serves it and lists it on /stories as "Draft, dev only"; a production build drops its page, its `public/stories/<slug>/` assets, its short link in `_redirects`, its sitemap and markdown entries, and any `_astro` script or style only it used (astro.config.mjs). Delete the line to publish. The producer story is a draft.
+- Deploy from this folder: `npm run deploy`, or double-click `~/development/ship-this-is-not-it.command` (tests, then deploys).

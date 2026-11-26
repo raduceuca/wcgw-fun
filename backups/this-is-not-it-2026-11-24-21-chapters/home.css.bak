@@ -1,0 +1,540 @@
+/* ==========================================================================
+   wcgw.fun — the page is a manuscript; WCGW holds the blue pencil.
+   Brief: tastefiles/home.md
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* Palette: Paper (light) */
+  --bg: #FAFAFA;
+  --ink: #1A1A1A;
+  --soft: #6B6B6B;
+  --hair: #E2E2E0;
+  --pencil: #2C4BD4;
+
+  /* Type: editorial manifesto */
+  --font: "EB Garamond", Garamond, "Times New Roman", serif;
+  --sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font);
+  --text: clamp(1.1875rem, 1.06rem + 0.42vw, 1.375rem);
+  --leading: 1.6;
+  --display: clamp(2.5rem, 1.55rem + 3.9vw, 3.75rem);
+
+  /* Space */
+  --gutter: 10rem;
+  --gap: 2.5rem;
+  --measure: 34rem;
+  --beat: 1.45em;
+  --act-space: clamp(3.5rem, 2.25rem + 4.5vw, 6rem);
+  --logo-width: 114px;
+
+  /* Hand-drawn marks (alpha masks, painted with --pencil) */
+  --mark-strike: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6.8C24 5.4 52 6 78 4.6S108 4 118 3.2' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --mark-strike-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M2 4.4C30 5.8 58 4.4 84 5.6S110 6.4 118 5.4' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --mark-line-1: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M1 4.6C13 2.8 25 6.2 39 4.4S65 2.6 80 4.6 106 6.4 119 3.8' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --mark-line-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M1 4C12 6 27 3 41 4.8S66 6.2 81 4 104 2.8 119 5' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  --mark-line-3: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'%3E%3Cpath d='M1 5.2C15 3.4 24 5.8 38 4S67 5.6 83 4.8 103 3.2 119 4.4' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+
+  --ease-pencil: cubic-bezier(0.6, 0.05, 0.3, 1);
+
+  /* 1 on dark palettes: the portrait switches to its night engraving */
+  --night: 0;
+}
+
+/* Palette: Night, from the system or the logo button */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #161513;
+    --ink: #E6E0D4;
+    --soft: #9B9486;
+    --hair: #34312C;
+    --pencil: #9DB0FF;
+    --night: 1;
+  }
+}
+
+:root[data-theme="night"] {
+  color-scheme: dark;
+  --bg: #161513;
+  --ink: #E6E0D4;
+  --soft: #9B9486;
+  --hair: #34312C;
+  --pencil: #9DB0FF;
+  --night: 1;
+}
+
+:root[data-theme="paper"] {
+  color-scheme: light;
+  --bg: #FAFAFA;
+  --ink: #1A1A1A;
+  --soft: #6B6B6B;
+  --hair: #E2E2E0;
+  --pencil: #2C4BD4;
+  --night: 0;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, p, figure, ul, dl, dd { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--text) / var(--leading) var(--font);
+  font-variant-numeric: oldstyle-nums;
+  font-kerning: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  hanging-punctuation: first;
+  overflow-x: clip; /* falling things never cause sideways scrolling */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2 { font-weight: 400; }
+p, dd { text-wrap: pretty; }
+cite { font-style: italic; }
+ul { list-style: none; }
+
+::selection { background: color-mix(in srgb, var(--pencil) 24%, transparent); }
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.skip {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.4em 0.8em;
+  background: var(--ink);
+  color: var(--bg);
+  z-index: 10;
+}
+.skip:focus { top: 1rem; }
+
+/* ==========================================================================
+   Layout: a page edge, a gutter for act labels, a reading column
+   ========================================================================== */
+
+.page {
+  width: min(100% - 2.75rem, var(--gutter) + var(--gap) + var(--measure));
+  margin-inline: auto;
+}
+
+@media (min-width: 48rem) {
+  .row {
+    display: grid;
+    grid-template-columns: var(--gutter) minmax(0, 1fr);
+    column-gap: var(--gap);
+  }
+  .row > .body { grid-column: 2; }
+  .row > .gutter {
+    grid-column: 1;
+    position: sticky;
+    top: 2.5rem;
+    align-self: start;
+  }
+}
+
+/* ==========================================================================
+   Masthead and hero
+   ========================================================================== */
+
+.masthead {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding-top: clamp(1.75rem, 1rem + 3vw, 3.5rem);
+}
+
+.logo {
+  display: block;
+  margin: -0.3em;
+  padding: 0.3em;
+  border: 0;
+  background: none;
+  color: inherit; /* fades with the page when the theme changes */
+  font: inherit;
+  cursor: pointer;
+  transition: scale 0.15s ease;
+}
+.logo:active { scale: 0.96; }
+.logo:focus-visible {
+  outline: 2px solid var(--pencil);
+  outline-offset: 0.2em;
+}
+
+/* The logo (src/components/Logo.astro) is the theme toggle: pointing at it turns
+   the × eye into a sun by day and a half moon by night. */
+.mark {
+  display: block;
+  width: var(--logo-width);
+  height: auto;
+}
+.mark :is(.eye-x, .eye-sun, .eye-moon) { transition: opacity 0.15s ease; }
+.mark :is(.eye-sun, .eye-moon) { opacity: 0; }
+.logo:focus-visible .eye-x { opacity: 0; }
+.logo:focus-visible .eye-sun { opacity: calc(1 - var(--night)); }
+.logo:focus-visible .eye-moon { opacity: var(--night); }
+@media (hover: hover) {
+  .logo:hover .eye-x { opacity: 0; }
+  .logo:hover .eye-sun { opacity: calc(1 - var(--night)); }
+  .logo:hover .eye-moon { opacity: var(--night); }
+}
+
+.hero { padding-bottom: var(--act-space); }
+
+h1 {
+  margin-top: clamp(4.5rem, 3rem + 7vw, 8.75rem);
+  font-family: var(--font-display);
+  font-size: var(--display);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+}
+.beat { display: block; text-wrap: balance; }
+
+/* Keep “What could go wrong?” on one line; shrink on narrow columns (320px). */
+.beat-punch {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: clamp(1.35rem, 7.6vw, 1em);
+  letter-spacing: -0.02em;
+  max-width: 100%;
+}
+
+/* Mishaps (src/home/mishaps.ts): things break, a click patches them, briefly. */
+.is-broken { cursor: pointer; }
+
+/* "wrong?" as separate letters, each pivoting where it would really tip */
+.wrong { white-space: nowrap; }
+.ch {
+  --baseline: calc(100% - 0.18em);
+  display: inline-block;
+  transform-origin: var(--pivot-x, 50%) var(--pivot-y, var(--baseline));
+}
+.ch-r { --pivot-x: 12%; }
+.ch-o { --pivot-y: calc(var(--baseline) - 0.2em); }
+.ch-n { --pivot-x: 95%; }
+.ch-g { --pivot-x: 90%; }
+.ch-q { --pivot-x: 100%; }
+
+/* The agent's caret: solid while tokens arrive, blinking when idle. Takes no width. */
+.caret {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin: 0 -0.14em 0 0.06em;
+  vertical-align: -0.12em;
+  background: currentColor;
+  animation: caret 1s steps(1) infinite;
+}
+.caret.is-typing { animation: none; }
+@keyframes caret { 50% { opacity: 0; } }
+
+/* Token streaming (src/home/stream.ts). If the script never runs, the text shows anyway. */
+.streaming :is(main, footer) { opacity: 0; animation: failsafe 0s 4s forwards; }
+.unwritten { opacity: 0; }
+@keyframes failsafe { to { opacity: 1; } }
+.tok { opacity: 0; transition: opacity 0.12s ease; }
+.tok.is-in { opacity: 1; }
+
+/* "Optimist with backups.": a tight box so it rests on the text it falls onto, above it */
+.line {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 80%;
+}
+
+/* The "Taste Files" row hangs from its left end when it comes loose */
+[data-loose-row] { transform-origin: 0 100%; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.lede {
+  margin-top: 1.6em;
+  color: var(--soft);
+}
+
+/* ==========================================================================
+   Links: a quiet underline at rest, the pencil on hover
+   ========================================================================== */
+
+.link {
+  position: relative;
+  color: inherit;
+  text-decoration: underline 0.06em color-mix(in srgb, var(--ink) 32%, transparent);
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color 0.2s ease;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: -0.04em;
+  right: -0.04em;
+  bottom: -0.3em;
+  height: 0.42em;
+  background: var(--pencil);
+  -webkit-mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+  mask: var(--mark-line-1) 0 0 / 100% 100% no-repeat;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.3s var(--ease-pencil);
+  pointer-events: none;
+}
+button.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+.link:focus-visible { text-decoration-color: transparent; }
+.link:focus-visible::after { clip-path: inset(0); }
+
+@media (hover: hover) {
+  .link:hover { text-decoration-color: transparent; }
+  .link:hover::after {
+    clip-path: inset(0);
+    animation: boil 0.36s steps(1) 0.3s infinite;
+  }
+}
+
+@keyframes boil {
+  0%   { -webkit-mask-image: var(--mark-line-2); mask-image: var(--mark-line-2); }
+  33%  { -webkit-mask-image: var(--mark-line-3); mask-image: var(--mark-line-3); }
+  66%  { -webkit-mask-image: var(--mark-line-1); mask-image: var(--mark-line-1); }
+}
+
+/* ==========================================================================
+   Acts
+   ========================================================================== */
+
+.gutter { color: var(--soft); }
+.act h2 { font-size: inherit; }
+
+.act .body > * + * { margin-top: var(--beat); }
+.act .body > .cont { margin-top: 0; text-indent: 1.4em; }
+
+.aside { padding-left: 1.4em; }
+
+/* + × dividers, blinking as you pass */
+.eyes { padding-block: var(--act-space); }
+.eyes .body {
+  display: flex;
+  justify-content: center;
+  gap: 1.15em;
+}
+.eye {
+  width: 0.6em;
+  height: 0.6em;
+  fill: var(--soft);
+  transition: rotate 0.7s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.blink.is-in .eye { rotate: 45deg; }
+@media (hover: hover) {
+  .blink:hover .eye { rotate: 45deg; }
+  .blink.is-in:hover .eye { rotate: 90deg; }
+}
+
+/* ==========================================================================
+   The roadmap: the pencil cuts, you can overrule it
+   ========================================================================== */
+
+.roadmap {
+  padding-block: 1.1em 1.2em;
+  border-block: 1px solid var(--hair);
+  font-size: 0.92em;
+  line-height: 1.6;
+}
+.roadmap figcaption { color: var(--soft); margin-bottom: 0.5em; }
+
+.idea {
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.25s ease calc(var(--i, 0) * 140ms);
+}
+.idea::after {
+  content: "";
+  position: absolute;
+  left: -0.15em;
+  right: -0.15em;
+  top: 50%;
+  height: 0.55em;
+  translate: 0 -38%;
+  background: var(--pencil);
+  -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+  mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.32s var(--ease-pencil) calc(var(--i, 0) * 140ms), opacity 0.2s ease;
+  pointer-events: none;
+}
+.idea:nth-of-type(even)::after {
+  -webkit-mask-image: var(--mark-strike-2);
+  mask-image: var(--mark-strike-2);
+}
+.idea[aria-pressed="true"] { color: var(--soft); }
+/* The zombie idea shrugs off its cut */
+.idea.is-back { animation: back 0.45s ease; }
+@keyframes back {
+  20% { translate: -0.06em 0; }
+  40% { translate: 0.06em 0; }
+  60% { translate: -0.04em 0; }
+  80% { translate: 0.02em 0; }
+}
+.idea[aria-pressed="true"]::after { clip-path: inset(0); }
+
+@media (hover: hover) {
+  .idea:hover::after { clip-path: inset(0); opacity: 0.35; }
+  .idea[aria-pressed="true"]:hover::after { opacity: 0.55; }
+}
+
+.roadmap.is-pending .idea { color: var(--ink); }
+.roadmap.is-pending .idea::after { clip-path: inset(0 100% 0 0); }
+
+.tally {
+  margin-top: 0.6em;
+  color: var(--soft);
+  transition: opacity 0.4s ease 1.3s;
+}
+.roadmap.is-pending .tally { opacity: 0; }
+
+/* ==========================================================================
+   Tools and vital signs
+   ========================================================================== */
+
+.tools li {
+  padding-block: 0.6em 0.65em;
+  border-top: 1px solid var(--hair);
+  line-height: 1.45;
+}
+.tools li:last-child { border-bottom: 1px solid var(--hair); }
+.tool {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1em;
+}
+.status, .tool-desc { color: var(--soft); }
+.status { flex-shrink: 0; }
+
+.signs {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: 1.2em;
+}
+.signs dt { color: var(--soft); }
+.clock, .num {
+  font-family: var(--sans);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size-adjust: 0.4;
+  letter-spacing: 0.01em;
+}
+
+/* Engraved portrait lives with the bio, not the masthead. */
+.bio {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1em;
+}
+.bio-copy > * + * { margin-top: 0; }
+.bio-copy > .cont { text-indent: 1.4em; }
+.portrait {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  width: 4.25em;
+  aspect-ratio: 320 / 352;
+  margin-top: 0.15em;
+}
+.portrait::before,
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  -webkit-mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/img/portrait.webp") 0 0 / 100% 100% no-repeat;
+  opacity: calc(1 - var(--night));
+  transition: opacity 0.3s ease;
+}
+.portrait::after {
+  -webkit-mask-image: url("/img/portrait-night.webp");
+  mask-image: url("/img/portrait-night.webp");
+  opacity: var(--night);
+}
+@media (max-width: 30rem) {
+  .bio { flex-direction: column; gap: 0.75em; }
+}
+
+/* ==========================================================================
+   Act two piles — static binned / kept lists (mole game removed)
+   ========================================================================== */
+
+.pile { text-indent: 0 !important; }
+.pile + .pile { margin-top: 0.5em; }
+.pile.binned { color: var(--soft); }
+.pile s {
+  text-decoration-thickness: 0.06em;
+  text-decoration-color: var(--soft);
+}
+
+.theme-note {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 1.4rem;
+  text-align: center;
+  color: var(--soft);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  pointer-events: none;
+}
+.theme-note.show { opacity: 1; }
+
+/* ==========================================================================
+   Closing and footer
+   ========================================================================== */
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  column-gap: 1.4em;
+  margin-top: clamp(5rem, 4rem + 4vw, 7.5rem);
+  padding-bottom: 2.5rem;
+  color: var(--soft);
+}
+
+/* ==========================================================================
+   Motion
+   ========================================================================== */
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Classified / mono easter themes intentionally dropped (prefs). */

@@ -1,10 +1,12 @@
 ---
 import Logo from '../../components/Logo.astro'
-import StoryCompare from '../../components/StoryCompare.astro'
+import ProducerDesk from '../../components/ProducerDesk.astro'
 import BaseLayout from '../../layouts/BaseLayout.astro'
 import { consent } from '../../copy'
 import { pages, site } from '../../site'
+import { makingOf, renders } from '../../stories/the-producer'
 import '../../styles/home.css'
+import '../../styles/producer-sleeve.css'
 
 /* Story: The model is the talent. You are the producer.
    Art direction: the page is the record's sleeve. AGAIN blue (#2C4BD4), a little moving paper grain,
@@ -12,36 +14,15 @@ import '../../styles/home.css'
    own shadow. Blue belongs to the sleeve here, so the pencil is paper white.
    Motion: src/scripts/the-producer.ts. Scroll writes --p/--e on [data-p]; CSS here turns them into
    motion. Records turn with scroll and can be scratched. AGAIN can be pressed (or the A key).
-   The desk is playable. Sound is off until the now-playing bar turns it on.
+   The page plays one track (track in producer-music.ts), started by a tap on a record or the bar's Play.
+   It builds section by section (BUILD in the-producer.ts); Fig. 5 in B2 is the desk where the reader mixes it.
    Copy rules: Radu's voice (vocea-radu), no em dashes, dry. Every number is sourced where it stands
-   (hover) and again in the liner notes. Notes in "B3" are as typed on 23 November 2026, Bucharest
-   time; spelling fixed, nothing else. A brief for more: docs/the-producer-motion.md. */
+   (hover) and again in the liner notes. How it was made (my notes, the takes, the track) lives on
+   its own page, ./the-producer/making-of.astro, so the story stays the story; their data is
+   src/stories/the-producer.ts. Sleeve styles both share: src/styles/producer-sleeve.css.
+   A brief for more: docs/the-producer-motion.md. */
 
 const base = '/stories/the-producer'
-
-/** The pictures. Source: the Amplifiers image sessions, 23 November 2026. In the order they were made. */
-const shots = [
-  ['01-again-v1', 'The AGAIN button, angled, on a black module'],
-  ['02-studio-v1', 'The studio, all black'],
-  ['03-cassette-v1', 'A black cassette'],
-  ['04-mic-v1', 'A black mic on a cable'],
-  ['05-button-v1', 'AGAIN, straight on, black bezel'],
-  ['06-knob-v1', 'An amp knob turned to 11'],
-  ['07-vinyl-v1', 'A black record, blue label'],
-  ['08-vinyl-v2', 'The same record, rounder'],
-  ['09-mic-v2', 'The mic, hanging from a rod'],
-  ['10-mix-v1', 'Eight faders, one blue'],
-  ['11-cassette-blue', 'The cassette, blue'],
-  ['12-mic-blue', 'The mic, blue mount'],
-  ['13-studio-blue', 'The studio, blue speakers'],
-  ['14-mix-blue', 'Eight blue faders'],
-  ['15-vinyl-blue', 'The record, blue'],
-  ['16-mic-blue2', 'The mic, blue all over'],
-  ['17-studio-blue2', 'The studio, every plastic blue'],
-  ['18-button-blue', 'AGAIN, blue bezel'],
-] as const
-const kept = new Set(['11-cassette-blue', '14-mix-blue', '15-vinyl-blue', '16-mic-blue2', '17-studio-blue2', '18-button-blue'])
-const renders = { made: shots.length, kept: kept.size, drawnRounds: 2 }
 
 const src = {
   rubin: 'https://www.cbsnews.com/news/rick-rubin-60-minutes-transcript-2023-05-28/',
@@ -50,31 +31,48 @@ const src = {
   cover: 'https://www.producthunt.com/products/replace-cover/launches',
 }
 
-/** What I typed while the pictures were made, in order. */
-const notes = [
-  { at: '10:50', said: 'create visuals for it, maintaining a consistent and beautifully simple aesthetic, NOT SLOP' },
-  { at: '11:14', said: 'Okay, these illustrations are not terrible.' },
-  { at: '11:14', said: 'That’s not a studio microphone. That is a podcast microphone.' },
-  { at: '11:20', said: 'Okay, perhaps we need to do images for all of them.' },
-  { at: '11:20', said: 'I don’t like the angle. I want the angle to be simple. I want the camera to look straight at the button.' },
-  { at: '11:33', said: 'It feels a bit unfinished, to be honest.' },
-  { at: '11:44', said: 'Can we make all plastics blue? That beautiful blue we use on the AGAIN button?' },
-  { at: '11:50', said: 'Make the microphone blue plastics.' },
-]
-
-const mics = [
-  { n: 1, how: 'Drawn in code.', verdict: '“That is a podcast microphone.”', alt: 'A flat drawing of a pill-shaped microphone on a desk stand.' },
-  { n: 2, how: 'Drawn again.', verdict: 'A studio mic now. Still a drawing.', alt: 'A flat drawing of a condenser microphone in a shock mount behind a pop filter.' },
-  { n: 3, how: 'Rendered.', verdict: 'Hangs from a rod.', alt: 'A black studio microphone hanging upside down in a shock mount from a rod.' },
-  { n: 4, how: 'Rendered again.', verdict: 'Every plastic part blue.', alt: 'The same microphone, its body and shock mount in cobalt blue.' },
-]
-
-/** The desk in Fig. 5, as set. Heights are read off the picture, 0 to 100. */
-const desk = [
-  ['kick', 34], ['snare', 62], ['bass', 42], ['vox', 70], ['keys', 52], ['gtr', 24], ['pad', 60], ['fx', 38],
+/** Fig. 1, the demos: one cassette per lab, each a refine of one render (tapes.py cut them and found
+    each one's reel hubs, in %). Each sings with its own ElevenLabs voice (VOICES in producer-music.ts). */
+const tapes = [
+  { id: 'chatgpt', lab: 'ChatGPT', shell: 'cobalt blue', l: [33.542, 38.741, 7.75], r: [58.292, 38.815, 7.667] },
+  { id: 'claude', lab: 'Claude', shell: 'deep ultramarine', l: [33.75, 39.111, 7.583], r: [58.458, 39.185, 7.5] },
+  { id: 'gemini', lab: 'Gemini', shell: 'periwinkle blue', l: [33.542, 38.815, 7.75], r: [58.292, 38.815, 7.667] },
+  { id: 'grok', lab: 'Grok', shell: 'smoked midnight blue', l: [33.917, 39.259, 7.583], r: [58.542, 39.259, 7.5] },
+  { id: 'pi', lab: 'Pi', shell: 'powder blue', l: [33.5, 38.815, 7.667], r: [58.292, 38.889, 7.417] },
+  { id: 'lechat', lab: 'Le Chat', shell: 'navy blue', l: [33.833, 39.333, 7.417], r: [58.5, 39.259, 7.417] },
 ] as const
 
-const sincere = 'The tools got good enough that taste is the scarce part again. That is good news for anyone who has spent twenty or thirty years learning what good looks like.'.split(' ')
+/** Fig. 6, the pad controller. Positions measured off the render by pads.py (visuals folder), in %.
+    Each pad plays from a key, laid out like a sampler's: 1234 / QWER / ASDF / ZXCV. */
+const padCols = [31.375, 39.375, 47.458, 55.583]
+const padRows = [22.37, 36.444, 50.519, 64.593]
+const padLetters = '1234QWERASDFZXCV'
+const padKeys = [
+  ['line-0', 'Delve', 'Her line: “Let’s delve into it”'],
+  ['line-1', 'Journey', 'Her line: “It’s not just a song, it’s a journey”'],
+  ['line-4', 'Hope', 'Her line: “I hope this helps”'],
+  ['line-6', 'Question', 'Her line: “Great question”'],
+  ['kick', 'Kick', 'Kick'],
+  ['clap', 'Clap', 'Clap'],
+  ['hat', 'Hat', 'Open hat'],
+  ['conga-hi', 'Conga', 'Conga'],
+  ['chord-0', 'Am9', 'Chord: A minor 9'],
+  ['chord-1', 'Dm9', 'Chord: D minor 9'],
+  ['chord-2', 'Fmaj9', 'Chord: F major 9'],
+  ['chord-3', 'G6/9', 'Chord: G six nine'],
+  ['riser', 'Riser', 'Riser, one bar'],
+  ['impact', 'Impact', 'Impact'],
+  ['again', 'Again', 'Again: back to the top of the phrase'],
+  ['tape', 'Tape stop', 'Tape stop'],
+]
+const padKnobs = [
+  ['filter', 'Filter', 66.125, 33.407, 50],
+  ['space', 'Space', 75.25, 33.407, 50],
+  ['echo', 'Echo', 66.125, 51.111, 50],
+  ['drive', 'Drive', 75.25, 51.111, 0],
+] as const
+
+const sincere ='The tools got good enough that taste is the scarce part again. That is good news for anyone who has spent twenty or thirty years learning what good looks like.'.split(' ')
 const shout = 'You are the producer.'.split('')
 ---
 
@@ -95,9 +93,22 @@ const shout = 'You are the producer.'.split('')
     <div class="bar" data-bar aria-label="Now playing">
       <img class="mini" data-record src={`${base}/record-cut.webp`} alt="" width="44" height="44" />
       <p class="now"><span class="soft">Now playing</span> <span class="num" data-now-code>A1</span> <span data-now-title>The demo</span></p>
+      <span class="stems" data-stems aria-hidden="true" title="The track's eight stems, in the order they come in: keys, strings and brass, voice, kick, snare and percussion, bass, guitar, room. Lit while you can hear them.">
+        {['keys', 'pad', 'vox', 'kick', 'snare', 'bass', 'gtr', 'fx'].map((s) => <i data-stem={s}></i>)}
+      </span>
       <p class="num time" data-now-time>00:00</p>
-      <button class="sound num" type="button" data-sound aria-pressed="false">Sound off</button>
+      <button class="sound num" type="button" data-play aria-pressed="false">Play</button>
       <span class="fill" data-now-fill aria-hidden="true"></span>
+    </div>
+
+    <!-- The monitors: on wide screens, once the studio opens (B1) and while the track plays -->
+    <div class="monitors" data-monitors aria-hidden="true">
+      {['l', 'r'].map((side) => (
+        <span class={`mon mon-${side}`}>
+          <img src={`${base}/monitor.webp`} alt="" width="760" height="819" loading="lazy" />
+          <i class="cone" data-cone style={`left: 15.526%; top: 43.346%; width: 38.421%; background-image: url(${base}/monitor-cone.webp)`}></i>
+        </span>
+      ))}
     </div>
 
     <div class="page">
@@ -116,9 +127,10 @@ const shout = 'You are the producer.'.split('')
             A rant about demos, records and saying “again”. The pictures were made the way the rant says.
             <a class="link" href="/stories">A WCGW story</a>.
           </p>
+          <!-- the way in, on the first screen: beside the lede on desktop, above the record on phones -->
+          <p class="hint rise" style="--d: 3">Tap the record to play. Drag it to scratch.</p>
           <figure class="deck">
-            <img class="record" data-record src={`${base}/record-cut.webp`} alt="A blue vinyl record with a white label that reads Produced by you. You can drag it to scratch." width="1400" height="1400" draggable="false" />
-            <figcaption class="hint">Drag the record to scratch it.</figcaption>
+            <img class="record" data-record src={`${base}/record-cut.webp`} alt="A blue vinyl record with a white label that reads Produced by you. Tap it (or Enter) to play. Drag it, or use the arrow keys, to scratch." tabindex="0" width="1400" height="1400" draggable="false" />
           </figure>
         </section>
 
@@ -149,9 +161,27 @@ const shout = 'You are the producer.'.split('')
           </div>
         </section>
 
-        <figure class="fig slide" data-p data-tilt>
-          <img src={`${base}/fig-1-demo.webp`} alt="A blue cassette tape with demo handwritten on its label." width="2400" height="1350" loading="lazy" />
-          <figcaption><em>Fig. 1</em> The demo. One take, no brief.</figcaption>
+        <figure class="fig slide" data-p data-demo>
+          <!-- one cassette per lab, in an endless row: three copies of the six, and the row quietly jumps a
+               whole set when it nears either end. The one in front sings the record. Only the middle set is
+               in the tab order and the accessibility tree; the copies either side are just more tape. -->
+          <div class="tapes" data-tapes>
+            {[0, 1, 2].flatMap((copy) => tapes.map((t, i) => (
+              <div class="tape-slide" data-tape={t.id} data-lab={t.lab} data-i={copy * tapes.length + i}
+                aria-hidden={copy === 1 ? undefined : 'true'} aria-roledescription={copy === 1 ? 'cassette' : undefined} aria-label={copy === 1 ? `${t.lab} demo` : undefined}>
+                <div class="tape-in">
+                  <img src={`${base}/tapes/${t.id}.webp`} alt={copy === 1 ? `A ${t.shell} cassette tape, “${t.lab} demo” handwritten on its label.` : ''} width="2000" height="1125" loading={copy === 1 && i < 2 ? 'eager' : 'lazy'} draggable="false" />
+                  <div class="tape">
+                    {(['l', 'r'] as const).map((side) => (
+                      <i class="reel" data-reel aria-hidden="true" style={`left: ${t[side][0]}%; top: ${t[side][1]}%; width: ${t[side][2]}%; background-image: url(${base}/tapes/${t.id}-reel-${side}.webp)`}></i>
+                    ))}
+                    <button class="tape-hit" type="button" data-demo-play aria-pressed="false" aria-label={`Play the ${t.lab} demo`} tabindex={copy === 1 ? undefined : -1}></button>
+                  </div>
+                </div>
+              </div>
+            )))}
+          </div>
+          <figcaption><em>Fig. 1</em> The demos. Six labs, one song. Spin the row: the tape in front sings the record. <span data-demo-cap>Tap it to play.</span></figcaption>
         </figure>
 
         <!-- A2 -->
@@ -169,10 +199,10 @@ const shout = 'You are the producer.'.split('')
 
         <figure class="fig drop" data-p data-in>
           <div class="hang">
-            <img data-mic tabindex="0" src={`${base}/fig-2-talent.webp`} alt="A blue studio microphone hanging in its shock mount from a rod. Touch it and it swings." width="2400" height="1350" loading="lazy" />
+            <img data-mic role="button" tabindex="0" src={`${base}/fig-2-talent.webp`} alt="A blue studio microphone hanging in its shock mount from a rod. Touch it and she records a line." width="2400" height="1350" loading="lazy" />
             <span class="waves" aria-hidden="true"><i></i><i></i><i></i></span>
           </div>
-          <figcaption><em>Fig. 2</em> The talent. It can sing anything. Touch it.</figcaption>
+          <figcaption><em>Fig. 2</em> <span data-mic-cap aria-live="polite">The talent. It can sing anything. Touch it.</span></figcaption>
         </figure>
 
         <!-- A3 -->
@@ -188,9 +218,10 @@ const shout = 'You are the producer.'.split('')
           </div>
         </section>
 
-        <figure class="fig press" data-p data-tilt>
-          <div class="pad">
-            <img data-again-img src={`${base}/fig-3-producer.webp`} alt="A single blue push button that says Again, seen from straight above." width="2400" height="1350" loading="lazy" />
+        <figure class="fig press" data-p>
+          <div class="pad" data-pad data-f="0">
+            <img src={`${base}/fig-3-producer.webp`} alt="A single blue push button that says Again, seen from straight above." width="2400" height="1350" loading="lazy" />
+            {[1, 2, 3].map((n) => <img class="frame" data-n={n} src={`${base}/again-press-${n}.webp`} alt="" width="2400" height="1350" loading="lazy" />)}
             <button class="hit" type="button" data-again aria-label="Press AGAIN"></button>
           </div>
           <figcaption>
@@ -233,6 +264,7 @@ const shout = 'You are the producer.'.split('')
           </div>
         </div>
         <p class="sr-only">Side B</p>
+        <p class="sr-only" data-handover aria-live="polite"></p>
 
         <!-- B1 -->
         <section class="act row" id="b1" data-track="B1" data-title="The studio" aria-labelledby="b1h">
@@ -248,9 +280,15 @@ const shout = 'You are the producer.'.split('')
           </div>
         </section>
 
-        <figure class="fig build" data-p data-tilt>
+        <figure class="fig build" data-p>
           <img src={`${base}/fig-4-studio.webp`} alt="A minimal studio: a desk with a blue mixing console, two blue speakers, a blue microphone with a pop filter, two blue hand drums." width="2400" height="1350" loading="lazy" />
-          <figcaption><em>Fig. 4</em> The studio. Everything around the voice.</figcaption>
+          <div class="over">
+            <i class="cone" data-cone aria-hidden="true" style={`left: 23.458%; top: 23.556%; width: 4.333%; background-image: url(${base}/studio-woofer-l.webp)`}></i>
+            <i class="cone" data-cone aria-hidden="true" style={`left: 63.625%; top: 23.407%; width: 4.333%; background-image: url(${base}/studio-woofer-r.webp)`}></i>
+            <button class="conga" type="button" data-conga="conga-hi" aria-label="Conga, high" style={`left: 63.667%; width: 7.667%; background-image: url(${base}/studio-conga-l.webp)`}></button>
+            <button class="conga" type="button" data-conga="conga-lo" aria-label="Conga, low" style={`left: 71.667%; width: 8%; background-image: url(${base}/studio-conga-r.webp)`}></button>
+          </div>
+          <figcaption><em>Fig. 4</em> The studio. Everything around the voice. Play the congas.</figcaption>
         </figure>
 
         <section class="act row after" aria-label="Fix it in the mix">
@@ -275,32 +313,15 @@ const shout = 'You are the producer.'.split('')
               and what goes. The fact check. The edit. The artwork. The version the client actually opens.
             </p>
             <p>Nothing gets pushed to the top. Louder was never the point.</p>
+            <p>I made the beat. She sings the most AI sentences ever written. You make the record. Thirty-two faders, one loop, <span class="fact" title="The tempo the loop is written at: BPM in src/scripts/producer-music.ts. The a cappellas were generated at 122 and stretched to it, pitch kept.">116 BPM</span>. Move the faders. Hold S when it gets good.</p>
+            <p class="soft">The desk starts on my mix. You know what happens at the top.</p>
           </div>
         </section>
 
-        <figure class="fig rise-in" data-p data-tilt>
-          <img src={`${base}/fig-5-mix.webp`} alt="Eight blue faders on a black console, labelled by hand kick, snare, bass, vox, keys, gtr, pad and fx, set at different heights." width="2400" height="1350" loading="lazy" />
+        <figure class="fig">
+          <ProducerDesk />
           <figcaption><em>Fig. 5</em> The mix. No fader at the top.</figcaption>
         </figure>
-
-        <section class="row yourturn" aria-labelledby="desk">
-          <p class="gutter">Your turn</p>
-          <div class="body">
-            <h2 id="desk" class="sr-only">Your turn at the desk</h2>
-            <div class="desk" data-desk data-in>
-              <div class="tape" aria-hidden="true">{desk.map(([name]) => <span>{name}</span>)}</div>
-              <div class="chans">
-                {desk.map(([name, v]) => (
-                  <div class="ch" data-fader data-name={name} data-mix={v} role="slider" tabindex="0" aria-label={`${name} fader`} aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-orientation="vertical">
-                    <span class="slot"><span class="cap"></span></span>
-                  </div>
-                ))}
-              </div>
-              <p class="note" data-desk-note aria-live="polite"></p>
-            </div>
-            <p class="soft deskhelp">The desk loads my mix. Drag any fader to the top and see what happens.</p>
-          </div>
-        </section>
 
         <!-- B3 -->
         <section class="act row" id="b3" data-track="B3" data-title="My credits" aria-labelledby="b3h">
@@ -316,57 +337,14 @@ const shout = 'You are the producer.'.split('')
               I am a designer. “Make the logo bigger” is the oldest bad brief in my trade. “Make it better”,
               typed into a chat box, is the same brief with better manners.
             </p>
-            <p>So here is one record I produced, today. The pictures on this page. What I typed, in order:</p>
-            <ol class="notes" data-p style={`--n: ${notes.length}`}>
-              {notes.map((n, i) => (
-                <li style={`--i: ${i}`}><span class="num">{n.at}</span><q>{n.said}</q></li>
-              ))}
-            </ol>
+            <p>
+              So here is one record I produced, today: the pictures on this page.
+              <abbr class="fact" title={`${renders.made} pictures rendered, ${renders.kept} kept. Amplifiers image sessions, 23 November 2026. Before that, ${renders.drawnRounds} rounds drawn in code.`}>{renders.made} takes, {renders.kept} kept</abbr>.
+              Same model on every take. I just kept saying again.
+            </p>
+            <p><a class="link" href={makingOf}>How it was made, take by take</a>.</p>
           </div>
         </section>
-
-        <figure class="contact" data-p>
-          <div class="sheet">
-            {mics.map((m, i) => (
-              <div style={`--i: ${i}`}>
-                <img src={`${base}/mic-take-${m.n}.webp`} alt={m.alt} width="800" height="1000" loading="lazy" />
-                <p class="v"><span class="num">Take {m.n}</span> {m.how} {m.verdict}</p>
-              </div>
-            ))}
-          </div>
-          <figcaption>The microphone, take by take. Same model every time.</figcaption>
-        </figure>
-
-        <section class="duo" data-in>
-          <figure class="cmpfig">
-            <StoryCompare
-              before={`${base}/again-angled.webp`}
-              after={`${base}/again-straight.webp`}
-              beforeLabel="Before"
-              afterLabel="After"
-              alt="The blue AGAIN button seen straight from above, compared with an earlier render seen at an angle on a black module."
-            />
-            <figcaption>“I want the camera to look straight at the button.” Drag the line.</figcaption>
-          </figure>
-          <div class="body">
-            <p class="big">Same model on every take. I just kept saying again.</p>
-          </div>
-        </section>
-
-        <figure class="takes" data-p style={`--n: ${shots.length}`}>
-          <ol>
-            {shots.map(([file, what], i) => (
-              <li class:list={[{ kept: kept.has(file) }]} style={`--i: ${i}`}>
-                <img src={`${base}/takes/${file}.webp`} alt={what} width="360" height="360" loading="lazy" />
-                <span class="num">{String(i + 1).padStart(2, '0')}</span>
-              </li>
-            ))}
-          </ol>
-          <figcaption>
-            <abbr class="fact" title={`${renders.made} pictures rendered, ${renders.kept} kept. Amplifiers image sessions, 23 November 2026. Before that, ${renders.drawnRounds} rounds drawn in code.`}>{renders.made} pictures, {renders.kept} kept</abbr>,
-            in the order they were made. The rest were demos.
-          </figcaption>
-        </figure>
 
         <section class="row sincere" data-p style={`--n: ${sincere.length}`}>
           <div class="body">
@@ -388,12 +366,41 @@ const shout = 'You are the producer.'.split('')
           </div>
         </section>
 
-        <section class="outro" data-p aria-label="The record">
-          <img class="record" data-record src={`${base}/record-cut.webp`} alt="" width="1400" height="1400" loading="lazy" draggable="false" />
+        <figure class="fig pads" data-pads>
+          <div class="dev">
+            <div class="dev-in">
+              <img src={`${base}/fig-6-pads.webp`} alt="A pocket pad controller in blue plastic: sixteen square pads, four knobs and a small black screen." width="2400" height="1350" loading="lazy" />
+              <div class="over">
+                <p class="screen" data-screen title="The last pad or knob you touched. Knobs read 0 to 100.">Remix</p>
+                {padKeys.map(([sound, short, label], i) => (
+                  <button class="key" type="button" data-key={sound} data-letter={padLetters[i].toLowerCase()} data-short={short}
+                    aria-label={`${label}. Key ${padLetters[i]}`} title={`${label} (${padLetters[i]})`} aria-keyshortcuts={padLetters[i]}
+                    style={`left: ${padCols[i % 4]}%; top: ${padRows[Math.floor(i / 4)]}%`}>
+                    <i class="lit" aria-hidden="true" style={`background-image: url(${base}/pads-lit-${i + 1}.webp)`}></i>
+                    <b class="legend" aria-hidden="true">{padLetters[i]}</b>
+                  </button>
+                ))}
+                {padKnobs.map(([name, label, left, top, v], i) => (
+                  <span class="knob" role="slider" tabindex="0" data-knob={name} data-default={v} aria-label={label} title={`${label}. Drag up or down, or use the arrow keys. Double-click resets.`}
+                    aria-valuemin="0" aria-valuemax="100" aria-valuenow={v}
+                    style={`left: ${left}%; top: ${top}%; --v: ${v / 100}; background-image: url(${base}/pads-knob-${i + 1}.webp)`}></span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <figcaption><em>Fig. 6</em> One piece of the studio. Sixteen pads, four knobs. Whatever you hit lands on the beat.</figcaption>
+        </figure>
+
+        <section class="outro" data-p aria-label="The record" data-track="End" data-title="The run-out groove">
+          <img class="record" data-record src={`${base}/record-cut.webp`} alt="The record. Tap it (or Enter) to play. Drag it, or use the arrow keys, to scratch." tabindex="0" width="1400" height="1400" loading="lazy" draggable="false" />
           <p class="end">
             <span class="beat">The model is the talent.</span>
             <span class="beat caps" aria-label="You are the producer.">{shout.map((c, i) => <span class="l" style={`--i: ${i}`} aria-hidden="true">{c === ' ' ? ' ' : c}</span>)}</span>
           </p>
+          <div class="press" data-press>
+            <button class="pill" type="button" data-press-go>Press your record</button>
+            <p class="press-out" data-press-out aria-live="polite"></p>
+          </div>
         </section>
 
         <section class="row ps">
@@ -425,7 +432,7 @@ const shout = 'You are the producer.'.split('')
               <dt>Produced by</dt>
               <dd>Radu Ceucă, by saying “again”.</dd>
               <dt>Produced by you</dt>
-              <dd><span class="fact" data-credit title="Counted live, in this tab only: presses of AGAIN, faders you moved (of 8), records you scratched, times you swung the mic. Starts at zero on every visit.">Nothing yet.</span></dd>
+              <dd><span class="fact" data-credit title="Counted live, in this tab only: presses of AGAIN, faders you moved (of 32), records you scratched, lines she recorded when you touched the mic, pads and congas you hit. Starts at zero on every visit.">Nothing yet.</span></dd>
               <dt>Words</dt>
               <dd>Claude, from my rant and my notes. It built this page too. Every “again” is mine.</dd>
               <dt>Pictures</dt>
@@ -433,9 +440,9 @@ const shout = 'You are the producer.'.split('')
                 <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
                 <span class="num">{renders.made}</span> rendered, <span class="num">{renders.kept}</span> kept, per its session
                 log on 23 November 2026. Before that, <span class="num">{renders.drawnRounds}</span> rounds drawn in code.
+                That evening, ten more for the instruments and the demos, eight kept: the pad controller (its second take), the monitor and six cassettes.
+                <a class="link" href={makingOf}>How it was made</a>.
               </dd>
-              <dt>Notes</dt>
-              <dd>Mine, as typed, between 10:50 and 11:50 Bucharest time. Spelling fixed.</dd>
               <dt>Sources</dt>
               <dd>
                 Rubin: <a class="link" href={src.rubin} rel="noopener">CBS News, 60 Minutes transcript</a>, 2023.
@@ -445,7 +452,16 @@ const shout = 'You are the producer.'.split('')
                 FIITMC: me.
               </dd>
               <dt>Sound</dt>
-              <dd>Off unless you turn it on. Scratch, clicks and crackle are made in the browser, from noise.</dd>
+              <dd>Off until you tap a record or press Play. Then the track builds as you read. Scratch, clicks and crackle are made in the browser, from noise.</dd>
+              <dt>The track</dt>
+              <dd>
+                A band of freely licensed samples, played in your browser. Drums and percussion: Virtuosity Drums (Versilian Studios, Karoryfer Samples) and VCSL claps.
+                Bass and guitar: Swagbass, Black And Green Guitars (Karoryfer Samples). Strings and horns: VSCO 2 Community Edition. All CC0.
+                The Rhodes samples are from <a class="link" href="https://github.com/sfzinstruments/jlearman.jRhodes3d" rel="noopener">jRhodes3d</a> by Jeff Learman,
+                <a class="link" href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>, trimmed and re-encoded.
+                The grand is the Salamander Grand Piano by Alexander Holm, CC BY 3.0. The Moog, clav, organ and lead are synthesised.
+                The singers are ElevenLabs Music: six voices, one per tape, all singing what models say, stretched from 122 to 116 BPM. None of them is a lab’s own voice.
+              </dd>
               <dt>Colour</dt>
               <dd>#2C4BD4. The AGAIN blue. Every plastic part on this page.</dd>
               <dt>Typefaces</dt>
@@ -480,54 +496,6 @@ const shout = 'You are the producer.'.split('')
 </script>
 
 <style>
-  /* ================================================================ the sleeve */
-  .sleeve {
-    --bg: #2c4bd4;
-    --ink: #fafafa;
-    --soft: rgb(250 250 250 / 0.72);
-    --hair: rgb(250 250 250 / 0.24);
-    --pencil: #fafafa;
-    --wide: min(100vw - 2.75rem, 66rem);
-    --out: calc(50% - min(50vw - 1.375rem, 33rem));
-    color-scheme: dark;
-    position: relative;
-    min-height: 100vh;
-    background: var(--bg);
-    color: var(--ink);
-    isolation: isolate;
-    overflow-x: clip;
-  }
-  :global(html:has(.sleeve)),
-  :global(body:has(.sleeve)) { background: #2c4bd4; }
-  :global(body:has(.sleeve) ::selection) { background: rgb(250 250 250 / 0.3); }
-
-  /* Paper grain over everything. It shifts a few times a second, like stock under a lamp. */
-  .sleeve::after {
-    content: '';
-    position: fixed;
-    inset: -50%;
-    z-index: 30;
-    pointer-events: none;
-    opacity: 0.17;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  @media (prefers-reduced-motion: no-preference) {
-    .sleeve::after { animation: grain 0.6s steps(3) infinite; }
-  }
-  @keyframes grain {
-    0% { translate: 0 0; }
-    33% { translate: -3% 2%; }
-    66% { translate: 2% -4%; }
-  }
-
-  .home { display: block; color: inherit; }
-  .home:focus-visible { outline: 2px solid var(--pencil); outline-offset: 0.2em; }
-  .num { font-family: var(--sans); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
-  .soft { color: var(--soft); }
-  .sleeve :global(.link) { color: inherit; }
-  em { font-style: italic; }
-
   /* ================================================================ now playing */
   .bar {
     position: fixed;
@@ -540,16 +508,20 @@ const shout = 'You are the producer.'.split('')
     gap: 0.9rem;
     height: 3rem;
     padding: 0 max(1.375rem, calc(50vw - 33rem));
-    background: rgb(44 75 212 / 0.92);
-    backdrop-filter: blur(6px);
+    background: #2c4bd4; /* solid: the site has no blur */
     border-bottom: 1px solid var(--hair);
     font-size: 0.82em;
     translate: 0 -105%;
     transition: translate 0.45s var(--ease-pencil);
   }
-  .bar:global(.on) { translate: 0 0; }
+  .bar:global(.on), .bar:focus-within { translate: 0 0; } /* tabbing into it shows it, even at the top */
+  @media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
   .mini { width: 1.6rem; height: 1.6rem; flex: none; }
   .now { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* the stems, in the order the page brings them in: lit while heard, a tick on every hit */
+  .stems { display: flex; align-items: flex-end; gap: 3px; height: 0.95rem; flex: none; cursor: help; }
+  .stems i { width: 3px; height: 100%; background: var(--ink); opacity: 0.18; transform-origin: 50% 100%; transition: opacity 0.8s; }
+  .stems i:global(.in) { opacity: 0.9; }
   .now .num { margin-inline: 0.4em 0.2em; font-size: 0.86em; }
   .time { color: var(--soft); font-size: 0.82em; cursor: help; }
   .sound {
@@ -561,6 +533,8 @@ const shout = 'You are the producer.'.split('')
     font-size: 0.78em;
     cursor: pointer;
   }
+  .sound { position: relative; }
+  .sound::after { content: ''; position: absolute; inset: -0.9rem -0.4rem; } /* a thumb-sized target, the pill stays small */
   .sound[aria-pressed='true'] { background: var(--ink); color: var(--bg); }
   .sound:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   .fill { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--ink); transform-origin: 0 50%; transform: scaleX(0); }
@@ -582,13 +556,16 @@ const shout = 'You are the producer.'.split('')
   .hero .lede .link { color: var(--ink); }
   .deck { margin: 2.5rem 0 0; justify-self: center; width: min(100%, 30rem); }
   .deck .record { width: 100%; }
-  .hint { margin-top: 0.6rem; text-align: center; color: var(--soft); font-family: var(--sans); font-size: 0.7em; letter-spacing: 0.12em; text-transform: uppercase; }
+  .hint { margin-top: 1.4rem; color: var(--ink); font-family: var(--sans); font-size: 0.72em; letter-spacing: 0.12em; text-transform: uppercase; }
   @media (min-width: 52rem) {
     .hero {
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-      grid-template-areas: 'kicker kicker' 'title title' 'lede deck';
+      /* the record spans the lede, the hint and a filler row, so the hint sits right under the lede */
+      grid-template-areas: 'kicker kicker' 'title title' 'lede deck' 'hint deck' '. deck';
+      grid-template-rows: auto auto auto auto 1fr;
       align-items: start;
     }
+    .hint { grid-area: hint; }
     .kicker { grid-area: kicker; }
     .hero h1 { grid-area: title; }
     .hero .lede { grid-area: lede; margin-top: 2.2rem; }
@@ -599,10 +576,10 @@ const shout = 'You are the producer.'.split('')
       justify-self: end;
       margin-right: calc(min(50vw - 1.375rem, 33rem) - 50vw);
     }
-    .hint { text-align: left; padding-left: 12%; }
   }
   .record { display: block; height: auto; aspect-ratio: 1; touch-action: none; user-select: none; cursor: grab; }
   .record:global(.held) { cursor: grabbing; }
+  .record:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; border-radius: 50%; }
 
   /* The front arrives in three beats, and the record sinks as you scroll away from it */
   @media (prefers-reduced-motion: no-preference) {
@@ -640,10 +617,7 @@ const shout = 'You are the producer.'.split('')
   .gutter .side { min-width: 0; margin-right: 0.5em; }
 
   /* ================================================================ the notes */
-  .act { padding-top: var(--act-space); }
-  .act h2 { font-size: clamp(1.55rem, 1.2rem + 1.4vw, 2.1rem); line-height: 1.15; letter-spacing: -0.012em; text-wrap: balance; }
   .rant { color: var(--soft); font-style: italic; }
-  .big { font-size: clamp(1.9rem, 1.25rem + 2.8vw, 3rem); line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; }
   .act .body > .big + p { margin-top: 1.2em; }
   .after { padding-top: 2rem; }
 
@@ -664,8 +638,6 @@ const shout = 'You are the producer.'.split('')
   /* the section's --e has to reach the echo */
   .act[data-p] .echo { --e: inherit; }
 
-  .fact { text-decoration: underline dotted rgb(250 250 250 / 0.55); text-decoration-thickness: 0.06em; text-underline-offset: 0.22em; cursor: help; }
-  a.fact { cursor: pointer; }
 
   /* The objections come in, in order */
   .objections dt { margin-top: 1.4em; font-size: 1.12em; }
@@ -686,28 +658,128 @@ const shout = 'You are the producer.'.split('')
 
   /* ================================================================ the pictures, straight on the sleeve */
   .fig { width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); }
-  .fig img { display: block; width: 100%; height: auto; transform: perspective(1200px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform 0.4s var(--ease-pencil); }
-  figcaption { margin-top: 0.75em; color: var(--soft); font-size: 0.88em; line-height: 1.45; }
-  figcaption em { color: var(--ink); margin-right: 0.35em; }
+  .fig img { display: block; width: 100%; height: auto; }
   .fig figcaption { width: min(100%, var(--gutter) + var(--gap) + var(--measure)); margin-inline: auto; }
 
   @media (prefers-reduced-motion: no-preference) {
     /* Fig. 1: the tape goes into the deck */
-    .slide img { translate: calc((1 - var(--e, 1)) * -45vw) 0; rotate: calc((1 - var(--e, 1)) * -9deg); opacity: calc(0.2 + var(--e, 1) * 0.8); }
-    /* Fig. 2: the mic comes down on its rod */
+    .slide .tapes { translate: calc((1 - var(--e, 1)) * -45vw) 0; rotate: calc((1 - var(--e, 1)) * -9deg); opacity: calc(0.2 + var(--e, 1) * 0.8); }
+    /* Fig. 2: the mic comes down on its rod, out of the top edge of its own frame, never over the words above */
+    .drop { clip-path: inset(0 -100vw -100vw -100vw); }
     .drop .hang { translate: 0 calc((1 - var(--e, 1)) * -42%); }
     /* Fig. 4: the studio opens up */
-    .build img { scale: calc(0.86 + var(--e, 1) * 0.14); opacity: calc(var(--e, 1) * 1.4 - 0.2); }
-    /* Fig. 5: the desk rises */
-    .rise-in img { translate: 0 calc((1 - var(--e, 1)) * 18%); opacity: calc(var(--e, 1) * 1.3 - 0.1); }
+    .build img, .build .over { scale: calc(0.86 + var(--e, 1) * 0.14); opacity: calc(var(--e, 1) * 1.4 - 0.2); }
+  }
+
+  /* Fig. 1, the demos: an endless row of cassettes (tapes.py cut them), the one in front bigger. It sings
+     the record; tap it and it plays its demo, its hubs turning while it does. */
+  .slide { position: relative; }
+  .tapes {
+    /* the row runs the whole window wide, so the tapes go on past its edges; room above and below for
+       the shadows (a scrolling box clips whatever spills out of it) */
+    --slide: clamp(15rem, 34vw, 30rem);
+    display: flex; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+    scrollbar-width: none; outline: none; touch-action: pan-x pan-y; cursor: grab;
+    width: 100vw; margin-inline: calc(50% - 50vw); padding-block: 2.5rem; margin-block: -2.5rem;
+  }
+  .tapes::-webkit-scrollbar { display: none; }
+  .tapes:global(.dragging), .tapes:global(.jumping) { scroll-snap-type: none; }
+  .tapes:global(.dragging) { cursor: grabbing; }
+  @media (max-width: 40rem) { .tapes { --slide: 74vw; } }
+  /* each slide is cropped to its cassette: the picture (16:9, the tape 59% of it) zoomed so the tape fills it */
+  .tape-slide {
+    --near: 1; /* 1 in front, 0 a slide or more away: the script writes it as the row moves */
+    position: relative; flex: 0 0 var(--slide); aspect-ratio: 3 / 2; scroll-snap-align: center;
+    opacity: calc(0.35 + var(--near) * 0.65);
+  }
+  .tape-in { position: absolute; left: 0; top: 50%; width: 100%; translate: 0 -50%; scale: calc(1.5 * (0.74 + var(--near) * 0.26)); }
+  .tape-in img { user-select: none; -webkit-user-drag: none; }
+  .tape {
+    position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 16 / 9; pointer-events: none;
+  }
+  .reel { position: absolute; aspect-ratio: 1; background-size: 100%; }
+  .tape-hit { position: absolute; left: 20.5%; top: 16.7%; width: 59%; height: 63.8%; border: 0; border-radius: 3% / 5.3%; background: none; cursor: pointer; pointer-events: auto; }
+  .tape-hit:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+
+  /* Layers cut from a figure's own render, laid exactly over it */
+  .build, .pads .dev-in { position: relative; }
+  .over { position: absolute; left: 0; top: 0; width: 100%; aspect-ratio: 2400 / 1350; pointer-events: none; }
+  .cone { position: absolute; aspect-ratio: 1; background-size: 100%; }
+  /* Fig. 4: the congas play (cut by studio.py); the woofers pump with the kick */
+  .conga {
+    position: absolute; top: 45.926%; height: 28.148%; padding: 0; border: 0; background: none; background-size: 100% 100%;
+    transform-origin: 50% 100%; cursor: pointer; pointer-events: auto; border-radius: 30% 30% 12% 12% / 12% 12% 6% 6%;
+  }
+  /* a hand is bigger than the drawn drum: the hit area reaches past the shell (the right drum wins the middle) */
+  .conga::before { content: ''; position: absolute; inset: -12% -30%; }
+  .conga:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* Fig. 6: the pad controller. Cropped to the device, edge to edge on phones, so the pads are big enough to hit. */
+  /* crop: x 12% to 90%, y 15% to 88% of the render, wide enough that the shadow fades out before the edge */
+  .pads .dev { position: relative; overflow: hidden; max-width: 56rem; margin-inline: auto; aspect-ratio: 1872 / 985.5; }
+  .pads .dev-in { position: absolute; width: 128.205%; left: -15.385%; top: -20.548%; container-type: inline-size; }
+  .pads .dev-in img { display: block; width: 100%; height: auto; }
+  @media (max-width: 40rem) { .pads .dev { margin-inline: -1.375rem; } }
+  .key {
+    position: absolute; width: 6.917%; height: 12.296%; padding: 0; border: 0; border-radius: 9.6%; background: none;
+    cursor: pointer; pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  }
+  /* The pads are dark translucent plastic, lit from inside. The light (the face brightening, the spill on
+     the body around it) is in the picture, one layer per pad, cut by pads.py: the page only fades it. */
+  .key .lit {
+    position: absolute; inset: -43.373%; background-size: 100% 100%; pointer-events: none;
+    opacity: 0; transition: opacity 0.55s ease-out;
+  }
+  .key:global(.on) .lit { opacity: 1; transition: none; }
+  /* the key that plays it, printed small on the pad */
+  .key .legend {
+    position: absolute; left: 11%; bottom: 9%; font-family: var(--sans); font-weight: 500; font-size: max(0.72cqi, 7px);
+    letter-spacing: 0.04em; line-height: 1; color: #fafafa; opacity: 0.4; transition: opacity 0.55s ease-out; pointer-events: none;
+  }
+  .key:global(.on) .legend { opacity: 0.95; transition: none; }
+  .key:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .knob {
+    position: absolute; width: 6.25%; aspect-ratio: 1; background-size: 100%; border-radius: 50%;
+    rotate: calc(var(--v, 0.5) * 270deg - 135deg); cursor: ns-resize; pointer-events: auto; touch-action: none; outline: none;
+  }
+  .knob:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .screen {
+    position: absolute; left: 18.417%; top: 22.667%; width: 10.25%; height: 9.481%; margin: 0; padding: 0 0.7cqi;
+    display: flex; align-items: center; overflow: hidden; white-space: nowrap;
+    font-family: 'Instrument Sans', sans-serif; font-size: max(1.05cqi, 8.5px); letter-spacing: 0.08em; text-transform: uppercase; color: #fafafa;
+  }
+
+  /* the monitors, standing in the outer margins once the studio is open */
+  .monitors { display: none; }
+  @media (min-width: 80rem) {
+    .monitors { display: block; }
+    .mon {
+      --w: min(8.5rem, (100vw - var(--wide)) / 2 - 2rem);
+      position: fixed; bottom: 1.25rem; z-index: 4; width: var(--w); pointer-events: none;
+      translate: 0 135%; transition: translate 0.7s var(--ease-pencil);
+    }
+    .mon img { display: block; width: 100%; height: auto; }
+    .mon-l { left: calc((100vw - var(--wide)) / 4 - var(--w) / 2); }
+    .mon-r { right: calc((100vw - var(--wide)) / 4 - var(--w) / 2); }
+    .monitors:global(.on) .mon { translate: 0 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mon { transition: none; }
   }
 
   /* Fig. 2 hangs from its top edge, and swings from there. Waves come off the grille. */
   .hang { position: relative; }
+  /* phones: the same tall crop as the hanging mic on wide screens, so the talent is not a sliver in a wide frame */
+  @media (max-width: 47.99rem) {
+    .drop .hang { width: min(8rem, 38vw); margin-inline: auto; }
+    .drop img { aspect-ratio: 400 / 1350; object-fit: cover; object-position: 50% 0; }
+    .drop figcaption { text-align: center; }
+  }
   .hang img { transform-origin: 50% 0; cursor: pointer; }
   .hang img:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
   .waves { position: absolute; left: 50%; top: 86%; width: 0; height: 0; pointer-events: none; }
   .waves i { position: absolute; left: 50%; top: 50%; width: 14rem; height: 14rem; margin: -7rem 0 0 -7rem; border: 1px solid var(--ink); border-radius: 50%; opacity: 0; }
+  @media (max-width: 40rem) { .waves i { width: 7rem; height: 7rem; margin: -3.5rem 0 0 -3.5rem; } } /* clear of the caption and the next heading */
   @media (prefers-reduced-motion: no-preference) {
     .drop:global(.is-in) .waves i { animation: wave 3.6s ease-out infinite; }
     .drop:global(.is-in) .waves i:nth-child(2) { animation-delay: 1.2s; }
@@ -715,16 +787,43 @@ const shout = 'You are the producer.'.split('')
   }
   @keyframes wave { from { scale: 0.15; opacity: 0.7; } to { scale: 1.6; opacity: 0; } }
 
+  /* Wide screens: the mic hangs from the top of the window, in the margin beside A2. It drops in as A2
+     arrives, stays while A2 is on screen, and goes up with the page after it. The script writes
+     --drop (0 → 1) and --lift (px) from A2's position. Words never sit under it. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 80rem) {
+    :global(.js) .drop {
+      --mw: min(14rem, 26vh);
+      position: fixed;
+      top: 0;
+      right: calc((50vw - (var(--gutter) + var(--gap) + var(--measure)) / 2 - var(--mw)) / 2);
+      z-index: 5;
+      width: var(--mw);
+      margin: 0;
+      clip-path: none;
+      translate: 0 calc((var(--drop, 0) - 1) * 100% + var(--lift, 0px));
+    }
+    :global(.js) .drop .hang { translate: none; }
+    :global(.js) .drop img { aspect-ratio: 400 / 1350; object-fit: cover; object-position: 50% 0; }
+    :global(.js) .drop .waves i { width: 9rem; height: 9rem; margin: -4.5rem 0 0 -4.5rem; }
+    :global(.js) .drop figcaption { margin-top: -3.5rem; font-size: 0.8em; }
+  }
+
   /* Fig. 3: a button you can press */
   .pad { position: relative; }
+  /* The cap goes down in three frames cut from the same render; the bezel never moves */
+  .pad .frame { position: absolute; inset: 0; height: 100%; visibility: hidden; pointer-events: none; }
+  .pad[data-f='1'] .frame[data-n='1'],
+  .pad[data-f='2'] .frame[data-n='2'],
+  .pad[data-f='3'] .frame[data-n='3'] { visibility: visible; }
   .hit {
+    /* exactly over the cap's well in the render */
     position: absolute;
-    left: 37%;
-    top: 21%;
-    width: 25%;
-    height: 50%;
+    left: 32.95%;
+    top: 19.85%;
+    width: 28.3%;
+    height: 49.8%;
     border: 0;
-    border-radius: 6%;
+    border-radius: 9%;
     background: transparent;
     cursor: pointer;
   }
@@ -756,128 +855,6 @@ const shout = 'You are the producer.'.split('')
     :global(.js) [data-in]:global(.is-in) .reg { scale: 1; }
   }
 
-  /* ================================================================ the desk you can play */
-  .yourturn { margin-top: 3rem; }
-  .desk {
-    --cap: #2c4bd4;
-    position: relative;
-    display: inline-grid;
-    gap: 0;
-    padding: 0.9rem 0.9rem 1.2rem;
-    background: #141414;
-    border-radius: 10px;
-    max-width: 100%;
-  }
-  .tape { display: grid; grid-template-columns: repeat(8, 1fr); background: #f4f2ec; color: #1a1a1a; font-style: italic; font-size: 0.86em; text-align: center; padding: 0.15em 0; rotate: -0.4deg; }
-  .chans { display: grid; grid-template-columns: repeat(8, minmax(2.4rem, 3.4rem)); }
-  .ch { display: grid; justify-items: center; padding: 0.9rem 0 0.2rem; cursor: ns-resize; touch-action: none; outline: none; }
-  .ch + .ch { border-left: 1px solid #262626; }
-  .ch:focus-visible .cap { outline: 2px solid #fafafa; outline-offset: 2px; }
-  .slot { position: relative; display: block; width: 6px; height: 12rem; border-radius: 3px; background: #050505; box-shadow: inset 0 0 0 1px #2a2a2a; }
-  .cap {
-    position: absolute;
-    left: 50%;
-    bottom: calc(var(--v, 0) * 100%);
-    width: 2rem;
-    height: 1.25rem;
-    margin: 0 0 -0.62rem -1rem;
-    border-radius: 3px;
-    background: linear-gradient(#3f5ee6, var(--cap) 45%, #2340c0);
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25);
-  }
-  .cap::after { content: ''; position: absolute; left: 15%; right: 15%; top: 50%; height: 2px; margin-top: -1px; background: #fafafa; }
-  .ch:global(.shake) .cap { animation: shake 0.5s; }
-  @keyframes shake {
-    20% { translate: -3px 0; }
-    40% { translate: 3px 0; }
-    60% { translate: -2px 0; }
-    80% { translate: 2px 0; }
-  }
-  .note {
-    position: absolute;
-    left: 100%;
-    top: 30%;
-    margin-left: 1rem;
-    width: 12rem;
-    font-size: 1.4em;
-    font-style: italic;
-    line-height: 1.1;
-    opacity: 0;
-    translate: -0.5rem 0;
-    transition: opacity 0.3s, translate 0.4s var(--ease-pencil);
-  }
-  .note:global(.on) { opacity: 1; translate: 0 0; }
-  @media (max-width: 60rem) { .note { position: static; width: auto; margin: 0.8rem 0 0; grid-column: 1 / -1; } }
-  .deskhelp { margin-top: 0.9rem; font-size: 0.88em; }
-
-  /* ================================================================ my notes, line by line as you read */
-  .notes { list-style: none; padding: 0; margin-top: 1.2em; border-top: 1px solid var(--hair); }
-  .notes li { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 0.6em; padding: 0.7em 0; border-bottom: 1px solid var(--hair); line-height: 1.4; }
-  .notes .num { color: var(--soft); font-size: 0.78em; padding-top: 0.25em; }
-  .notes q { quotes: '“' '”'; }
-  @media (prefers-reduced-motion: no-preference) {
-    .notes li { opacity: clamp(0.12, calc(var(--p, 1) * (var(--n) + 4) - var(--i)), 1); }
-  }
-
-  /* The four takes of one mic develop like prints */
-  .contact { width: var(--wide); margin: 3rem 0 0; margin-inline: var(--out); }
-  .sheet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-  @media (min-width: 44rem) { .sheet { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-  .sheet img { display: block; width: 100%; height: auto; }
-  .v { margin-top: 0.55em; color: var(--soft); font-size: 0.82em; line-height: 1.4; }
-  .v .num { display: block; color: var(--ink); font-size: 0.85em; }
-  @media (prefers-reduced-motion: no-preference) {
-    .sheet > div {
-      --k: clamp(0, calc(var(--e, 1) * 5 - var(--i)), 1);
-      opacity: var(--k);
-      filter: blur(calc((1 - var(--k)) * 14px));
-      translate: 0 calc((1 - var(--k)) * 2rem);
-    }
-  }
-
-  .duo { display: grid; gap: 2rem; width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); align-items: center; }
-  .duo > .cmpfig { max-width: 24rem; }
-  @media (min-width: 52rem) {
-    .duo { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); column-gap: clamp(2rem, 5vw, 5rem); }
-    .duo > .cmpfig { max-width: none; }
-  }
-  .cmpfig :global(.cmp) { background: transparent; border: 0; overflow: visible; }
-  .cmpfig :global(.lbl) { background: var(--ink); color: var(--bg); font-family: var(--sans); letter-spacing: 0.06em; }
-  .cmpfig :global(.line) { background: var(--ink); }
-
-  /* ================================================================ eighteen takes, twelve of them demos */
-  .takes { width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); }
-  .takes ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem 0.8rem; }
-  @media (min-width: 40rem) { .takes ol { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
-  .takes li { position: relative; }
-  .takes img { display: block; width: 100%; height: auto; }
-  .takes li .num { position: absolute; left: 0; top: 0; font-size: 0.66em; color: var(--soft); }
-  .takes li:not(.kept)::after {
-    content: '';
-    position: absolute;
-    left: 6%;
-    right: 6%;
-    top: 46%;
-    height: 9%;
-    background: var(--pencil);
-    -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
-    mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
-    pointer-events: none;
-  }
-  .takes li:nth-child(3n):not(.kept)::after { -webkit-mask-image: var(--mark-strike-2); mask-image: var(--mark-strike-2); }
-  @media (prefers-reduced-motion: no-preference) {
-    .takes li {
-      /* each picture arrives in order, then the demos are struck and fade */
-      --k: clamp(0, calc(var(--e, 1) * (var(--n) + 2) - var(--i)), 1);
-      --x: clamp(0, calc((var(--p, 1) - 0.45) * 8), 1);
-      opacity: var(--k);
-      scale: calc(0.8 + var(--k) * 0.2);
-    }
-    .takes li:not(.kept) img { opacity: calc(1 - var(--x) * 0.62); }
-    .takes li:not(.kept)::after { clip-path: inset(0 calc((1 - var(--x)) * 100%) 0 0); }
-  }
-  @media (prefers-reduced-motion: reduce) { .takes li:not(.kept) img { opacity: 0.38; } }
-
   /* ================================================================ the one straight line, read word by word */
   .sincere { margin-top: var(--act-space); padding-block: var(--act-space); border-block: 1px solid var(--hair); }
   .sincere p { font-size: clamp(1.6rem, 1.15rem + 2vw, 2.4rem); line-height: 1.2; letter-spacing: -0.012em; text-wrap: balance; }
@@ -901,6 +878,19 @@ const shout = 'You are the producer.'.split('')
   /* ================================================================ the record, out of the sleeve */
   .outro { display: grid; justify-items: center; margin-top: var(--act-space); padding-top: var(--act-space); text-align: center; }
   .outro .record { width: min(86vw, 40rem); }
+  /* your record: the mix bounced to a WAV, a sleeve, a link */
+  .press { display: grid; justify-items: center; gap: 1rem; margin-top: 2.4rem; }
+  .pill {
+    padding: 0.55em 1.3em; border: 1px solid var(--ink); border-radius: 999px; background: none; color: var(--ink);
+    font: inherit; font-size: 1.05em; cursor: pointer; transition: background-color 0.2s, color 0.2s;
+  }
+  .pill:hover, .pill[aria-busy='true'] { background: var(--ink); color: var(--bg); }
+  .pill:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .pill[disabled] { cursor: default; }
+  .press-out { min-height: 1.5em; margin: 0; color: var(--soft); }
+  /* made by the script, so :global (scoped styles do not reach nodes created at runtime) */
+  .press-out :global(a), .press-out :global(button) { color: var(--ink); }
+  .press-out :global(button) { padding: 0; border: 0; background: none; font: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
   @media (prefers-reduced-motion: no-preference) {
     .outro .record { scale: calc(0.6 + var(--e, 1) * 0.4); translate: 0 calc((1 - var(--e, 1)) * -6rem); }
   }
@@ -932,15 +922,7 @@ const shout = 'You are the producer.'.split('')
     mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
     clip-path: inset(0 100% 0 0);
   }
-  .eleven:global(.loud) { animation: loud 0.9s cubic-bezier(0.3, 1.6, 0.5, 1); }
-  .eleven:global(.loud)::after { clip-path: inset(0); transition: clip-path 0.4s var(--ease-pencil) 0.55s; }
-  @keyframes loud {
-    0% { scale: 1; }
-    25% { scale: 1.9; rotate: -4deg; }
-    35% { rotate: 4deg; }
-    45% { rotate: -3deg; }
-    100% { scale: 1; rotate: 0deg; }
-  }
+  .eleven:global(.loud)::after { clip-path: inset(0); transition: clip-path 0.4s var(--ease-pencil); }
 
   .cta { margin-top: var(--act-space); padding-top: var(--act-space); border-top: 1px solid var(--hair); }
   .ask { font-size: clamp(1.8rem, 1.25rem + 2.6vw, 2.7rem); line-height: 1.12; letter-spacing: -0.015em; margin-bottom: 0.4em; }

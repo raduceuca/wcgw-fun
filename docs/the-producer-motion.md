@@ -37,24 +37,26 @@ One-shot moments: add `data-in`; the element gets `.is-in` and an `in` event whe
 
 | Where | What the reader can do / sees |
 | --- | --- |
-| Hero | Drag the record to scratch it. Title rises in three beats; pencil underlines "producer." |
-| Bar | Now playing, track, progress line, reading time, Sound on/off (off by default). |
-| A1 | "the same." arrives as three offset takes that slide into one. Cassette slides in like a tape into a deck. |
-| A2 | Mic comes down on its rod, swings when it lands and when touched; waves come off the grille. |
-| A3 | AGAIN is a real button (and the A key). Each press is a take, with a producer note; take 6 is "That one." |
+| Hero | Tap the record (or Enter) to start the track; drag it to scratch (or focus it: arrows scratch, Space holds it). Title rises in three beats; pencil underlines "producer." |
+| Bar | Now playing, track, progress line, reading time, Play/Stop for the page's track (see `docs/the-producer-music.md`). Shows her line instead of the title when it fits whole. |
+| A1 | "the same." arrives as three offset takes that slide into one. Fig. 1 is six cassettes in a row, one per lab (ChatGPT, Claude, Gemini, Grok, Pi, Le Chat), each a refine of one render with its own blue (`tapes/<id>.webp`, cut by `tapes.py`). They run in an endless row the whole window wide (three copies; the row jumps a set, unseen, near either end), the one in front bigger, the others shrinking and fading with distance. Swipe, drag or arrow keys turn it; tap a side tape to bring it in front. The one in front sings the record (`track.setVoice`); tap it to play its demo off tape, its hubs turning. |
+| A2 | Wide screens (80rem+, motion on): the mic hangs from the top of the window in the right margin, drops in as A2 arrives, stays while A2 is on screen, then goes up with the page (`writeMic`, `--drop`/`--lift`). Narrow or reduced motion: it comes down out of the top edge of its own frame, never over the text. Swings when it lands and when hovered; waves come off the grille. Touch it (or Enter/Space) and she records the next line: a two-click count-in, then the line, dry and close (`Booth.take()`); the caption shows "Take 3. “Unlock your potential”" while she sings. One voice at a time: a take cuts the tape, the tape cuts a take. |
+| A3 | AGAIN is a real button (and the A key). It fires on the hit, like a pad: the cap goes down in three frames (`again-press-1..3.webp`, cut from the same render by `press.py` in the visuals folder), stays down while held, comes back up on release. Each press is a take, with a producer note; take 4 is "That one." (A3 says take four was the one). The mic and AGAIN number their takes from one count |
 | A4 | Objections arrive in order. |
 | Side B | "Side A" flips over into "Side B" (rotateX, scroll-linked). |
-| B1 | Studio opens up. FIITMC counts up to 4.7; the ® stamps in. |
-| B2 | A playable desk under Fig. 5. It motor-recalls the mix on entry. Push a fader to the top: it shakes, "Louder was never the point.", and slides back. All up: "Everything is loud. So nothing is." Keyboard works (arrows, Page Up/Down, Home/End). |
-| B3 | Notes light up line by line as you read. The four mic takes develop like prints. Before/after slider sweeps once. 18 renders arrive in order; the 12 demos get struck and fade. |
+| B1 | Studio opens up. FIITMC counts up to 4.7; the ® stamps in. Fig. 4: tap the congas (layers cut from the render by `studio.py`); its woofers pump with the kick. On wide screens two monitors (`monitor.webp`, one more render) rise into the outer margins and pump too, from B1 on, while the track plays. |
+| B2 | Fig. 5 is the desk (`<ProducerDesk />`): 32 faders on one wide board built from the render (the window wide; on small screens it keeps its size and you slide along it), a pan knob above each, Play, hold S to stutter, "My mix", her lyric. Where the build-up ends and the reader takes over the mix. It motor-recalls my mix on arrival; a fader at the top shakes and slides back. Faders count in "Produced by you". Fits one screen. Fig. 6 under it: the pad controller (`fig-6-pads.webp`, one more render, cut by `pads.py`), cropped to the device and edge to edge on phones. 16 pads, 4 knobs (caps cut out so they turn), a screen that names the last thing touched. See the music doc. |
+| B3 | The argument only: my one credit, the logo brief, "18 takes, 6 kept. Same model on every take. I just kept saying again." and a link to the making-of page. The behind-the-scenes material (my notes, the four mic takes, the before/after slider, the 18 renders, the instruments, how the track was made) lives on `/stories/the-producer/making-of`, static, so the story is not crowded. |
 | Sincere line | Lights up word by word. |
-| B4 | Pencil rings "before" and "after". |
-| Outro | The record scales in and turns; YOU ARE THE PRODUCER drops in letter by letter. |
-| PS | Hover "eleven": it goes loud, then gets struck through. |
+| B4 | Pencil rings "before" and "after". The band comes back here (B3 was the breakdown). Fig. 6, the pad controller, is "that piece of the studio. One piece.": see the music doc. |
+| Everywhere | The track (`docs/the-producer-music.md`) builds section by section, piano alone at the top. While it plays, every record is the platter: the hand scratches the actual music, the records turn at the deck's speed (33⅓ rpm; not with reduced motion), Stop brakes. |
+| Outro | The record scales in and turns; YOU ARE THE PRODUCER drops in letter by letter. The track plays out into the run-out groove and stops. "Press your record": their mix as a WAV, a sleeve PNG and a link to their mix. |
+| PS | Hover or focus "eleven": the pencil strikes it through, once, with a thump. |
+| Liner notes | "Produced by you" counts the reader's takes (AGAIN presses), faders moved (distinct, of 8), scratches (a drag of more than 30°) and lines recorded (mic clicks or Enter/Space; hover swings it but does not count), live. "Nothing yet." until then. |
 | Console | `Again.` |
 
-Sound (Web Audio, nothing downloaded): scratch follows the hand, AGAIN click, fader ticks, a thump,
-quiet crackle. Only after the reader turns it on.
+Sound (Web Audio, nothing downloaded): scratch follows the hand, AGAIN click, a thump,
+quiet crackle. Only while the track plays.
 
 ## Rules for anything new
 
@@ -71,10 +73,6 @@ quiet crackle. Only after the reader turns it on.
 
 1. **Talkback.** Hold the AGAIN button: the page "talks back" (a line of the rant played by a speech
    synth, or a short ducked tone) while the background dims like a control room.
-2. **Cue the tape.** Scroll speed over Fig. 1 spins two reel overlays placed on the cassette window
-   (needs reel cut-outs from `public/stories/the-producer/fig-1-demo.webp`).
-3. **Record the reader.** Count the reader's own takes across the page (AGAIN presses, fader moves,
-   scratches) and print them in the liner notes as "Produced by you: 7 takes, 3 faders, 1 scratch".
 4. **VU meter in the bar.** A needle that follows scroll velocity. Pins at the red line if you fling the page.
    ("Louder was never the point" applies to scrolling too.)
 5. **Side B with a needle drop.** On entering Side B, a tonearm swings in from the right edge and sets
@@ -85,6 +83,9 @@ quiet crackle. Only after the reader turns it on.
 ## Files
 
 - `src/pages/stories/the-producer.astro`: markup, copy, CSS (motion CSS sits with each section).
+- `src/pages/stories/the-producer/making-of.astro`: how it was made. Keep behind-the-scenes material here, not in the story.
+- `src/stories/the-producer.ts`: the session's data (renders, notes, mic takes), used by both pages.
+- `src/styles/producer-sleeve.css`: the sleeve both pages share (tokens, grain, type basics).
 - `src/scripts/the-producer.ts`: the loop, records, bar, sound, AGAIN, desk, counters, slider sweep.
 - `public/stories/the-producer/`: cut-outs (`fig-*`, `mic-take-*`, `again-*`, `record-cut`), `takes/` (all 18 renders in order), `og.png`.
 - The renders' sources and the scripts that cut them: `~/development/Claude outputs/producer-visuals/`.

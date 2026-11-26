@@ -1,0 +1,247 @@
+---
+import Logo from '../../../components/Logo.astro'
+import StoryCompare from '../../../components/StoryCompare.astro'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import { pages } from '../../../site'
+import { base, kept, mics, notes, renders, shots } from '../../../stories/the-producer'
+import '../../../styles/home.css'
+import '../../../styles/producer-sleeve.css'
+
+/* The producer: how it was made. The session behind the story (/stories/the-producer), kept off it
+   so the story stays the story: what I typed, the takes, the instruments, the track. Static on
+   purpose: the story moves, this page is the contact sheet you look at afterwards. */
+---
+
+<BaseLayout
+  title="How the record was made. The producer, WCGW"
+  description="The session behind “The model is the talent. You are the producer.”: what I typed, every take the model made, what I kept, and how the track was built."
+  social="The session behind the record: what I typed, every take, what I kept."
+  page={pages.theProducerMakingOf}
+  image={`${base}/og.png`}
+  creator="@raduceuca"
+  themeColorLight="#2C4BD4"
+  themeColorDark="#2C4BD4"
+>
+  <div class="sleeve">
+    <div class="page">
+      <header class="masthead">
+        <a class="home" href="/" aria-label="WCGW home"><Logo /></a>
+      </header>
+
+      <main>
+        <section class="row top" aria-labelledby="title">
+          <p class="gutter"><a class="link" href={base}>The record</a></p>
+          <div class="body">
+            <p class="kicker">WCGW · Liner notes · Making of</p>
+            <h1 id="title">How the record was made.</h1>
+            <p class="soft">The story is the record. This is the session: what I typed, what came back, what I kept.</p>
+          </div>
+        </section>
+
+        <section class="act row" aria-labelledby="pictures">
+          <p class="gutter">The pictures</p>
+          <div class="body">
+            <h2 id="pictures">Same model on every take.</h2>
+            <p>Made on 23 November 2026 with <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>. What I typed, in order:</p>
+            <ol class="notes">
+              {notes.map((n) => <li><span class="num">{n.at}</span><q>{n.said}</q></li>)}
+            </ol>
+          </div>
+        </section>
+
+        <figure class="contact">
+          <div class="sheet">
+            {mics.map((m) => (
+              <div>
+                <img src={`${base}/mic-take-${m.n}.webp`} alt={m.alt} width="800" height="1000" loading="lazy" />
+                <p class="v"><span class="num">Take {m.n}</span> {m.how} {m.verdict}</p>
+              </div>
+            ))}
+          </div>
+          <figcaption>The microphone, take by take. Same model every time.</figcaption>
+        </figure>
+
+        <section class="duo">
+          <figure class="cmpfig">
+            <StoryCompare
+              before={`${base}/again-angled.webp`}
+              after={`${base}/again-straight.webp`}
+              beforeLabel="Before"
+              afterLabel="After"
+              alt="The blue AGAIN button seen straight from above, compared with an earlier render seen at an angle on a black module."
+            />
+            <figcaption>“I want the camera to look straight at the button.” Drag the line.</figcaption>
+          </figure>
+          <div class="body">
+            <p class="big">I just kept saying again.</p>
+          </div>
+        </section>
+
+        <figure class="takes">
+          <ol>
+            {shots.map(([file, what], i) => (
+              <li class:list={[{ kept: kept.has(file) }]}>
+                <img src={`${base}/takes/${file}.webp`} alt={what} width="360" height="360" loading="lazy" />
+                <span class="num">{String(i + 1).padStart(2, '0')}</span>
+              </li>
+            ))}
+          </ol>
+          <figcaption>
+            <abbr class="fact" title={`${renders.made} pictures rendered, ${renders.kept} kept. Amplifiers image sessions, 23 November 2026. Before that, ${renders.drawnRounds} rounds drawn in code.`}>{renders.made} pictures, {renders.kept} kept</abbr>,
+            in the order they were made. The rest were demos.
+          </figcaption>
+        </figure>
+
+        <section class="act row" aria-labelledby="instruments">
+          <p class="gutter">The instruments</p>
+          <div class="body">
+            <h2 id="instruments">More takes, for the instruments.</h2>
+            <p>
+              That evening the page learned to play, so it needed things to play on. Ten more renders, eight
+              kept: the pad controller, then the same controller again with dark translucent pads, the monitor,
+              a blank cassette and six labelled ones, each the blank one with a lab’s name pencilled on and its
+              own blue. Every part that moves on the page is cut from its own render by a script: the knob caps,
+              the woofer cones, the cassette’s hubs, the AGAIN cap going down. The pads’ light is worked out
+              from the picture too, one pad at a time. Nothing is drawn twice.
+            </p>
+          </div>
+        </section>
+
+        <div class="pair">
+          <figure>
+            <img src={`${base}/fig-6-pads.webp`} alt="A pocket pad controller in blue plastic: sixteen square pads, four knobs and a small black screen." width="2400" height="1350" loading="lazy" />
+            <figcaption>The pad controller. Fig. 6 in the story.</figcaption>
+          </figure>
+          <figure class="mon">
+            <img src={`${base}/monitor.webp`} alt="A studio monitor in blue plastic, a black woofer and tweeter." width="760" height="819" loading="lazy" />
+            <figcaption>The monitor. Two of them stand in the margins once the studio opens.</figcaption>
+          </figure>
+        </div>
+
+        <section class="act row" aria-labelledby="track">
+          <p class="gutter">The track</p>
+          <div class="body">
+            <h2 id="track">The track.</h2>
+            <p>
+              Disco in A minor, <span class="fact" title="The tempo the loop is written at: BPM in src/scripts/producer-music.ts. The a cappellas were generated at 122 and stretched to it, pitch kept.">116 BPM</span>.
+              Thirty-two channels in eight stems, played in your browser while you read. The band is freely
+              licensed samples, one file of 49 hits and notes: a dry kit with a hand-muted snare, a flatwound
+              bass, a hollowbody guitar, a 1977 Rhodes, a violin section and a horn section (sources in the
+              liner notes). The Moog, the clav, the organ and the lead are synthesised; no free clavinet samples
+              exist. The pad is a sampled grand piano in a long room (Salamander Grand Piano by Alexander Holm,
+              CC BY 3.0).
+            </p>
+            <p>
+              The singers are ElevenLabs Music, six of them, one per cassette, all singing the same most-AI
+              sentences ever written. None is a lab’s own voice. Each a cappella is pitched into A minor, cut
+              into its eight lines by a script, and every line is transcribed again to check the cut. Swipe the
+              cassettes in Fig. 1 and another singer takes the record.
+            </p>
+            <p>
+              It builds as you read. The piano alone at the top, the singer at A2, the drums at A3, the bass at
+              A4, the room at B1. At B2 the desk hands you every fader, and from there on the song is your mix.
+            </p>
+            <p>
+              The records are turntables. The mix plays off a few seconds of tape, so your hand moves the music,
+              backwards too. Press your record at the end and the whole song is rendered in your browser, at
+              your faders.
+            </p>
+            <p>Claude wrote the words from my rant and my notes, and built all of it. Every “again” is mine.</p>
+            <p><a class="link" href={base}>Back to the record</a>.</p>
+          </div>
+        </section>
+
+        <section class="row liner" aria-labelledby="liner">
+          <p class="gutter">Liner notes</p>
+          <div class="body">
+            <h2 id="liner" class="sr-only">Liner notes</h2>
+            <dl class="signs">
+              <dt>Notes</dt>
+              <dd>Mine, as typed, between 10:50 and 11:50 Bucharest time. Spelling fixed.</dd>
+              <dt>Pictures</dt>
+              <dd>
+                <a class="link" href="https://getamplifiers.com" rel="noopener">Amplifiers</a>.
+                <span class="num">{renders.made}</span> rendered, <span class="num">{renders.kept}</span> kept, per its session
+                log on 23 November 2026, then ten more for the instruments and the demos, eight kept.
+              </dd>
+            </dl>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // the before/after line follows the range (StoryCompare leaves its behaviour to the page)
+  document.querySelectorAll<HTMLElement>('[data-cmp]').forEach((cmp) => {
+    const range = cmp.querySelector('input')
+    if (!range) return
+    const set = () => cmp.style.setProperty('--x', `${range.value}%`)
+    range.addEventListener('input', set)
+    set()
+  })
+</script>
+
+<style>
+  .top { padding-top: clamp(2rem, 1rem + 4vw, 4.5rem); }
+  .top .gutter .link { color: var(--soft); }
+  .kicker { color: var(--soft); font-family: var(--sans); font-size: 0.72em; letter-spacing: 0.14em; text-transform: uppercase; }
+  h1 { margin-top: 0.5em; font-size: clamp(2.4rem, 1.2rem + 4.6vw, 4.6rem); line-height: 1; letter-spacing: -0.022em; text-wrap: balance; }
+  h1 + p { margin-top: 1.2rem; }
+  .body > p + p { margin-top: var(--beat, 1em); }
+
+  /* what I typed */
+  .notes { list-style: none; padding: 0; margin-top: 1.2em; border-top: 1px solid var(--hair); }
+  .notes li { display: grid; grid-template-columns: 3.6em minmax(0, 1fr); gap: 0.6em; padding: 0.7em 0; border-bottom: 1px solid var(--hair); line-height: 1.4; }
+  .notes .num { color: var(--soft); font-size: 0.78em; padding-top: 0.25em; }
+  .notes q { quotes: '“' '”'; }
+
+  /* the microphone, take by take */
+  .contact, .duo, .takes, .pair { width: var(--wide); margin: var(--act-space) 0 0; margin-inline: var(--out); }
+  .sheet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  @media (min-width: 44rem) { .sheet { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .sheet img, .takes img, .pair img { display: block; width: 100%; height: auto; }
+  .v { margin-top: 0.55em; color: var(--soft); font-size: 0.82em; line-height: 1.4; }
+  .v .num { display: block; color: var(--ink); font-size: 0.85em; }
+
+  /* before and after */
+  .duo { display: grid; gap: 2rem; align-items: center; }
+  .duo > .cmpfig { max-width: 24rem; }
+  @media (min-width: 52rem) {
+    .duo { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); column-gap: clamp(2rem, 5vw, 5rem); }
+    .duo > .cmpfig { max-width: none; }
+  }
+  .cmpfig :global(.cmp) { background: transparent; border: 0; overflow: visible; }
+  .cmpfig :global(.lbl) { background: var(--ink); color: var(--bg); font-family: var(--sans); letter-spacing: 0.06em; }
+  .cmpfig :global(.line) { background: var(--ink); }
+
+  /* eighteen takes: the demos struck in pencil */
+  .takes ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem 0.8rem; }
+  @media (min-width: 40rem) { .takes ol { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .takes li { position: relative; }
+  .takes li .num { position: absolute; left: 0; top: 0; font-size: 0.66em; color: var(--soft); }
+  .takes li:not(.kept) img { opacity: 0.38; }
+  .takes li:not(.kept)::after {
+    content: '';
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    top: 46%;
+    height: 9%;
+    background: var(--pencil);
+    -webkit-mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    mask: var(--mark-strike) 0 0 / 100% 100% no-repeat;
+    pointer-events: none;
+  }
+  .takes li:nth-child(3n):not(.kept)::after { -webkit-mask-image: var(--mark-strike-2); mask-image: var(--mark-strike-2); }
+
+  /* the two instrument renders */
+  .pair { display: grid; gap: 2rem; align-items: end; }
+  @media (min-width: 44rem) { .pair { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr); } }
+  .pair .mon img { max-width: 16rem; margin-inline: auto; }
+
+  .liner { margin-top: var(--act-space); padding-top: var(--act-space); border-top: 1px solid var(--hair); }
+  .liner .signs { row-gap: 0.45em; font-size: 0.92em; line-height: 1.5; }
+  .liner .signs dt { color: var(--soft); }
+</style>
