@@ -658,11 +658,12 @@ const finds = [
       show?.remove()
       if (!helped) find('its')
     }
-    all.forEach((em) => em.addEventListener('click', () => spot(em), { once: true }))
+    // The whole word counts, so "it’s" and "it?" don't need a hit on two letters.
+    all.forEach((em) => (em.closest('.word') ?? em).addEventListener('click', () => spot(em), { once: true }))
     // Any other word is told what every wrong picture is told.
     hunt.querySelector('.its')?.addEventListener('click', (e) => {
       const line = (e.target as Element).closest('li')
-      if (!miss || !line || (e.target as Element).closest('.it')) return
+      if (!miss || !line || (e.target as Element).closest('.word')) return
       miss.textContent = 'This is not it.'
       line.classList.add('huh')
       line.addEventListener('animationend', () => line.classList.remove('huh'), { once: true })
@@ -702,6 +703,8 @@ const finds = [
       at++
       const next = tries[at]
       next.classList.add('now')
+      const left = tries.length - 1 - at
+      if (end) end.textContent = left ? `${left} to go.` : 'The last one.'
       screen.poster = next.dataset.poster ?? ''
       screen.src = next.dataset.src ?? ''
       play()
@@ -1572,7 +1575,8 @@ const finds = [
   }
   .it.found :global(button) { cursor: default; }
   /* A bigger place to hit than two letters. */
-  .it :global(button::before) { content: ''; position: absolute; inset: -0.3em -0.25em; }
+  .it :global(button::before) { content: ''; position: absolute; inset: -0.5em -0.4em; }
+  :global(.js) .word:has(.it) { cursor: pointer; }
   .it:not(.found) :global(button:hover) { color: var(--pencil); }
   .hunt .score { display: none; position: sticky; z-index: 1; top: 0; width: fit-content; padding: 0.5em 0.7em; margin-left: -0.7em; background: var(--bg); }
   @media (min-width: 48rem) { .hunt .score { margin-left: calc(var(--gutter) + var(--gap) - 0.7em); } }
